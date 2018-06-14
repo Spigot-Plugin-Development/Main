@@ -6,3 +6,5 @@ commands:
     kickall:
     kick:
     nick:
+    ping:
+    

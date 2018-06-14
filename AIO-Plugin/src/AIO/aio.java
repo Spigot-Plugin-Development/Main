@@ -63,7 +63,12 @@ public class aio extends JavaPlugin implements Listener {
 			}
 		}
 		
+		if (command.getName().equalsIgnoreCase("ping")) {
+			sender.sendMessage("Pong!");
+		}
+		
 		return false;
+		
 	}
 	
 	@EventHandler
