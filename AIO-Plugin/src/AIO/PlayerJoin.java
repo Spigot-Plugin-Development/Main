@@ -15,7 +15,7 @@ public class PlayerJoin implements Listener {
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
-		event.setJoinMessage(event.getPlayer().getDisplayName().toString() + "has joined the game. Welcome!");
-		event.getPlayer().sendMessage("Welcome" + event.getPlayer().getDisplayName().toString() + "to the game");
+		event.setJoinMessage(event.getPlayer().getDisplayName().toString() + " has joined the game. Welcome!");
+		event.getPlayer().sendMessage("Welcome " + event.getPlayer().getDisplayName().toString() + " to the game");
 	}
 }
