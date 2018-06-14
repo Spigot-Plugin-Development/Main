@@ -1,4 +1,7 @@
-AIO-Plugin/.classpath
 
 # Log file
 *.log
+
+AIO-Plugin/bin/
+
+AIO-Plugin/.classpath
