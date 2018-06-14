@@ -14,12 +14,12 @@ public class aio extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onEnable() {
-		PlayerJoin playerjoin = new PlayerJoin(this);
 		getLogger().info("Starting All-In-One Plugin");
-		Bukkit.getPluginManager().registerEvents(this, this);
+		
 		//retrieve server id
 		//connect to mysql
 		//enable necessary parts
+		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 	}
 	
 	@Override
