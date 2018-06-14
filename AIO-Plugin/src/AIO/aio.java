@@ -20,6 +20,7 @@ public class aio extends JavaPlugin implements Listener {
 		//connect to mysql
 		//enable necessary parts
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerMessage(this), this);
 	}
 	
 	@Override
@@ -52,6 +53,16 @@ public class aio extends JavaPlugin implements Listener {
 				sender.sendMessage("Player not found.");
 			}
 		}
+		
+		if (command.getName().equalsIgnoreCase("nick")) {
+			if (sender instanceof Player) {
+				Player player = (Player)sender;
+				player.setDisplayName(colorize(args[0]));
+			} else {
+				sender.sendMessage("Only players can execute this command.");
+			}
+		}
+		
 		return false;
 	}
 	
@@ -60,7 +71,11 @@ public class aio extends JavaPlugin implements Listener {
 		event.setQuitMessage(event.getPlayer().getDisplayName().toString() + "has joined the game. Welcome!");
 	}
 	
-	private String[] allButFirst(String[] input) {
+	public static String[] allButFirst(String[] input) {
 		return Arrays.copyOfRange(input, 1, input.length);
+	}
+	
+	public static String colorize(String input) {
+		return ChatColor.translateAlternateColorCodes('&', input);
 	}
 }

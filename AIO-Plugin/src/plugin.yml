@@ -5,3 +5,4 @@ name: All-In-One_Plugin
 commands:
     kickall:
     kick:
+    nick:
