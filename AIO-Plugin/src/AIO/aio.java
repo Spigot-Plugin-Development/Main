@@ -8,13 +8,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class aio extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onEnable() {
+		PlayerJoin playerjoin = new PlayerJoin(this);
 		getLogger().info("Starting All-In-One Plugin");
 		Bukkit.getPluginManager().registerEvents(this, this);
 		//retrieve server id
@@ -53,12 +53,6 @@ public class aio extends JavaPlugin implements Listener {
 			}
 		}
 		return false;
-	}
-	
-	@EventHandler
-	public void onJoin(PlayerJoinEvent event) {
-		event.setJoinMessage(event.getPlayer().getDisplayName().toString() + "has joined the game. Welcome!");
-		event.getPlayer().sendMessage("Welcome" + event.getPlayer().getDisplayName().toString() + "to the game");
 	}
 	
 	@EventHandler
