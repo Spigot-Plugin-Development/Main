@@ -2,3 +2,6 @@ main: AIO.aio
 version: 1.0
 developers: [DaniFoldi, ApocalypseDJ]
 name: All-In-One_Plugin
+commands:
+    kickall:
+    kick:
