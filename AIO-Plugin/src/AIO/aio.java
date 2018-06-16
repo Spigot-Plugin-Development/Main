@@ -89,9 +89,23 @@ public class aio extends JavaPlugin implements Listener {
 				if (sender instanceof Player) {
 					Player player = (Player)sender;
 					privateMessage.message(player, getServer().getPlayer(args[0]), String.join(" ", allButFirst(args)));
+				} else {
+					sender.sendMessage("Only players can execute this command.");
 				}
 			} else if (args.length == 1 && getServer().getPlayer(args[0]) == null) {
 				sender.sendMessage("Player not found.");
+			}
+		}
+		
+		//Reply to message
+		if (command.getName().equalsIgnoreCase("reply")) {
+			if (args.length > 1 && getServer().getPlayer(args[0]) != null) {
+				if (sender instanceof Player) {
+					Player player = (Player)sender;
+					privateMessage.reply(player, String.join(" ", args));
+				} else {
+					sender.sendMessage("Only players can execute this command.");
+				}
 			}
 		}
 		
