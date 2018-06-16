@@ -127,6 +127,65 @@ public class aio extends JavaPlugin implements Listener {
 			sender.sendMessage("Worlds: " + getServer().getWorlds().toString());
 		}
 		
+		if (command.getName().equalsIgnoreCase("survival")) {
+			if (sender instanceof Player) {
+				Player player = (Player)sender;
+				player.setGameMode(GameMode.SURVIVAL);
+			} else {
+				sender.sendMessage("Only players can execute this command.");
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("creative")) {
+			if (sender instanceof Player) {
+				Player player = (Player)sender;
+				player.setGameMode(GameMode.CREATIVE);
+			} else {
+				sender.sendMessage("Only players can execute this command.");
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("adventure")) {
+			if (sender instanceof Player) {
+				Player player = (Player)sender;
+				player.setGameMode(GameMode.ADVENTURE);
+			} else {
+				sender.sendMessage("Only players can execute this command.");
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("spectator")) {
+			if (sender instanceof Player) {
+				Player player = (Player)sender;
+				player.setGameMode(GameMode.SPECTATOR);
+			} else {
+				sender.sendMessage("Only players can execute this command.");
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("gm")) {
+			if (sender instanceof Player) {
+				Player player = (Player)sender;
+				String[] gms = {"survival", "s", "0"};
+				String[] gmc = {"creative", "c", "1"};
+				String[] gma = {"adventure", "a", "2"};
+				String[] gmsp = {"spectator", "sp", "3"};
+				if (args.length > 0 && Arrays.asList(gms).contains(args[0])) {
+					player.setGameMode(GameMode.SURVIVAL);
+				}
+				if (args.length > 0 && Arrays.asList(gmc).contains(args[0])) {
+					player.setGameMode(GameMode.CREATIVE);
+				}
+				if (args.length > 0 && Arrays.asList(gma).contains(args[0])) {
+					player.setGameMode(GameMode.ADVENTURE);
+				}
+				if (args.length > 0 && Arrays.asList(gmsp).contains(args[0])) {
+					player.setGameMode(GameMode.SPECTATOR);
+				}
+			} else {
+				sender.sendMessage("Only players can execute this command.");
+			}
+		
 		return false;
 		
 	}
