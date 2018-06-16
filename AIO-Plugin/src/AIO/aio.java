@@ -99,7 +99,7 @@ public class aio extends JavaPlugin implements Listener {
 		
 		//Reply to message
 		if (command.getName().equalsIgnoreCase("reply")) {
-			if (args.length > 1) {
+			if (args.length > 0) {
 				if (sender instanceof Player) {
 					Player player = (Player)sender;
 					privateMessage.reply(player, String.join(" ", args));
