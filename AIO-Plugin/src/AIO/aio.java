@@ -30,6 +30,7 @@ public class aio extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMessage(this), this);
+		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
 	}
 	
