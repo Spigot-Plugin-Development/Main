@@ -14,7 +14,7 @@ public class PlayerLeave implements Listener {
 	}
 	
 	@EventHandler
-	public void onJoin(PlayerQuitEvent event) {
+	public void onLeave(PlayerQuitEvent event) {
 		event.setQuitMessage(event.getPlayer().getDisplayName().toString() + " has left the game.");
 	}
 }
