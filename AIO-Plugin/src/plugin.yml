@@ -39,4 +39,6 @@ commands:
         aliases: [b, bal, money]
     heal:
     feed:
+    fly:
+    god:
     

@@ -24,6 +24,8 @@ public class aio extends JavaPlugin implements Listener {
 	private PrivateMessage privateMessage;
 	Advertisements advertisements;
 	
+	List<Player> godPlayers = new ArrayList<Player>();
+	
 	@Override
 	public void onEnable() {
 		getLogger().info("Starting All-In-One Plugin");
@@ -338,10 +340,47 @@ public class aio extends JavaPlugin implements Listener {
 			}
 		}
 		
+		if (command.getName().equalsIgnoreCase("fly")) {
+			if (sender instanceof Player) {
+				if (args.length == 0) {
+					((Player)sender).setAllowFlight(!((Player)sender).getAllowFlight());
+				} else {
+					getServer().getPlayer(args[0]).setAllowFlight(!getServer().getPlayer(args[0]).getAllowFlight());
+				}
+			} else if (args.length == 0) {
+				sender.sendMessage("Player not found.");
+			} else {
+				getServer().getPlayer(args[0]).setAllowFlight(!getServer().getPlayer(args[0]).getAllowFlight());
+			}
+		}
 		
+		if (command.getName().equalsIgnoreCase("god")) {
+			if (sender instanceof Player) {
+				if (args.length == 0) {
+					if (godPlayers.contains((Player)sender)) {
+						godPlayers.remove((Player)sender);
+					} else {
+						godPlayers.add((Player)sender);
+					}
+				} else {
+					if (godPlayers.contains(getServer().getPlayer(args[0]))) {
+						godPlayers.remove(getServer().getPlayer(args[0]));
+					} else {
+						godPlayers.add(getServer().getPlayer(args[0]));
+					}
+				}
+			} else if (args.length == 0) {
+				sender.sendMessage("Player not found.");
+			} else {
+				if (godPlayers.contains(getServer().getPlayer(args[0]))) {
+					godPlayers.remove(getServer().getPlayer(args[0]));
+				} else {
+					godPlayers.add(getServer().getPlayer(args[0]));
+				}
+			}
+		}
 		
 		return false;
-		
 	}
 	
 	private boolean setupChat() {
@@ -368,5 +407,15 @@ public class aio extends JavaPlugin implements Listener {
 	
 	public static String colorize(String input) {
 		return ChatColor.translateAlternateColorCodes('&', input);
+	}
+	
+	@EventHandler
+	private void playerHarm(EntityDamageEvent event) {
+		if (event.getEntity() instanceof Player) {
+			if (godPlayers.contains((Player)event.getEntity())) {
+				event.setCancelled(true);
+				((Player)event.getEntity()).setHealth(20.0);
+			}
+		}
 	}
 }
