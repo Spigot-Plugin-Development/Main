@@ -35,4 +35,6 @@ commands:
     night:
     dusk:
     midnight:
+    balance:
+        aliases: [b, bal, money]
     

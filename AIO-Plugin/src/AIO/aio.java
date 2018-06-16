@@ -14,10 +14,13 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.economy.Economy;
 
 public class aio extends JavaPlugin implements Listener {
 	
 	private Chat chat;
+	private Economy economy;
+	
 	private PrivateMessage privateMessage;
 	Advertisements advertisements;
 	
@@ -36,6 +39,7 @@ public class aio extends JavaPlugin implements Listener {
 		privateMessage = new PrivateMessage(this);
 		Bukkit.getPluginManager().registerEvents(privateMessage, this);
 		setupChat();
+		setupEconomy();
 	}
 	
 	@Override
@@ -292,19 +296,35 @@ public class aio extends JavaPlugin implements Listener {
 			}
 		}
 		
+		if (command.getName().equalsIgnoreCase("balance")) {
+			if (sender instanceof Player) {
+				Player player = (Player)sender;
+				economy.depositPlayer(player, 10);
+				player.sendMessage("Current balance: " + economy.getBalance(player));
+			}
+		}
+		
 		return false;
 		
 	}
 	
-	 private boolean setupChat()
-	    {
-	        RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-	        if (chatProvider != null) {
-	            chat = chatProvider.getProvider();
-	        }
+	private boolean setupChat() {
+        RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+        if (chatProvider != null) {
+            chat = chatProvider.getProvider();
+        }
 
-	        return (chat != null);
-	    }
+        return (chat != null);
+    }
+	
+	private boolean setupEconomy() {
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            economy = economyProvider.getProvider();
+        }
+
+        return (economy != null);
+    }
 	
 	public static String[] allButFirst(String[] input) {
 		return Arrays.copyOfRange(input, 1, input.length);
