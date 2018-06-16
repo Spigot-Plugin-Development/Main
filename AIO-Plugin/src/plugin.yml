@@ -15,11 +15,11 @@ commands:
     storm:
     gm:
     survival:
-    	aliases: [s, gms, gm0]
+        aliases: [s, gms, gm0]
     creative:
-    	aliases: [c, gmc, gm1]
+        aliases: [c, gmc, gm1]
     adventure:
-    	aliases: [a, gma, gm2]
+        aliases: [a, gma, gm2]
     spectator:
-    	aliases: [sp, gmsp, gm3]
+        aliases: [sp, gmsp, gm3]
     

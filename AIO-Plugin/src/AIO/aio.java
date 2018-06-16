@@ -185,6 +185,7 @@ public class aio extends JavaPlugin implements Listener {
 			} else {
 				sender.sendMessage("Only players can execute this command.");
 			}
+		}
 		
 		return false;
 		
