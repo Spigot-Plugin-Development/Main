@@ -16,6 +16,7 @@ public class aio extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		getLogger().info("Starting All-In-One Plugin");
+		Advertisements advertisements = new Advertisements(this);
 		
 		//retrieve server id
 		//connect to mysql
