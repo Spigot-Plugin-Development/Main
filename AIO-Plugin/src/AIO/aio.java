@@ -159,6 +159,76 @@ public class aio extends JavaPlugin implements Listener {
 			}
 		}
 		
+		if (command.getName().equalsIgnoreCase("morning")) {
+			if (sender instanceof Player) {
+				((Player)sender).getLocation().getWorld().setTime(450);
+			} else if (args.length == 0) {
+				sender.sendMessage("World not given");
+			} else if (getServer().getWorld(args[0]) != null) {
+				getServer().getWorld(args[0]).setTime(450);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("day")) {
+			if (sender instanceof Player) {
+				((Player)sender).getLocation().getWorld().setTime(1000);
+			} else if (args.length == 0) {
+				sender.sendMessage("World not given");
+			} else if (getServer().getWorld(args[0]) != null) {
+				getServer().getWorld(args[0]).setTime(1000);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("noon")) {
+			if (sender instanceof Player) {
+				((Player)sender).getLocation().getWorld().setTime(6000);
+			} else if (args.length == 0) {
+				sender.sendMessage("World not given");
+			} else if (getServer().getWorld(args[0]) != null) {
+				getServer().getWorld(args[0]).setTime(6000);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("afternoon")) {
+			if (sender instanceof Player) {
+				((Player)sender).getLocation().getWorld().setTime(10000);
+			} else if (args.length == 0) {
+				sender.sendMessage("World not given");
+			} else if (getServer().getWorld(args[0]) != null) {
+				getServer().getWorld(args[0]).setTime(10000);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("dusk")) {
+			if (sender instanceof Player) {
+				((Player)sender).getLocation().getWorld().setTime(12500);
+			} else if (args.length == 0) {
+				sender.sendMessage("World not given");
+			} else if (getServer().getWorld(args[0]) != null) {
+				getServer().getWorld(args[0]).setTime(12500);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("night")) {
+			if (sender instanceof Player) {
+				((Player)sender).getLocation().getWorld().setTime(13000);
+			} else if (args.length == 0) {
+				sender.sendMessage("World not given");
+			} else if (getServer().getWorld(args[0]) != null) {
+				getServer().getWorld(args[0]).setTime(13000);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("midnight")) {
+			if (sender instanceof Player) {
+				((Player)sender).getLocation().getWorld().setTime(18000);
+			} else if (args.length == 0) {
+				sender.sendMessage("World not given");
+			} else if (getServer().getWorld(args[0]) != null) {
+				getServer().getWorld(args[0]).setTime(18000);
+			}
+		}
+		
 		if (command.getName().equalsIgnoreCase("survival")) {
 			if (sender instanceof Player) {
 				Player player = (Player)sender;
