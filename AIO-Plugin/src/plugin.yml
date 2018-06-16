@@ -2,6 +2,7 @@ main: AIO.aio
 version: 1.0
 developers: [DaniFoldi, ApocalypseDJ]
 name: All-In-One_Plugin
+softdepend: [Vault]
 commands:
     kickall:
     kick:
