@@ -29,13 +29,21 @@ public class PrivateMessage implements Listener {
 	public void message(Player sender, Player target, String message) {
 		target.sendMessage(sender.getName() + ": " + message);
 		sender.sendMessage(sender.getName() + ": " + message);
-		replyList.put(target.getName(), sender.getName());
-		System.out.println(target.getName());
+		if(replyList.containsKey(target.getName())) {
+			replyList.replace(target.getName(), sender.getName());
+		} else {
+			replyList.put(target.getName(), sender.getName());
+		}
+		if(replyList.containsKey(sender.getName())) {
+			replyList.replace(sender.getName(), target.getName());
+		} else {
+			replyList.put(sender.getName(), target.getName());
+		}
+		
 	}
 	
 	public void reply(Player sender, String message) {
-		Player target = Bukkit.getServer().getPlayer((String)replyList.get(sender));
-		System.out.println(target.getName());
+		Player target = Bukkit.getServer().getPlayer((String)replyList.get(sender.getName()));
 		target.sendMessage(sender.getName() + ": " + message);
 		sender.sendMessage(sender.getName() + ": " + message);
 	}
