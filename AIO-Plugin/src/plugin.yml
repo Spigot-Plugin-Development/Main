@@ -23,4 +23,6 @@ commands:
         aliases: [a, gma, gm2]
     spectator:
         aliases: [sp, gmsp, gm3]
+    reply:
+        aliases: [r]
     
