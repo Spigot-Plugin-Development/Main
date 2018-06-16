@@ -8,10 +8,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 public class aio extends JavaPlugin implements Listener {
+	
+	private Chat chat;
 	
 	@Override
 	public void onEnable() {
@@ -24,6 +28,7 @@ public class aio extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMessage(this), this);
+		setupChat();
 	}
 	
 	@Override
@@ -82,6 +87,16 @@ public class aio extends JavaPlugin implements Listener {
 		return false;
 		
 	}
+	
+	 private boolean setupChat()
+	    {
+	        RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+	        if (chatProvider != null) {
+	            chat = chatProvider.getProvider();
+	        }
+
+	        return (chat != null);
+	    }
 	
 	public static String[] allButFirst(String[] input) {
 		return Arrays.copyOfRange(input, 1, input.length);
