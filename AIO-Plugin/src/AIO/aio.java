@@ -32,7 +32,6 @@ public class aio extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMessage(this), this);
-		Bukkit.getPluginManager().registerEvents(advertisements, this);
 		Bukkit.getPluginManager().registerEvents(this, this);
 		privateMessage = new PrivateMessage(this);
 		Bukkit.getPluginManager().registerEvents(privateMessage, this);
