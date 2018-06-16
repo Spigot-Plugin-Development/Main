@@ -149,6 +149,16 @@ public class aio extends JavaPlugin implements Listener {
 			sender.sendMessage("Worlds: " + getServer().getWorlds().toString());
 		}
 		
+		if (command.getName().equalsIgnoreCase("dawn")) {
+			if (sender instanceof Player) {
+				((Player)sender).getLocation().getWorld().setTime(0);
+			} else if (args.length == 0) {
+				sender.sendMessage("World not given");
+			} else if (getServer().getWorld(args[0]) != null) {
+				getServer().getWorld(args[0]).setTime(0);
+			}
+		}
+		
 		if (command.getName().equalsIgnoreCase("survival")) {
 			if (sender instanceof Player) {
 				Player player = (Player)sender;

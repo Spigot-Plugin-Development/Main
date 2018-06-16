@@ -27,4 +27,12 @@ commands:
         aliases: [r]
     ad:
         aliases: [advertise]
+    dawn:
+    morning:
+    day:
+    noon:
+    afternoon:
+    night:
+    dusk:
+    midnight:
     
