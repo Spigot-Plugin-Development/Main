@@ -304,6 +304,42 @@ public class aio extends JavaPlugin implements Listener {
 			}
 		}
 		
+		if (command.getName().equalsIgnoreCase("heal")) {
+			if (args.length == 0 && !(sender instanceof Player)) {
+				sender.sendMessage("No playername given.");
+			} else {
+				if (args.length == 0) {
+					((Player)sender).setHealth(20.0);
+				} else {
+					if (getServer().getPlayer(args[0]) != null) {
+						getServer().getPlayer(args[0]).setHealth(20.0);
+					} else {
+						sender.sendMessage("Player not found.");
+					}
+				}
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("feed")) {
+			if (args.length == 0 && !(sender instanceof Player)) {
+				sender.sendMessage("No playername given.");
+			} else {
+				if (args.length == 0) {
+					((Player)sender).setFoodLevel(20);
+					((Player)sender).setExhaustion(0.0f);
+				} else {
+					if (getServer().getPlayer(args[0]) != null) {
+						getServer().getPlayer(args[0]).setFoodLevel(20);
+						getServer().getPlayer(args[0]).setExhaustion(0.0f);
+					} else {
+						sender.sendMessage("Player not found.");
+					}
+				}
+			}
+		}
+		
+		
+		
 		return false;
 		
 	}

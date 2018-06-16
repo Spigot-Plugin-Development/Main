@@ -37,4 +37,6 @@ commands:
     midnight:
     balance:
         aliases: [b, bal, money]
+    heal:
+    feed:
     
