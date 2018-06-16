@@ -9,4 +9,9 @@ commands:
     nick:
     ping:
     privatemsg:
+    worlds:
+    sun:
+    rain:
+    storm:
+    
     
