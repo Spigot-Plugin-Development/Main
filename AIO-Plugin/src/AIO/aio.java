@@ -3,15 +3,17 @@ package AIO;
 import java.util.Arrays;
 
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
+
+import net.milkbowl.vault.chat.Chat;
 
 public class aio extends JavaPlugin implements Listener {
 	
@@ -82,6 +84,46 @@ public class aio extends JavaPlugin implements Listener {
 			} else if (args.length == 1 && getServer().getPlayer(args[0]) == null) {
 				sender.sendMessage("Player not found.");
 			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("sun")) {
+			if (sender instanceof Player && args.length == 0) {
+				((Player)sender).getLocation().getWorld().setThundering(false);
+				((Player)sender).getLocation().getWorld().setStorm(false);
+			} else if (args.length == 0) {
+				sender.sendMessage("World not given");
+			} else if (getServer().getWorld(args[0]) != null) {
+				getServer().getWorld(args[0]).setThundering(false);
+				getServer().getWorld(args[0]).setStorm(false);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("rain")) {
+			if (sender instanceof Player && args.length == 0) {
+				((Player)sender).getLocation().getWorld().setThundering(true);
+				((Player)sender).getLocation().getWorld().setStorm(false);
+			} else if (args.length == 0) {
+				sender.sendMessage("World not given");
+			} else if (getServer().getWorld(args[0]) != null) {
+				getServer().getWorld(args[0]).setThundering(true);
+				getServer().getWorld(args[0]).setStorm(false);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("storm")) {
+			if (sender instanceof Player) {
+				((Player)sender).getLocation().getWorld().setThundering(true);
+				((Player)sender).getLocation().getWorld().setStorm(true);
+			} else if (args.length == 0) {
+				sender.sendMessage("World not given");
+			} else if (getServer().getWorld(args[0]) != null) {
+				getServer().getWorld(args[0]).setThundering(true);
+				getServer().getWorld(args[0]).setStorm(true);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("worlds")) {
+			sender.sendMessage("Worlds: " + getServer().getWorlds().toString());
 		}
 		
 		return false;
