@@ -8,7 +8,8 @@ commands:
     kick:
     nick:
     ping:
-    privatemsg:
+    msg:
+      aliases: [m, t, w, whisper, tell]
     worlds:
     sun:
     rain:
