@@ -30,10 +30,12 @@ public class PrivateMessage implements Listener {
 		target.sendMessage(sender.getName() + ": " + message);
 		sender.sendMessage(sender.getName() + ": " + message);
 		replyList.put(target.getName(), sender.getName());
+		System.out.println(target.getName());
 	}
 	
 	public void reply(Player sender, String message) {
 		Player target = Bukkit.getServer().getPlayer((String)replyList.get(sender));
+		System.out.println(target.getName());
 		target.sendMessage(sender.getName() + ": " + message);
 		sender.sendMessage(sender.getName() + ": " + message);
 	}
