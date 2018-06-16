@@ -69,6 +69,15 @@ public class aio extends JavaPlugin implements Listener {
 			sender.sendMessage("Pong!");
 		}
 		
+		//Send private message to another player
+		if (command.getName().equalsIgnoreCase("privatemsg")) {
+			if (args.length > 1 && getServer().getPlayer(args[0]) != null) {
+				getServer().getPlayer(args[0]).sendMessage(String.join(" ", allButFirst(args)));
+			} else {
+				sender.sendMessage("Player not found.");
+			}
+		}
+		
 		return false;
 		
 	}

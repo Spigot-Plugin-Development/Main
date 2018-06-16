@@ -7,4 +7,5 @@ commands:
     kick:
     nick:
     ping:
+    privatemsg:
     
