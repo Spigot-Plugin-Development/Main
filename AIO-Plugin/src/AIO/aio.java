@@ -158,6 +158,10 @@ public class aio extends JavaPlugin implements Listener {
 			}
 		}
 		
+		if (command.getName().equalsIgnoreCase("ad")) {
+			advertisements.addAd(sender, String.join(" ", args));
+		}
+		
 		if (command.getName().equalsIgnoreCase("creative")) {
 			if (sender instanceof Player) {
 				Player player = (Player)sender;

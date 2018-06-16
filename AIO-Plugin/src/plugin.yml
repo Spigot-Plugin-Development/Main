@@ -25,4 +25,6 @@ commands:
         aliases: [sp, gmsp, gm3]
     reply:
         aliases: [r]
+    ad:
+        aliases: [advertise]
     
