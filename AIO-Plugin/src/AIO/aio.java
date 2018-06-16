@@ -18,6 +18,7 @@ import net.milkbowl.vault.chat.Chat;
 public class aio extends JavaPlugin implements Listener {
 	
 	private Chat chat;
+	private PrivateMessage privateMessage;
 	
 	@Override
 	public void onEnable() {
@@ -32,6 +33,7 @@ public class aio extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(new PlayerMessage(this), this);
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
+		privateMessage = new PrivateMessage(this);
 	}
 	
 	@Override
@@ -81,7 +83,10 @@ public class aio extends JavaPlugin implements Listener {
 		//Send private message to another player
 		if (command.getName().equalsIgnoreCase("msg")) {
 			if (args.length > 1 && getServer().getPlayer(args[0]) != null) {
-				getServer().getPlayer(args[0]).sendMessage(sender.getName() + ": " + String.join(" ", allButFirst(args)));
+				if (sender instanceof Player) {
+					Player player = (Player)sender;
+					privateMessage.message(player, getServer().getPlayer(args[0]), String.join(" ", allButFirst(args)));
+				}
 			} else if (args.length == 1 && getServer().getPlayer(args[0]) == null) {
 				sender.sendMessage("Player not found.");
 			}
