@@ -19,18 +19,20 @@ public class aio extends JavaPlugin implements Listener {
 	
 	private Chat chat;
 	private PrivateMessage privateMessage;
+	Advertisements advertisements;
 	
 	@Override
 	public void onEnable() {
 		getLogger().info("Starting All-In-One Plugin");
-		Advertisements advertisements = new Advertisements(this);
 		
 		//retrieve server id
 		//connect to mysql
 		//enable necessary parts
+		advertisements = new Advertisements(this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMessage(this), this);
+		Bukkit.getPluginManager().registerEvents(advertisements, this);
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
 		privateMessage = new PrivateMessage(this);
