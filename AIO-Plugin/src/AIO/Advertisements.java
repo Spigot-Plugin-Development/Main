@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,7 +30,7 @@ public class Advertisements {
 	Advertisements(Plugin plugin) {
 		this.plugin = plugin;
 		
-		bossBar = Bukkit.createBossBar("Loading", BarColor.BLUE, org.bukkit.boss.BarStyle.SOLID);
+		bossBar = Bukkit.createBossBar("Loading", BarColor.BLUE, BarStyle.SOLID);
 		bossBar.setVisible(true);
 		
 		new BukkitRunnable() {
@@ -43,11 +44,13 @@ public class Advertisements {
 					serverAdid = (serverAdid + 1) % ads.length;
 					bossBar.setTitle(ads[serverAdid]);
 					bossBar.setColor(adColors[serverAdid]);
+					bossBar.setStyle(BarStyle.SOLID);
 				} else {
 					bossBar.setColor(BarColor.WHITE);
 					bossBar.setTitle(playerAds.get(0));
 					playerAds.remove(0);
 					players.remove(0);
+					bossBar.setStyle(BarStyle.SEGMENTED_20);
 				}
 				bossBar.setProgress(1.0);
 				for (Player player: Bukkit.getServer().getOnlinePlayers()) {
