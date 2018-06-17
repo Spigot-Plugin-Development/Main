@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
@@ -404,6 +405,18 @@ public class aio extends JavaPlugin implements Listener {
 						
 					}
 				}.runTaskTimer(this, 10, 2);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("giveself")) {
+			if (sender instanceof Player) {
+				ItemStack toGive = new ItemStack(Material.matchMaterial(args[0]));
+				if (args.length > 1) {
+					toGive.setAmount(Integer.parseInt(args[1]));
+				} else {
+					toGive.setAmount(1);
+				}
+				((Player)sender).getInventory().addItem(toGive);
 			}
 		}
 		

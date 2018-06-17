@@ -43,3 +43,5 @@ commands:
     god:
     kittycannon:
         aliases: [kc, f]
+    giveself:
+        aliases: [i]
