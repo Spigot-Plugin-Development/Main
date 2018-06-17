@@ -37,9 +37,9 @@ public class TeleportA {
 		
 		sender.sendMessage("Request sent to " + target.getName());
 		if (toSelf) {
-			target.sendMessage(sender.getName() + "wants to teleport you to them.");
+			target.sendMessage(sender.getName() + " wants to teleport you to them.");
 		} else {
-			target.sendMessage(sender.getName() + "watnts to teleport to you.");
+			target.sendMessage(sender.getName() + " wants to teleport to you.");
 		}
 	}
 	
