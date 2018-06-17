@@ -67,3 +67,7 @@ commands:
         aliases: [fspeed]
     nearby:
         aliases: [near]
+    motd:
+    rules:
+    news:
+    

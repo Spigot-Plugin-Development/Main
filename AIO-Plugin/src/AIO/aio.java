@@ -562,6 +562,19 @@ public class aio extends JavaPlugin implements Listener {
 			}
 		}
 		
+		if (command.getName().equalsIgnoreCase("news")) {
+			sender.sendMessage("Server news:");
+			sender.sendMessage("Server now working");
+		}
+		
+		if (command.getName().equalsIgnoreCase("motd")) {
+			sender.sendMessage("Best server ever!");
+		}
+		
+		if (command.getName().equalsIgnoreCase("rules")) {
+			sender.sendMessage("Eat, sleep, code, repeat");
+		}
+		
 		return false;
 	}
 	
