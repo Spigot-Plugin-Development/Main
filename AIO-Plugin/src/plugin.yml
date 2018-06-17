@@ -41,4 +41,5 @@ commands:
     feed:
     fly:
     god:
-    
+    kittycannon:
+        aliases: [kc, f]

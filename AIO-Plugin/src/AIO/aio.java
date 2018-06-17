@@ -8,8 +8,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -377,6 +381,28 @@ public class aio extends JavaPlugin implements Listener {
 				} else {
 					godPlayers.add(getServer().getPlayer(args[0]));
 				}
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("kittycannon")) {
+			if (sender instanceof Player) {
+				Ocelot ocelot = (Ocelot)((Player)sender).getWorld().spawnEntity(((Player)sender).getLocation(), EntityType.OCELOT);
+				ocelot.setBaby();
+				ocelot.setCatType(Ocelot.Type.BLACK_CAT);
+				ocelot.setVelocity(((Player)sender).getEyeLocation().getDirection().multiply(2.0));
+				
+				new BukkitRunnable() {
+					
+					@Override
+					public void run() {
+						if (ocelot.isOnGround()) {
+							ocelot.getLocation().getWorld().createExplosion(ocelot.getLocation(), 0.0f);
+							ocelot.remove();
+							cancel();
+						}
+						
+					}
+				}.runTaskTimer(this, 10, 2);
 			}
 		}
 		
