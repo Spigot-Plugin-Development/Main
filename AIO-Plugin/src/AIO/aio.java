@@ -441,6 +441,7 @@ public class aio extends JavaPlugin implements Listener {
 			if (godPlayers.contains((Player)event.getEntity())) {
 				event.setCancelled(true);
 				((Player)event.getEntity()).setHealth(20.0);
+				((Player)event.getEntity()).setFoodLevel(20);
 			}
 		}
 	}
