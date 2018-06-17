@@ -28,8 +28,9 @@ public class aio extends JavaPlugin implements Listener {
 	private Chat chat;
 	private Economy economy;
 	
-	private PrivateMessage privateMessage;
+	PrivateMessage privateMessage;
 	Advertisements advertisements;
+	TeleportA teleporta;
 	
 	List<Player> godPlayers = new ArrayList<Player>();
 	
@@ -45,6 +46,7 @@ public class aio extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMessage(this), this);
 		Bukkit.getPluginManager().registerEvents(this, this);
+		teleporta = new TeleportA(this);
 		privateMessage = new PrivateMessage(this);
 		Bukkit.getPluginManager().registerEvents(privateMessage, this);
 		setupChat();
@@ -419,6 +421,30 @@ public class aio extends JavaPlugin implements Listener {
 					toGive.setAmount(1);
 				}
 				((Player)sender).getInventory().addItem(toGive);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("tpa")) {
+			if (sender instanceof Player && args.length > 0 && getServer().getPlayer(args[0]) != null) {
+				teleporta.request((Player)sender, getServer().getPlayer(args[0]), false);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("tpahere")) {
+			if (sender instanceof Player && args.length > 0 && getServer().getPlayer(args[0]) != null) {
+				teleporta.request((Player)sender, getServer().getPlayer(args[0]), true);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("tpaccept")) {
+			if (sender instanceof Player) {
+				teleporta.decide((Player)sender, true);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("tpdeny")) {
+			if (sender instanceof Player) {
+				teleporta.decide((Player)sender, false);
 			}
 		}
 		

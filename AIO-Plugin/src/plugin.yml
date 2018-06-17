@@ -45,3 +45,9 @@ commands:
         aliases: [kc, f]
     giveself:
         aliases: [i]
+    tpa:
+    tpahere:
+    tpaccept:
+        aliases: [tpyes]
+    tpdeny:
+        aliases: [tpno]
