@@ -5,14 +5,10 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -42,12 +38,12 @@ public class Advertisements {
 				
 				if (playerAds.isEmpty()) {
 					serverAdid = (serverAdid + 1) % ads.length;
-					bossBar.setTitle(ads[serverAdid]);
+					bossBar.setTitle(aio.colorize(ads[serverAdid]));
 					bossBar.setColor(adColors[serverAdid]);
 					bossBar.setStyle(BarStyle.SOLID);
 				} else {
 					bossBar.setColor(BarColor.WHITE);
-					bossBar.setTitle(playerAds.get(0));
+					bossBar.setTitle(aio.colorize(playerAds.get(0)));
 					playerAds.remove(0);
 					players.remove(0);
 					bossBar.setStyle(BarStyle.SEGMENTED_20);
