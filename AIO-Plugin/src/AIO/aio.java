@@ -11,6 +11,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Ocelot;
@@ -32,6 +34,8 @@ public class aio extends JavaPlugin implements Listener {
 	Advertisements advertisements;
 	TeleportA teleporta;
 	
+	Location spawn;
+	
 	List<Player> godPlayers = new ArrayList<Player>();
 	
 	@Override
@@ -43,6 +47,8 @@ public class aio extends JavaPlugin implements Listener {
 		//enable necessary parts
 		getConfig().options().copyDefaults(true);
 		saveDefaultConfig();
+		
+		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));
 		
 		advertisements = new Advertisements(this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
@@ -453,7 +459,7 @@ public class aio extends JavaPlugin implements Listener {
 		
 		if (command.getName().equalsIgnoreCase("spawn")) {
 			if (sender instanceof Player) {
-				((Player)sender).teleport(new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch")));
+				((Player)sender).teleport(spawn);
 			} else {
 				sender.sendMessage("Only players can execute this command");
 			}
@@ -468,6 +474,7 @@ public class aio extends JavaPlugin implements Listener {
 				getConfig().set("spawn-yaw", ((Player)sender).getLocation().getYaw());
 				getConfig().set("spawn-pitch", ((Player)sender).getLocation().getPitch());
 				saveConfig();
+				spawn = ((Player)sender).getLocation();
 			} else {
 				sender.sendMessage("Only players can execute this command");
 			}
@@ -528,5 +535,10 @@ public class aio extends JavaPlugin implements Listener {
 				((Player)event.getEntity()).setFoodLevel(20);
 			}
 		}
+	}
+	
+	@EventHandler
+	private void playerDeath(PlayerRespawnEvent event) {
+		event.setRespawnLocation(spawn);
 	}
 }
