@@ -41,6 +41,9 @@ public class aio extends JavaPlugin implements Listener {
 		//retrieve server id
 		//connect to mysql
 		//enable necessary parts
+		getConfig().options().copyDefaults(true);
+		saveDefaultConfig();
+		
 		advertisements = new Advertisements(this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
@@ -445,6 +448,28 @@ public class aio extends JavaPlugin implements Listener {
 		if (command.getName().equalsIgnoreCase("tpdeny")) {
 			if (sender instanceof Player) {
 				teleporta.decide((Player)sender, false);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("spawn")) {
+			if (sender instanceof Player) {
+				((Player)sender).teleport(new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch")));
+			} else {
+				sender.sendMessage("Only players can execute this command");
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("setspawn")) {
+			if (sender instanceof Player) {
+				getConfig().set("spawn-world", ((Player)sender).getLocation().getWorld().getName());
+				getConfig().set("spawn-x", ((Player)sender).getLocation().getX());
+				getConfig().set("spawn-y", ((Player)sender).getLocation().getY());
+				getConfig().set("spawn-z", ((Player)sender).getLocation().getZ());
+				getConfig().set("spawn-yaw", ((Player)sender).getLocation().getYaw());
+				getConfig().set("spawn-pitch", ((Player)sender).getLocation().getPitch());
+				saveConfig();
+			} else {
+				sender.sendMessage("Only players can execute this command");
 			}
 		}
 		

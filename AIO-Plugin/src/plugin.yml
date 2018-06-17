@@ -51,3 +51,5 @@ commands:
         aliases: [tpyes]
     tpdeny:
         aliases: [tpno]
+    spawn:
+    setspawn:
