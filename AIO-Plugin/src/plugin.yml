@@ -53,3 +53,5 @@ commands:
         aliases: [tpno]
     spawn:
     setspawn:
+    test:
+    

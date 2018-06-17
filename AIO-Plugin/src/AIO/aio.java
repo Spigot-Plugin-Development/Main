@@ -5,16 +5,19 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.*;
-import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.entity.ItemMergeEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -480,6 +483,14 @@ public class aio extends JavaPlugin implements Listener {
 			}
 		}
 		
+		if (command.getName().equalsIgnoreCase("test")) {
+			if (sender instanceof Player) {
+				for (int i = 0; i < 100; i++) {
+					((Player)sender).getWorld().dropItem(((Player)sender).getLocation().add(0, -2, 0), new ItemStack(Material.DIAMOND_SPADE));
+				}
+			}
+		}
+		
 		return false;
 	}
 	
@@ -511,6 +522,9 @@ public class aio extends JavaPlugin implements Listener {
 	
 	@EventHandler
 	private void treeFeller(BlockBreakEvent event) {
+		if (event.getPlayer().getInventory().getItem(event.getPlayer().getInventory().getHeldItemSlot()) == null) {
+			return;
+		}
 		if (event.getPlayer().getInventory().getItem(event.getPlayer().getInventory().getHeldItemSlot()).getType() != Material.DIAMOND_AXE) {
 			return;
 		}
@@ -537,8 +551,38 @@ public class aio extends JavaPlugin implements Listener {
 		}
 	}
 	
+	List<Item> items = new ArrayList<Item>();
+	
 	@EventHandler
 	private void playerDeath(PlayerRespawnEvent event) {
 		event.setRespawnLocation(spawn);
+	}
+	
+	@EventHandler
+	private void itemDrop(ItemSpawnEvent event) {
+		items.add(event.getEntity());
+		if (items.size() >= 1000) {
+			for (int i= 0; i < 50; i++) {
+				items.get(0).remove();
+				items.remove(0);
+			}
+			getServer().broadcastMessage("Warning: 50 dropped items have been removed to prevent lag!");
+		}
+		System.out.println(items.size());
+	}
+	
+	@EventHandler
+	private void itemPickup(EntityPickupItemEvent event) {
+		items.remove(event.getItem());
+	}
+	
+	@EventHandler
+	private void itemMerge(ItemMergeEvent event) {
+		items.remove(event.getEntity());
+	}
+	
+	@EventHandler
+	private void itemDespawn(ItemDespawnEvent event) {
+		items.remove(event.getEntity());
 	}
 }
