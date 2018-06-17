@@ -74,4 +74,8 @@ public class Advertisements {
 			players.add(player.getName());
 		}
 	}
+	
+	public void removeBar() {
+		bossBar.removeAll();
+	}
 }

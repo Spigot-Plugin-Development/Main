@@ -51,6 +51,7 @@ public class aio extends JavaPlugin implements Listener {
 	@Override
 	public void onDisable() {
 		getLogger().info("Stopping All-In-One Plugin");
+		advertisements.removeBar();
 	}
 	
 	@Override
