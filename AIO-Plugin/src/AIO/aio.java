@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.*;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.entity.EntityType;
@@ -447,6 +449,21 @@ public class aio extends JavaPlugin implements Listener {
 	
 	public static String colorize(String input) {
 		return ChatColor.translateAlternateColorCodes('&', input);
+	}
+	
+	@EventHandler
+	private void treeFeller(BlockBreakEvent event) {
+		if (event.getPlayer().getInventory().getItemInMainHand() != new ItemStack(Material.IRON_AXE) || event.getBlock().getType() != Material.LOG) {
+			return;
+		}
+		int i = 0;
+		while (event.getBlock().getRelative(0, i, 0).getType() == event.getBlock().getType() && i < 32) {
+			i++;
+		}
+		System.out.println(i);
+		for (int j = 0; j < i; j++) {
+			event.getBlock().getRelative(0, j, 0).breakNaturally(event.getPlayer().getInventory().getItemInMainHand());
+		}
 	}
 	
 	@EventHandler
