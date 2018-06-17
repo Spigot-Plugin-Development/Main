@@ -59,3 +59,7 @@ commands:
     skull:
     craftbench:
         aliases: [wb, cb, workbench]
+    enchanttable:
+        aliases: [etable, et]
+    enderchest:
+        aliases: [ec, echest]

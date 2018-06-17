@@ -21,6 +21,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
@@ -519,6 +520,18 @@ public class aio extends JavaPlugin implements Listener {
 					head.setItemMeta(meta);
 					((Player)sender).getInventory().addItem(head);
 				}
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("enchanttable")) {
+			if (sender instanceof Player) {
+				((Player)sender).openEnchanting(new Location(getServer().getWorld("world"), -278.0, 69.0, 296.0), true);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("enderchest")) {
+			if (sender instanceof Player) {
+				((Player)sender).openInventory(((Player)sender).getEnderChest());
 			}
 		}
 		
