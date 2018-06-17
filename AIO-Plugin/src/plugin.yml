@@ -65,3 +65,5 @@ commands:
         aliases: [ec, echest]
     flyspeed:
         aliases: [fspeed]
+    nearby:
+        aliases: [near]

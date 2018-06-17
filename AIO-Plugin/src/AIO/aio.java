@@ -25,6 +25,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Ocelot;
@@ -546,6 +547,18 @@ public class aio extends JavaPlugin implements Listener {
 		if (command.getName().equalsIgnoreCase("craftbench")) {
 			if (sender instanceof Player) {
 				((Player)sender).openWorkbench(null, true);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("nearby")) {
+			if (sender instanceof Player) {
+				for (Entity entity: ((Player)sender).getNearbyEntities(100, 100, 100)) {
+					if (entity instanceof Player) {
+						if (((Player)entity).getLocation().distance(((Player)sender).getLocation()) <= 100.0) {
+							((Player)sender).sendMessage(((Player)entity).getName() + ": " + ((Player)entity).getLocation().distance(((Player)sender).getLocation()) + "m");
+						}
+					}
+				}
 			}
 		}
 		
