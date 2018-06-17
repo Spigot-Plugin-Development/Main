@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
@@ -14,9 +17,12 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.material.MaterialData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Ocelot;
@@ -614,5 +620,37 @@ public class aio extends JavaPlugin implements Listener {
 	@EventHandler
 	private void itemDespawn(ItemDespawnEvent event) {
 		items.remove(event.getEntity());
+	}
+	
+	@EventHandler
+	private void trashChest(InventoryCloseEvent event) {
+		if (event.getInventory().getType() == InventoryType.CHEST) {
+			Block chest = event.getInventory().getLocation().getBlock();
+			if (chest.getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN) {
+				Block sign = (Block)chest.getRelative(BlockFace.EAST);
+				Sign signBlock = (Sign)sign.getState();
+				if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)5) {
+					event.getInventory().clear();
+				}
+			}
+			if (chest.getRelative(BlockFace.WEST).getType() == Material.WALL_SIGN) {
+				Block sign = (Block)chest.getRelative(BlockFace.WEST);
+				if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)4) {
+					event.getInventory().clear();
+				}
+			}
+			if (chest.getRelative(BlockFace.NORTH).getType() == Material.WALL_SIGN) {
+				Block sign = (Block)chest.getRelative(BlockFace.NORTH);
+				if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)3) {
+					event.getInventory().clear();
+				}
+			}
+			if (chest.getRelative(BlockFace.SOUTH).getType() == Material.WALL_SIGN) {
+				Block sign = (Block)chest.getRelative(BlockFace.SOUTH);
+				if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)2) {
+					event.getInventory().clear();
+				}
+			}
+		}
 	}
 }
