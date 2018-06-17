@@ -63,3 +63,5 @@ commands:
         aliases: [etable, et]
     enderchest:
         aliases: [ec, echest]
+    flyspeed:
+        aliases: [fspeed]

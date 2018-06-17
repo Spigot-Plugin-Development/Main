@@ -523,6 +523,14 @@ public class aio extends JavaPlugin implements Listener {
 			}
 		}
 		
+		if (command.getName().equalsIgnoreCase("flyspeed")) {
+			if (sender instanceof Player && args.length == 1) {
+				((Player)sender).setFlySpeed(Float.parseFloat(args[0]));
+			} else {
+				getServer().getPlayer(args[1]).setFlySpeed(Float.parseFloat(args[0]) / 10f);
+			}
+		}
+		
 		if (command.getName().equalsIgnoreCase("enchanttable")) {
 			if (sender instanceof Player) {
 				((Player)sender).openEnchanting(new Location(getServer().getWorld("world"), -278.0, 69.0, 296.0), true);
