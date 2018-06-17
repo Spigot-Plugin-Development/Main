@@ -504,16 +504,18 @@ public class aio extends JavaPlugin implements Listener {
 	
 	@EventHandler
 	private void treeFeller(BlockBreakEvent event) {
-		if (event.getPlayer().getInventory().getItemInMainHand() != new ItemStack(Material.IRON_AXE) || event.getBlock().getType() != Material.LOG) {
+		if (event.getPlayer().getInventory().getItem(event.getPlayer().getInventory().getHeldItemSlot()).getType() != Material.DIAMOND_AXE) {
+			return;
+		}
+		if (event.getBlock().getType() != Material.LOG && event.getBlock().getType() != Material.LOG_2) {
 			return;
 		}
 		int i = 0;
 		while (event.getBlock().getRelative(0, i, 0).getType() == event.getBlock().getType() && i < 32) {
 			i++;
 		}
-		System.out.println(i);
 		for (int j = 0; j < i; j++) {
-			event.getBlock().getRelative(0, j, 0).breakNaturally(event.getPlayer().getInventory().getItemInMainHand());
+			event.getBlock().getRelative(0, j, 0).breakNaturally(event.getPlayer().getInventory().getItem(event.getPlayer().getInventory().getHeldItemSlot()));
 		}
 	}
 	
