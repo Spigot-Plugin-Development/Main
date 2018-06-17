@@ -16,13 +16,13 @@ import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.milkbowl.vault.chat.Chat;
@@ -483,11 +483,41 @@ public class aio extends JavaPlugin implements Listener {
 			}
 		}
 		
-		if (command.getName().equalsIgnoreCase("test")) {
+		if (command.getName().equalsIgnoreCase("more")) {
 			if (sender instanceof Player) {
-				for (int i = 0; i < 100; i++) {
-					((Player)sender).getWorld().dropItem(((Player)sender).getLocation().add(0, -2, 0), new ItemStack(Material.DIAMOND_SPADE));
+				((Player)sender).getInventory().getItemInMainHand().setAmount(((Player)sender).getInventory().getItemInMainHand().getMaxStackSize());
+			} else {
+				sender.sendMessage("Only players can execute this command.");
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("repair")) {
+			if (sender instanceof Player) {
+				((Player)sender).getInventory().getItemInMainHand().setDurability((short)0);
+			}
+ 		}
+		
+		if (command.getName().equalsIgnoreCase("skull")) {
+			if (sender instanceof Player) {
+				if (args.length == 0) {
+					ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+					SkullMeta meta = (SkullMeta)head.getItemMeta();
+					meta.setOwningPlayer((Player)sender);
+					head.setItemMeta(meta);
+					((Player)sender).getInventory().addItem(head);
+				} else if (getServer().getPlayer(args[0]) != null) {
+					ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
+					SkullMeta meta = (SkullMeta)head.getItemMeta();
+					meta.setOwningPlayer(getServer().getPlayer(args[0]));
+					head.setItemMeta(meta);
+					((Player)sender).getInventory().addItem(head);
 				}
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("craftbench")) {
+			if (sender instanceof Player) {
+				((Player)sender).openWorkbench(null, true);
 			}
 		}
 		

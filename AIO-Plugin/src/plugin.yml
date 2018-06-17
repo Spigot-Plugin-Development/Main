@@ -54,4 +54,8 @@ commands:
     spawn:
     setspawn:
     test:
-    
+    more:
+    repair:
+    skull:
+    craftbench:
+        aliases: [wb, cb, workbench]
