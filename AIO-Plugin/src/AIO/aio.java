@@ -11,6 +11,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -20,6 +21,7 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -723,6 +725,16 @@ public class aio extends JavaPlugin implements Listener {
 	@EventHandler
 	private void itemDespawn(ItemDespawnEvent event) {
 		items.remove(event.getEntity());
+	}
+	
+	@EventHandler
+	private void rightClickBlock(PlayerInteractEvent event) {
+		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getItem() == null || event.getItem().getType() != Material.BUCKET) {
+			return;
+		}
+		event.getClickedBlock().setType(Material.AIR);
+		event.getItem().setType(Material.LAVA_BUCKET);
+		event.setCancelled(true);
 	}
 	
 	@EventHandler
