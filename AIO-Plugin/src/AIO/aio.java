@@ -744,13 +744,13 @@ public class aio extends JavaPlugin implements Listener {
 			}
 			if (chest.getRelative(BlockFace.NORTH).getType() == Material.WALL_SIGN) {
 				Block sign = (Block)chest.getRelative(BlockFace.NORTH);
-				if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)3) {
+				if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)2) {
 					event.getInventory().clear();
 				}
 			}
 			if (chest.getRelative(BlockFace.SOUTH).getType() == Material.WALL_SIGN) {
 				Block sign = (Block)chest.getRelative(BlockFace.SOUTH);
-				if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)2) {
+				if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)3) {
 					event.getInventory().clear();
 				}
 			}
@@ -782,7 +782,7 @@ public class aio extends JavaPlugin implements Listener {
 			}
 			if (chest.getRelative(BlockFace.NORTH).getType() == Material.WALL_SIGN) {
 				Block sign = (Block)chest.getRelative(BlockFace.NORTH);
-				if (((Sign)sign.getState()).getLines()[1].equals("[Free]") && sign.getData() == (byte)3) {
+				if (((Sign)sign.getState()).getLines()[1].equals("[Free]") && sign.getData() == (byte)2) {
 					Material material = Material.matchMaterial(((Sign)sign.getState()).getLines()[2]);
 					for (int i = 0; i < 27; i++) {
 						event.getInventory().setItem(i, new ItemStack(material, material.getMaxStackSize()));
@@ -791,7 +791,7 @@ public class aio extends JavaPlugin implements Listener {
 			}
 			if (chest.getRelative(BlockFace.SOUTH).getType() == Material.WALL_SIGN) {
 				Block sign = (Block)chest.getRelative(BlockFace.SOUTH);
-				if (((Sign)sign.getState()).getLines()[1].equals("[Free]") && sign.getData() == (byte)2) {
+				if (((Sign)sign.getState()).getLines()[1].equals("[Free]") && sign.getData() == (byte)3) {
 					Material material = Material.matchMaterial(((Sign)sign.getState()).getLines()[2]);
 					for (int i = 0; i < 27; i++) {
 						event.getInventory().setItem(i, new ItemStack(material, material.getMaxStackSize()));
