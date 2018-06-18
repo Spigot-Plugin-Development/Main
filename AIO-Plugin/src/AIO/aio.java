@@ -20,6 +20,7 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -611,6 +612,13 @@ public class aio extends JavaPlugin implements Listener {
 		if (frozenPlayers.contains(event.getPlayer())) {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage("You are frozen and can not teleport.");
+		}
+	}
+	
+	@EventHandler
+	private void playerKick(PlayerKickEvent event) {
+		if (frozenPlayers.contains(event.getPlayer()) && event.getReason().equals("Flying is not enabled on this server")) {
+			event.setCancelled(true);
 		}
 	}
 	
