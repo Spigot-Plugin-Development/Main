@@ -70,4 +70,5 @@ commands:
     motd:
     rules:
     news:
+    freeze:
     

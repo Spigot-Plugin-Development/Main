@@ -20,7 +20,9 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -49,6 +51,7 @@ public class aio extends JavaPlugin implements Listener {
 	Location spawn;
 	
 	List<Player> godPlayers = new ArrayList<Player>();
+	List<Player> frozenPlayers = new ArrayList<Player>();
 	
 	@Override
 	public void onEnable() {
@@ -575,7 +578,40 @@ public class aio extends JavaPlugin implements Listener {
 			sender.sendMessage("Eat, sleep, code, repeat");
 		}
 		
+		if (command.getName().equalsIgnoreCase("freeze")) {
+			if (args.length == 0) {
+				sender.sendMessage("Player not given.");
+			} else {
+				if (getServer().getPlayer(args[0]) == null) {
+					sender.sendMessage("Player not found.");
+				} else {
+					if (frozenPlayers.contains(getServer().getPlayer(args[0]))) {
+						frozenPlayers.remove(getServer().getPlayer(args[0]));
+					} else {
+						frozenPlayers.add(getServer().getPlayer(args[0]));
+					}
+				}
+			}
+		}
+		
 		return false;
+	}
+	
+	@EventHandler
+	private void playerMove(PlayerMoveEvent event) {
+		if (frozenPlayers.contains(event.getPlayer())) {
+			event.setCancelled(true);
+			event.setTo(event.getFrom());
+			event.getPlayer().sendMessage("You are frozen and can not move.");
+		}
+	}
+	
+	@EventHandler
+	private void playerTeleport(PlayerTeleportEvent event) {
+		if (frozenPlayers.contains(event.getPlayer())) {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage("You are frozen and can not teleport.");
+		}
 	}
 	
 	private boolean setupChat() {
