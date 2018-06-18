@@ -684,6 +684,8 @@ public class aio extends JavaPlugin implements Listener {
 				event.setCancelled(true);
 				((Player)event.getEntity()).setHealth(20.0);
 				((Player)event.getEntity()).setFoodLevel(20);
+				((Player)event.getEntity()).setRemainingAir(((Player)event.getEntity()).getMaximumAir());
+				((Player)event.getEntity()).setFireTicks(0);
 			}
 		}
 	}
