@@ -45,6 +45,7 @@ public class aio extends JavaPlugin implements Listener {
 	private Chat chat;
 	private Economy economy;
 	
+	Enchant enchant;
 	PrivateMessage privateMessage;
 	Advertisements advertisements;
 	TeleportA teleporta;
@@ -67,12 +68,14 @@ public class aio extends JavaPlugin implements Listener {
 		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));
 		
 		advertisements = new Advertisements(this);
+		enchant = new Enchant(this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMessage(this), this);
 		Bukkit.getPluginManager().registerEvents(this, this);
 		teleporta = new TeleportA(this);
 		privateMessage = new PrivateMessage(this);
+		Bukkit.getPluginManager().registerEvents(enchant, this);
 		Bukkit.getPluginManager().registerEvents(privateMessage, this);
 		setupChat();
 		setupEconomy();
@@ -592,6 +595,12 @@ public class aio extends JavaPlugin implements Listener {
 						frozenPlayers.add(getServer().getPlayer(args[0]));
 					}
 				}
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("unsafeenchant")) {
+			if (sender instanceof Player) {
+				((Player)sender).getInventory().getItemInMainHand().addUnsafeEnchantment(Enchant.Translate(args[0]), Integer.parseInt(args[1]));
 			}
 		}
 		
