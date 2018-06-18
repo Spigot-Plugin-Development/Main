@@ -71,4 +71,5 @@ commands:
     rules:
     news:
     freeze:
-    
+    unsafeenchant:
+        aliases: [uenchant, ue]
