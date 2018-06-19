@@ -739,6 +739,9 @@ public class aio extends JavaPlugin implements Listener {
 	
 	@EventHandler
 	private void trashChest(InventoryCloseEvent event) {
+		if (event.getInventory().getType() == null) {
+			return;
+		}
 		if (event.getInventory().getType() == InventoryType.CHEST) {
 			Block chest = event.getInventory().getLocation().getBlock();
 			if (chest.getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN) {
@@ -771,6 +774,9 @@ public class aio extends JavaPlugin implements Listener {
 	
 	@EventHandler
 	private void freeChest(InventoryOpenEvent event) {
+		if (event.getInventory().getType() == null) {
+			return;
+		}
 		if (event.getInventory().getType() == InventoryType.CHEST) {
 			Block chest = event.getInventory().getLocation().getBlock();
 			if (chest.getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN) {
