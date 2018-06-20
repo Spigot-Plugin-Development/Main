@@ -50,6 +50,7 @@ public class aio extends JavaPlugin implements Listener {
 	Advertisements advertisements;
 	TeleportA teleporta;
 	BannerCreator bannerCreator;
+	AntiSpambot antiSpambot;
 	
 	Location spawn;
 	
@@ -81,6 +82,7 @@ public class aio extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(privateMessage, this);
 		setupChat();
 		setupEconomy();
+		antiSpambot = new AntiSpambot(this);
 	}
 	
 	@Override
