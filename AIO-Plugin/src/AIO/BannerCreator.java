@@ -205,9 +205,9 @@ public class BannerCreator implements Listener {
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
 				break;
 			case "i":
-				patterns.add(new Pattern(bgColor, PatternType.STRIPE_TOP));
-				patterns.add(new Pattern(bgColor, PatternType.STRIPE_BOTTOM));
-				patterns.add(new Pattern(fgColor, PatternType.STRIPE_MIDDLE));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_CENTER));
 				break;
 			case "j":
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
@@ -245,25 +245,26 @@ public class BannerCreator implements Listener {
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
 				break;
 			case "p":
-				patterns.add(new Pattern(fgColor, PatternType.HALF_VERTICAL_MIRROR));
+				patterns.add(new Pattern(fgColor, PatternType.HALF_HORIZONTAL_MIRROR));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
 				patterns.add(new Pattern(bgColor, PatternType.STRIPE_BOTTOM));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
 				break;
 			case "q":
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNRIGHT));
-				patterns.add(new Pattern(bgColor, PatternType.HALF_VERTICAL_MIRROR));
+				patterns.add(new Pattern(bgColor, PatternType.HALF_HORIZONTAL));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
 				break;
 			case "r":
-				patterns.add(new Pattern(fgColor, PatternType.HALF_VERTICAL_MIRROR));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNRIGHT));
+				patterns.add(new Pattern(fgColor, PatternType.HALF_HORIZONTAL));
 				patterns.add(new Pattern(bgColor, PatternType.DIAGONAL_LEFT));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
-				patterns.add(new Pattern(bgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_MIDDLE));
 				break;
 			case "s":
@@ -272,11 +273,11 @@ public class BannerCreator implements Listener {
 				patterns.add(new Pattern(fgColor, PatternType.SQUARE_TOP_RIGHT));
 				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_LEFT));
 				patterns.add(new Pattern(bgColor, PatternType.RHOMBUS_MIDDLE));
-				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNLEFT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNRIGHT));
 				break;
 			case "t":
-				patterns.add(new Pattern(bgColor, PatternType.STRIPE_TOP));
-				patterns.add(new Pattern(fgColor, PatternType.STRIPE_MIDDLE));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_CENTER));
 				break;
 			case "u":
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
@@ -287,6 +288,7 @@ public class BannerCreator implements Listener {
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
 				patterns.add(new Pattern(bgColor, PatternType.TRIANGLE_BOTTOM));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNLEFT));
+				break;
 			case "w":
 				patterns.add(new Pattern(fgColor, PatternType.TRIANGLE_BOTTOM));
 				patterns.add(new Pattern(bgColor, PatternType.TRIANGLES_BOTTOM));
@@ -299,8 +301,9 @@ public class BannerCreator implements Listener {
 				break;
 			case "y":
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNRIGHT));
-				patterns.add(new Pattern(bgColor, PatternType.HALF_VERTICAL_MIRROR));
+				patterns.add(new Pattern(bgColor, PatternType.DIAGONAL_RIGHT));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNLEFT));
+				break;
 			case "z":
 				patterns.add(new Pattern(fgColor, PatternType.TRIANGLE_TOP));
 				patterns.add(new Pattern(fgColor, PatternType.TRIANGLE_BOTTOM));

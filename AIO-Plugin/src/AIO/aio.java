@@ -499,9 +499,11 @@ public class aio extends JavaPlugin implements Listener {
 				} else if (args[0].equalsIgnoreCase("letter")) {
 					String[] borderWanted = {"yes", "y", "true", "border", "bordered"};
 					boolean bordered = false;
-					for (String border: borderWanted) {
-						if (args[4].equals(border)) {
-							bordered = true;
+					if (args.length > 4) {
+						for (String border: borderWanted) {
+							if (args[4].equals(border)) {
+								bordered = true;
+							}
 						}
 					}
 					if (BannerCreator.getCharacter(args[1], args[2], args[3], bordered) != null) {
