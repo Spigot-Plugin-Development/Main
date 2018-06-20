@@ -762,7 +762,6 @@ public class aio extends JavaPlugin implements Listener {
 			Block chest = event.getInventory().getLocation().getBlock();
 			if (chest.getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN) {
 				Block sign = (Block)chest.getRelative(BlockFace.EAST);
-				Sign signBlock = (Sign)sign.getState();
 				if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)5) {
 					event.getInventory().clear();
 				}
@@ -800,7 +799,6 @@ public class aio extends JavaPlugin implements Listener {
 			Block chest = event.getInventory().getLocation().getBlock();
 			if (chest.getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN) {
 				Block sign = (Block)chest.getRelative(BlockFace.EAST);
-				Sign signBlock = (Sign)sign.getState();
 				if (((Sign)sign.getState()).getLines()[1].equals("[Free]") && sign.getData() == (byte)5) {
 					Material material = Material.matchMaterial(((Sign)sign.getState()).getLines()[2]);
 					for (int i = 0; i < 27; i++) {
