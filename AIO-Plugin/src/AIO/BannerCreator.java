@@ -116,30 +116,26 @@ public class BannerCreator implements Listener {
 	}
 	
 	public static ItemStack getByName(String string) {
+		ItemStack banner = new ItemStack(Material.BANNER, (byte)15);
+		BannerMeta bannerMeta = (BannerMeta)banner.getItemMeta();
+		List<Pattern> bannerPatterns = new ArrayList<Pattern>();
 		switch (string) {
 		case "plus": 
-			ItemStack plus = new ItemStack(Material.BANNER, 1, (byte)15);
-			BannerMeta plusMeta = (BannerMeta)plus.getItemMeta();
-			List<Pattern> plusPatterns = new ArrayList<Pattern>();
-			plusPatterns.add(new Pattern(DyeColor.GREEN, PatternType.STRIPE_CENTER));
-			plusPatterns.add(new Pattern(DyeColor.GREEN, PatternType.STRIPE_MIDDLE));
-			plusPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
-			plusPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP));
-			plusPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM));
-			plusMeta.setPatterns(plusPatterns);
-			plus.setItemMeta(plusMeta);
-			return plus;
+			bannerPatterns.add(new Pattern(DyeColor.GREEN, PatternType.STRIPE_CENTER));
+			bannerPatterns.add(new Pattern(DyeColor.GREEN, PatternType.STRIPE_MIDDLE));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM));
+			break;
 		case "minus":
-			ItemStack minus = new ItemStack(Material.BANNER, 1, (byte)15);
-			BannerMeta minusMeta = (BannerMeta)minus.getItemMeta();
-			List<Pattern> minusPatterns = new ArrayList<Pattern>();
-			minusPatterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_MIDDLE));
-			minusPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
-			minusMeta.setPatterns(minusPatterns);
-			minus.setItemMeta(minusMeta);
-			return minus;
+			bannerPatterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_MIDDLE));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
+			break;
 		default: return null;
 		}
+		bannerMeta.setPatterns(bannerPatterns);
+		banner.setItemMeta(bannerMeta);
+		return banner;
 	}
 	
 	public static ItemStack getCharacter(String string, String foregroundColor, String backgroundColor, boolean border) {
