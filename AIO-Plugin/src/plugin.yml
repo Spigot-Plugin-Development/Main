@@ -73,3 +73,5 @@ commands:
     freeze:
     unsafeenchant:
         aliases: [uenchant, ue]
+    banner:
+    

@@ -51,6 +51,7 @@ public class aio extends JavaPlugin implements Listener {
 	PrivateMessage privateMessage;
 	Advertisements advertisements;
 	TeleportA teleporta;
+	BannerCreator bannerCreator;
 	
 	Location spawn;
 	
@@ -68,12 +69,13 @@ public class aio extends JavaPlugin implements Listener {
 		saveDefaultConfig();
 		
 		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));
-		
+		bannerCreator = new BannerCreator(this);
 		advertisements = new Advertisements(this);
 		enchant = new Enchant(this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMessage(this), this);
+		Bukkit.getPluginManager().registerEvents(bannerCreator, this);
 		Bukkit.getPluginManager().registerEvents(this, this);
 		teleporta = new TeleportA(this);
 		privateMessage = new PrivateMessage(this);
@@ -483,6 +485,12 @@ public class aio extends JavaPlugin implements Listener {
 				((Player)sender).teleport(spawn);
 			} else {
 				sender.sendMessage("Only players can execute this command");
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("banner")) {
+			if (sender instanceof Player) {
+				bannerCreator.createBanner((Player)sender);
 			}
 		}
 		
