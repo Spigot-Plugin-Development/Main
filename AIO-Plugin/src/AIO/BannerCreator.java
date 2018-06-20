@@ -174,6 +174,19 @@ public class BannerCreator implements Listener {
 			case "x":
 			case "y":
 			case "z":
+			case "3":
+			case "4":
+			case "6":
+			case "8":
+			case "9":
+			case "0":
+			case "!":
+			case "?":
+			case ".":
+			case ":":
+			case ";":
+			case "/":
+			case "\\":
 				banner = getCharacter(string, foregroundColor, backgroundColor, false);
 				bannerMeta = (BannerMeta)banner.getItemMeta();
 				patterns = bannerMeta.getPatterns();
@@ -195,13 +208,40 @@ public class BannerCreator implements Listener {
 				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_RIGHT));
 				patterns.add(new Pattern(bgColor, PatternType.BORDER));
 				break;
+			case "1":
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_TOP_LEFT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_CENTER));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
+				patterns.add(new Pattern(bgColor, PatternType.BORDER));
+				break;
+			case "2":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(bgColor, PatternType.RHOMBUS_MIDDLE));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNLEFT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
+				patterns.add(new Pattern(bgColor, PatternType.BORDER));
+				break;
+			case "5":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNRIGHT));
+				patterns.add(new Pattern(bgColor, PatternType.CURLY_BORDER));
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_LEFT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(bgColor, PatternType.BORDER));
+				break;
+			case "7":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(bgColor, PatternType.DIAGONAL_RIGHT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNLEFT));
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_LEFT));
+				patterns.add(new Pattern(bgColor, PatternType.BORDER));
+				break;
 			default:
 				break;
 			}
 			bannerMeta.setPatterns(patterns);
 			banner.setItemMeta(bannerMeta);
 			return banner;
-			//qrsxz
 		} else {
 			ItemStack banner = new ItemStack(Material.BANNER, 1, bgColor.getDyeData());
 			BannerMeta bannerMeta = (BannerMeta)banner.getItemMeta();
@@ -366,6 +406,107 @@ public class BannerCreator implements Listener {
 				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_RIGHT));
 				patterns.add(new Pattern(bgColor, PatternType.RHOMBUS_MIDDLE));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNLEFT));
+				break;
+			case "0":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNLEFT));
+				break;
+			case "1":
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_TOP_LEFT));
+				patterns.add(new Pattern(bgColor, PatternType.BORDER));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_CENTER));
+				break;
+			case "2":
+				patterns.add(new Pattern(fgColor, PatternType.TRIANGLE_TOP));
+				patterns.add(new Pattern(fgColor, PatternType.TRIANGLE_BOTTOM));
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_TOP_LEFT));
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_RIGHT));
+				patterns.add(new Pattern(bgColor, PatternType.RHOMBUS_MIDDLE));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNLEFT));
+				break;
+			case "3":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_MIDDLE));
+				patterns.add(new Pattern(bgColor, PatternType.STRIPE_LEFT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
+				break;
+			case "4":
+				patterns.add(new Pattern(fgColor, PatternType.HALF_HORIZONTAL_MIRROR));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
+				patterns.add(new Pattern(bgColor, PatternType.STRIPE_BOTTOM));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_MIDDLE));
+				break;
+			case "5":
+				banner = new ItemStack(Material.BANNER, 1, fgColor.getDyeData());
+				patterns.add(new Pattern(bgColor, PatternType.HALF_VERTICAL_MIRROR));
+				patterns.add(new Pattern(bgColor, PatternType.HALF_HORIZONTAL_MIRROR));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
+				patterns.add(new Pattern(bgColor, PatternType.DIAGONAL_RIGHT_MIRROR));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNRIGHT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				break;
+			case "6":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
+				patterns.add(new Pattern(bgColor, PatternType.HALF_HORIZONTAL));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_MIDDLE));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
+				break;
+			case "7":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(bgColor, PatternType.DIAGONAL_RIGHT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNLEFT));
+				break;
+			case "8":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_MIDDLE));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
+				break;
+			case "9":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
+				patterns.add(new Pattern(bgColor, PatternType.HALF_HORIZONTAL_MIRROR));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_MIDDLE));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
+				break;
+			case "?":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
+				patterns.add(new Pattern(bgColor, PatternType.HALF_HORIZONTAL_MIRROR));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_MIDDLE));
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_LEFT));
+				break;
+			case "!":
+				patterns.add(new Pattern(fgColor, PatternType.HALF_HORIZONTAL));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_MIDDLE));
+				patterns.add(new Pattern(bgColor, PatternType.HALF_VERTICAL_MIRROR));
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_LEFT));
+				break;
+			case ".":
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_LEFT));
+				break;
+			case ":":
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_LEFT));
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_TOP_LEFT));
+				break;
+			case ";":
+				patterns.add(new Pattern(fgColor, PatternType.HALF_VERTICAL));
+				patterns.add(new Pattern(bgColor, PatternType.HALF_HORIZONTAL_MIRROR));
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_LEFT));
+				break;
+			case "/":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNLEFT));
+				break;
+			case "\\":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_DOWNRIGHT));
 				break;
 			default:
 				break;
