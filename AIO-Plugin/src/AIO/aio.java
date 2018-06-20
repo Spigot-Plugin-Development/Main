@@ -493,9 +493,19 @@ public class aio extends JavaPlugin implements Listener {
 				if (args.length == 0) {
 					bannerCreator.createBanner((Player)sender);	
 				} else if (args[0].equalsIgnoreCase("get")) {
-					System.out.println(String.join(" ", allButFirst(args)));
 					if (BannerCreator.getByName(String.join(" ", allButFirst(args))) != null) {
 						((Player)sender).getInventory().addItem(BannerCreator.getByName(String.join(" ", allButFirst(args))));
+					}
+				} else if (args[0].equalsIgnoreCase("letter")) {
+					String[] borderWanted = {"yes", "y", "true", "border", "bordered"};
+					boolean bordered = false;
+					for (String border: borderWanted) {
+						if (args[4].equals(border)) {
+							bordered = true;
+						}
+					}
+					if (BannerCreator.getCharacter(args[1], args[2], args[3], bordered) != null) {
+						((Player)sender).getInventory().addItem(BannerCreator.getCharacter(args[1], args[2], args[3], bordered));
 					}
 				}
 			}
