@@ -26,10 +26,8 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.material.MaterialData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -490,7 +488,14 @@ public class aio extends JavaPlugin implements Listener {
 		
 		if (command.getName().equalsIgnoreCase("banner")) {
 			if (sender instanceof Player) {
-				bannerCreator.createBanner((Player)sender);
+				if (args.length == 0) {
+					bannerCreator.createBanner((Player)sender);	
+				} else if (args[0].equalsIgnoreCase("get")) {
+					System.out.println(String.join(" ", allButFirst(args)));
+					if (BannerCreator.getByName(String.join(" ", allButFirst(args))) != null) {
+						((Player)sender).getInventory().addItem(BannerCreator.getByName(String.join(" ", allButFirst(args))));
+					}
+				}
 			}
 		}
 		

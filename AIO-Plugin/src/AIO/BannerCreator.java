@@ -113,4 +113,31 @@ public class BannerCreator implements Listener {
 			event.setCancelled(true);
 		}
 	}
+	
+	public static ItemStack getByName(String string) {
+		switch (string) {
+		case "plus": 
+			ItemStack plus = new ItemStack(Material.BANNER, 1, (byte)15);
+			BannerMeta plusMeta = (BannerMeta)plus.getItemMeta();
+			List<Pattern> plusPatterns = new ArrayList<Pattern>();
+			plusPatterns.add(new Pattern(DyeColor.GREEN, PatternType.STRIPE_CENTER));
+			plusPatterns.add(new Pattern(DyeColor.GREEN, PatternType.STRIPE_MIDDLE));
+			plusPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
+			plusPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP));
+			plusPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM));
+			plusMeta.setPatterns(plusPatterns);
+			plus.setItemMeta(plusMeta);
+			return plus;
+		case "minus":
+			ItemStack minus = new ItemStack(Material.BANNER, 1, (byte)15);
+			BannerMeta minusMeta = (BannerMeta)minus.getItemMeta();
+			List<Pattern> minusPatterns = new ArrayList<Pattern>();
+			minusPatterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_MIDDLE));
+			minusPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
+			minusMeta.setPatterns(minusPatterns);
+			minus.setItemMeta(minusMeta);
+			return minus;
+		default: return null;
+		}
+	}
 }
