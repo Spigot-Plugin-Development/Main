@@ -116,7 +116,7 @@ public class BannerCreator implements Listener {
 	}
 	
 	public static ItemStack getByName(String string) {
-		ItemStack banner = new ItemStack(Material.BANNER, (byte)15);
+		ItemStack banner = new ItemStack(Material.BANNER, 1, (byte)15);
 		BannerMeta bannerMeta = (BannerMeta)banner.getItemMeta();
 		List<Pattern> bannerPatterns = new ArrayList<Pattern>();
 		switch (string) {
@@ -131,7 +131,20 @@ public class BannerCreator implements Listener {
 			bannerPatterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_MIDDLE));
 			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
 			break;
-		default: return null;
+		case "check":
+			bannerPatterns.add(new Pattern(DyeColor.LIME, PatternType.STRIPE_LEFT));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP));
+			bannerPatterns.add(new Pattern(DyeColor.LIME, PatternType.STRIPE_DOWNLEFT));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
+			break;
+		case "cross":
+			bannerPatterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_DOWNRIGHT));
+			bannerPatterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_DOWNLEFT));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
+			break;
+		default:
+			return null;
 		}
 		bannerMeta.setPatterns(bannerPatterns);
 		banner.setItemMeta(bannerMeta);
