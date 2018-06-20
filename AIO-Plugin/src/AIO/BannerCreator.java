@@ -146,7 +146,62 @@ public class BannerCreator implements Listener {
 		DyeColor fgColor = DyeColor.valueOf(foregroundColor.toUpperCase());
 		DyeColor bgColor = DyeColor.valueOf(backgroundColor.toUpperCase());
 		if (border) {
-			return null;
+			ItemStack banner = new ItemStack(Material.BANNER, 1, bgColor.getDyeData());
+			BannerMeta bannerMeta = (BannerMeta)banner.getItemMeta();
+			List<Pattern> patterns = new ArrayList<Pattern>();
+			switch (string.toLowerCase()) {
+			case "a":
+			case "b":
+			case "c":
+			case "e":
+			case "f":
+			case "g":
+			case "h":
+			case "i":
+			case "j":
+			case "k":
+			case "l":
+			case "m":
+			case "n":
+			case "o":
+			case "p":
+			case "r":
+			case "s":
+			case "t":
+			case "u":
+			case "v":
+			case "w":
+			case "x":
+			case "y":
+			case "z":
+				banner = getCharacter(string, foregroundColor, backgroundColor, false);
+				bannerMeta = (BannerMeta)banner.getItemMeta();
+				patterns = bannerMeta.getPatterns();
+				patterns.add(new Pattern(bgColor, PatternType.BORDER));
+				break;
+			case "d":
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
+				patterns.add(new Pattern(bgColor, PatternType.CURLY_BORDER));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
+				patterns.add(new Pattern(bgColor, PatternType.BORDER));
+				break;
+			case "q":
+				banner = new ItemStack(Material.BANNER, 1, fgColor.getDyeData());
+				patterns.add(new Pattern(bgColor, PatternType.RHOMBUS_MIDDLE));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
+				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
+				patterns.add(new Pattern(fgColor, PatternType.SQUARE_BOTTOM_RIGHT));
+				patterns.add(new Pattern(bgColor, PatternType.BORDER));
+				break;
+			default:
+				break;
+			}
+			bannerMeta.setPatterns(patterns);
+			banner.setItemMeta(bannerMeta);
+			return banner;
+			//qrsxz
 		} else {
 			ItemStack banner = new ItemStack(Material.BANNER, 1, bgColor.getDyeData());
 			BannerMeta bannerMeta = (BannerMeta)banner.getItemMeta();
