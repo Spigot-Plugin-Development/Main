@@ -138,6 +138,13 @@ public class BannerCreator implements Listener {
 			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM));
 			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
 			break;
+		case "check-disabled":
+			bannerPatterns.add(new Pattern(DyeColor.SILVER, PatternType.STRIPE_LEFT));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP));
+			bannerPatterns.add(new Pattern(DyeColor.SILVER, PatternType.STRIPE_DOWNLEFT));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
+			break;
 		case "cross":
 			bannerPatterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_DOWNRIGHT));
 			bannerPatterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_DOWNLEFT));
