@@ -3,11 +3,14 @@ package AIO;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.*;
@@ -33,6 +36,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -51,6 +56,7 @@ public class aio extends JavaPlugin implements Listener {
 	TeleportA teleporta;
 	BannerCreator bannerCreator;
 	AntiSpambot antiSpambot;
+	Warp warp;
 	
 	Location spawn;
 	
@@ -71,6 +77,8 @@ public class aio extends JavaPlugin implements Listener {
 		bannerCreator = new BannerCreator(this);
 		advertisements = new Advertisements(this);
 		enchant = new Enchant(this);
+		warp = new Warp(this);
+		getServer().getPluginManager().registerEvents(new Warp(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMessage(this), this);
@@ -89,6 +97,8 @@ public class aio extends JavaPlugin implements Listener {
 	public void onDisable() {
 		getLogger().info("Stopping All-In-One Plugin");
 		advertisements.removeBar();
+		saveConfig();
+		warp.saveWarps();
 	}
 	
 	@Override
@@ -631,6 +641,109 @@ public class aio extends JavaPlugin implements Listener {
 			if (sender instanceof Player) {
 				((Player)sender).getInventory().getItemInMainHand().addUnsafeEnchantment(Enchant.Translate(args[0]), Integer.parseInt(args[1]));
 			}
+		}
+		
+		//Delete warp
+		if(command.getName().equalsIgnoreCase("delwarp")) {
+			/* if(!sender.hasPermission("aio.command.delwarp")) {
+				sender.sendMessage(colorize(warp.noperm));
+				return true;
+			} */
+			if(args.length < 1) {
+				sender.sendMessage(ChatColor.RED + "/delwarp <warp name>");
+				return true;
+			}
+			if(warp.getWarpLocation(args[0]) == null) {
+				sender.sendMessage(colorize(warp.warp_not_found));
+				return true;
+			}
+			warp.delWarp((Player)sender, args[0]);
+			return false;
+		}
+		
+		//Set new warp
+		if(command.getName().equalsIgnoreCase("setwarp")) {
+			if(!(sender instanceof Player)) {
+				sender.sendMessage(colorize(warp.player_only));
+				return true;
+			}
+			/* if(!sender.hasPermission("aio.command.setwarp")) {
+				sender.sendMessage(colorize(warp.noperm));
+				return true;
+			} */
+			if(args.length < 1) {
+				sender.sendMessage(ChatColor.RED + "/setwarp <warp name>");
+				return true;
+			}
+			if(warp.getWarpLocation(args[0]) != null) {
+				sender.sendMessage(colorize(warp.warp_already.replace("{warp}", args[0])));
+				return true;
+			}
+			warp.setWarp((Player)sender, args[0]);
+			return false;
+		}
+		
+		//Warping
+		if(command.getName().equalsIgnoreCase("warp")) {
+			if(!(sender instanceof Player)){
+				sender.sendMessage(colorize(warp.player_only));
+				return true;
+			}
+			/* if(!sender.hasPermission("aio.command.warp")) {
+				sender.sendMessage(colorize(warp.noperm));
+				return true;
+			} */
+			Player player = (Player)sender;
+			if(args.length < 1) {
+				player.sendMessage(ChatColor.RED + "/warp <warp name>");
+				return true;
+			}
+			if(warp.getWarpLocation(args[0]) == null) {
+				player.sendMessage(colorize(warp.warp_not_found).replace("{warp}", args[0]));
+				return true;
+			}
+			if(warp.getWarpLocation(args[0]).getWorld() == null) {
+				player.sendMessage(colorize(warp.no_world));
+				return true;
+			}
+			player.sendMessage(colorize(warp.warping).replace("{warp}", args[0]));
+			player.teleport(warp.getWarpLocation(args[0]));
+			return false;
+		}
+		
+		//Reloading warp file
+		if(command.getName().equalsIgnoreCase("warpreload")) {
+			/* if(!sender.hasPermission("aio.command.warpreload")) {
+				sender.sendMessage(colorize(warp.noperm));
+				return true;
+			} */
+			reloadConfig();
+			warp.reloadWarps();
+			saveConfig();
+			warp.saveWarps();
+			warp.load();
+			sender.sendMessage(colorize(warp.reload));
+			return false;
+		}
+		
+		//Warplist
+		if(command.getName().equalsIgnoreCase("warplist")) {
+			/* if(!sender.hasPermission("aio.command.warplist")) {
+				sender.sendMessage(colorize(warp.noperm));
+				return true;
+			} */
+			if(!warp.getWarps().isConfigurationSection("warps")) {
+				sender.sendMessage(colorize(warp.no_warp));
+				return true;
+			}
+			Set<String> warps = warp.getWarps().getConfigurationSection("warps").getKeys(false);
+			Iterator<String> itr = warps.iterator();
+			String list = "";
+			while(itr.hasNext()) {
+				list = list + itr.next() + ", ";
+			}
+			sender.sendMessage(colorize(warp.warp_list.replace("{list}", list.substring(0, list.length() - 2)).replace("{amount}", String.valueOf(warps.size()))));
+			return false;
 		}
 		
 		return false;
