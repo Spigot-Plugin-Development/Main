@@ -75,3 +75,14 @@ commands:
         aliases: [uenchant, ue]
     banner:
     
+    warp:
+        description: Warping...
+    setwarp:
+        description: Creates a new warp.
+    delwarp:
+        description: Deletes an existing warp.
+    warplist:
+        description: Displays the warplist.
+    warpreload:
+        description: Reloads the configuration.
+   
