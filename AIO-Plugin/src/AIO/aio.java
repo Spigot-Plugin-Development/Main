@@ -14,10 +14,6 @@ import org.bukkit.event.*;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.entity.ItemDespawnEvent;
-import org.bukkit.event.entity.ItemMergeEvent;
-import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -30,7 +26,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -46,6 +41,7 @@ public class aio extends JavaPlugin implements Listener {
 	private Economy economy;
 	
 	Enchant enchant;
+	AntiItemlag antiItemlag;
 	PrivateMessage privateMessage;
 	Advertisements advertisements;
 	TeleportA teleporta;
@@ -70,6 +66,7 @@ public class aio extends JavaPlugin implements Listener {
 		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));
 		bannerCreator = new BannerCreator(this);
 		advertisements = new Advertisements(this);
+		antiItemlag = new AntiItemlag(this);
 		enchant = new Enchant(this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
@@ -721,38 +718,9 @@ public class aio extends JavaPlugin implements Listener {
 		}
 	}
 	
-	List<Item> items = new ArrayList<Item>();
-	
 	@EventHandler
 	private void playerDeath(PlayerRespawnEvent event) {
 		event.setRespawnLocation(spawn);
-	}
-	
-	@EventHandler
-	private void itemDrop(ItemSpawnEvent event) {
-		items.add(event.getEntity());
-		if (items.size() >= 1000) {
-			for (int i= 0; i < 50; i++) {
-				items.get(0).remove();
-				items.remove(0);
-			}
-			getServer().broadcastMessage("Warning: 50 dropped items have been removed to prevent lag!");
-		}
-	}
-	
-	@EventHandler
-	private void itemPickup(EntityPickupItemEvent event) {
-		items.remove(event.getItem());
-	}
-	
-	@EventHandler
-	private void itemMerge(ItemMergeEvent event) {
-		items.remove(event.getEntity());
-	}
-	
-	@EventHandler
-	private void itemDespawn(ItemDespawnEvent event) {
-		items.remove(event.getEntity());
 	}
 	
 	@EventHandler
