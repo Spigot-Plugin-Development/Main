@@ -127,8 +127,19 @@ public class BannerCreator implements Listener {
 			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP));
 			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM));
 			break;
+		case "plus-disabled": 
+			bannerPatterns.add(new Pattern(DyeColor.SILVER, PatternType.STRIPE_CENTER));
+			bannerPatterns.add(new Pattern(DyeColor.SILVER, PatternType.STRIPE_MIDDLE));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_TOP));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.STRIPE_BOTTOM));
+			break;
 		case "minus":
 			bannerPatterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_MIDDLE));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
+			break;
+		case "minus-disabled":
+			bannerPatterns.add(new Pattern(DyeColor.SILVER, PatternType.STRIPE_MIDDLE));
 			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
 			break;
 		case "check":
@@ -148,6 +159,11 @@ public class BannerCreator implements Listener {
 		case "cross":
 			bannerPatterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_DOWNRIGHT));
 			bannerPatterns.add(new Pattern(DyeColor.RED, PatternType.STRIPE_DOWNLEFT));
+			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
+			break;
+		case "cross-disabled":
+			bannerPatterns.add(new Pattern(DyeColor.SILVER, PatternType.STRIPE_DOWNRIGHT));
+			bannerPatterns.add(new Pattern(DyeColor.SILVER, PatternType.STRIPE_DOWNLEFT));
 			bannerPatterns.add(new Pattern(DyeColor.WHITE, PatternType.BORDER));
 			break;
 		default:
