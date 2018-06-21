@@ -736,7 +736,6 @@ public class aio extends JavaPlugin implements Listener {
 			}
 			getServer().broadcastMessage("Warning: 50 dropped items have been removed to prevent lag!");
 		}
-		System.out.println(items.size());
 	}
 	
 	@EventHandler
