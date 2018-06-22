@@ -765,6 +765,18 @@ public class aio extends JavaPlugin implements Listener {
 			return false;
 		}
 		
+		if (command.getName().equalsIgnoreCase("lightning")) {
+			if (sender instanceof Player && args.length == 0) {
+				((Player)sender).getWorld().strikeLightning(((Player)sender).getTargetBlock(null, 600).getLocation());
+			} else if (args.length == 0) {
+				sender.sendMessage("Player not given.");
+			} else if (getServer().getPlayer(args[0]) == null) {
+				sender.sendMessage("Player not found.");
+			} else {
+				getServer().getPlayer(args[0]).getWorld().strikeLightning(getServer().getPlayer(args[0]).getLocation());
+			}
+		}
+		
 		return false;
 	}
 	
