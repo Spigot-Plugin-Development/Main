@@ -16,7 +16,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
 
 public class BannerCreator implements Listener {
