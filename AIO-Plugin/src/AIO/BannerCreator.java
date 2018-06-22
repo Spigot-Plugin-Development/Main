@@ -77,7 +77,6 @@ public class BannerCreator implements Listener {
 	@EventHandler
 	public void playerClickInventory(InventoryClickEvent event) {
 		if (creatingBanners.contains((Player)event.getWhoClicked())) {
-			System.out.println(event.getCurrentItem().getType());
 			switch (event.getCurrentItem().getType()) {
 			case WOOL:
 				ItemStack newBanner = createdBanners.get(creatingBanners.indexOf(event.getWhoClicked()));
