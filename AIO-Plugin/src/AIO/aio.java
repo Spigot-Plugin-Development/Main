@@ -582,7 +582,7 @@ public class aio extends JavaPlugin implements Listener {
 				} else if (getServer().getPlayer(args[0]) != null) {
 					ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
 					SkullMeta meta = (SkullMeta)head.getItemMeta();
-					meta.setOwningPlayer(getServer().getPlayer(args[0]));
+					meta.setOwningPlayer(getServer().getOfflinePlayer(args[0]));
 					head.setItemMeta(meta);
 					((Player)sender).getInventory().addItem(head);
 				}
