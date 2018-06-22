@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -143,12 +144,12 @@ public class Warp implements Listener {
 		Sign sign = (Sign)event.getBlock().getState();
 		if(event.getLine(0).equalsIgnoreCase("[warp]") && player.hasPermission("aio.sign.create")) {
 			if(event.getLine(1) == null || this.getWarpLocation(event.getLine(1)) == null) {
-				event.setLine(0, "§4[Warp]");
+				event.setLine(0, aio.colorize("&4&l[Warp]"));
 				event.setLine(1, "warp name");
 				sign.update();
 				return;
 			}
-			event.setLine(0, "§1[Warp]");
+			event.setLine(0, aio.colorize("&1&l[Warp]"));
 			event.setLine(1, event.getLine(1));
 			sign.update();
 		}
@@ -159,21 +160,21 @@ public class Warp implements Listener {
 		Block block = event.getClickedBlock();
 		if(event.getAction().equals(Action.LEFT_CLICK_BLOCK) && this.isSign(block)) {
 			Sign sign = (Sign)block.getState();
-			if(!player.hasPermission("aio.sign.destroy") && sign.getLine(0).equals("§1[Warp]")) {
+			if(!player.hasPermission("aio.sign.destroy") && sign.getLine(0).equals(aio.colorize("&1&l[Warp]"))) {
 				player.sendMessage(this.noperm);
 				event.setCancelled(true);
 			}
 		}
 		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && this.isSign(block)) {
 			Sign sign = (Sign)block.getState();
-			if(player.hasPermission("aio.sign.use") && sign.getLine(0).equals("§1[Warp]") && this.getWarpLocation(sign.getLine(1)) != null) {
+			if(player.hasPermission("aio.sign.use") && sign.getLine(0).equals(aio.colorize("&1&l[Warp]")) && this.getWarpLocation(sign.getLine(1)) != null) {
 				player.teleport(this.getWarpLocation(sign.getLine(1)));
 			}
 		}
 	}
-	@SuppressWarnings("deprecation")
+	
 	private boolean isSign(Block block) {
-		if(block.getTypeId() == 63 || block.getTypeId() == 68) {
+		if(block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST) {
 			return true;
 		}
 		return false;
