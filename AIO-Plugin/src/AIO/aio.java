@@ -873,8 +873,12 @@ public class aio extends JavaPlugin implements Listener {
 		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getItem() == null || event.getItem().getType() != Material.BUCKET) {
 			return;
 		}
+		if (!event.getClickedBlock().getType().equals(Material.OBSIDIAN)) {
+			return;
+		}
 		event.getClickedBlock().setType(Material.AIR);
-		event.getItem().setType(Material.LAVA_BUCKET);
+		event.getItem().setAmount(event.getItem().getAmount() - 1);
+		event.getPlayer().getInventory().addItem(new ItemStack(Material.LAVA_BUCKET));
 		event.setCancelled(true);
 	}
 	
