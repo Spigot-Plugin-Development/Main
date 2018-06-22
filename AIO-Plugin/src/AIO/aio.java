@@ -15,6 +15,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -786,6 +787,13 @@ public class aio extends JavaPlugin implements Listener {
 			event.setCancelled(true);
 			event.setTo(event.getFrom());
 			event.getPlayer().sendMessage("You are frozen and can not move.");
+		}
+	}
+	
+	@EventHandler
+	private void signColor(SignChangeEvent event) {
+		for (int i = 0; i < 4; i++) {
+			event.setLine(i, aio.colorize(event.getLine(i)));
 		}
 	}
 	
