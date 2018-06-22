@@ -9,6 +9,7 @@ import java.util.Set;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -775,6 +776,26 @@ public class aio extends JavaPlugin implements Listener {
 				sender.sendMessage("Player not found.");
 			} else {
 				getServer().getPlayer(args[0]).getWorld().strikeLightning(getServer().getPlayer(args[0]).getLocation());
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("spawner")) {
+			if (sender instanceof Player) {
+				if (args.length == 0) {
+					sender.sendMessage("No mob type given");
+				} else if (EntityType.valueOf(args[0].toUpperCase()) == null) {
+					sender.sendMessage("Invalid mob type given.");
+				} else {
+					if (!((Player)sender).getTargetBlock(null, 10).getType().equals(Material.MOB_SPAWNER)) {
+						sender.sendMessage("You must be looking at a mob spawner to change its type");
+					} else {
+						CreatureSpawner spawner = (CreatureSpawner)((Player)sender).getTargetBlock(null, 10).getState();
+						spawner.setSpawnedType(EntityType.valueOf(args[0].toUpperCase()));
+						spawner.update();
+					}
+				}
+			} else {
+				sender.sendMessage("Only players can execute this command.");
 			}
 		}
 		

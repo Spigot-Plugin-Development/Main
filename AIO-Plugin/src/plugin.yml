@@ -88,3 +88,4 @@ commands:
         description: Reloads the configuration.
     lightning:
         aliases: [thor]
+    spawner:
