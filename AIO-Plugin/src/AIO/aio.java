@@ -30,6 +30,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -441,14 +442,34 @@ public class aio extends JavaPlugin implements Listener {
 					
 					@Override
 					public void run() {
-						if (ocelot.isOnGround()) {
+						if (ocelot.isOnGround() || ocelot.isDead() || ocelot.getLocation().getBlockY() < 0) {
 							ocelot.getLocation().getWorld().createExplosion(ocelot.getLocation(), 0.0f);
 							ocelot.remove();
 							cancel();
 						}
 						
 					}
-				}.runTaskTimer(this, 10, 2);
+				}.runTaskTimer(this, 5, 2);
+			}
+		}
+		
+		if (command.getName().equalsIgnoreCase("tntcannon")) {
+			if (sender instanceof Player) {
+				TNTPrimed tnt = (TNTPrimed)((Player)sender).getWorld().spawnEntity(((Player)sender).getLocation(), EntityType.PRIMED_TNT);
+				tnt.setVelocity(((Player)sender).getEyeLocation().getDirection().multiply(2.0));
+				tnt.setFuseTicks(300);
+				new BukkitRunnable() {
+					
+					@Override
+					public void run() {
+						if (tnt.isOnGround() || tnt.getLocation().getBlockY() < 0) {
+							tnt.getLocation().getWorld().createExplosion(tnt.getLocation(), 0.0f);
+							tnt.remove();
+							cancel();
+						}
+						
+					}
+				}.runTaskTimer(this, 5, 2);
 			}
 		}
 		

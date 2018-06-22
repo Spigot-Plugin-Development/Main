@@ -43,6 +43,8 @@ commands:
     god:
     kittycannon:
         aliases: [kc, f]
+    tntcannon:
+        aliases: [tnt]
     giveself:
         aliases: [i, item]
     tpa:
