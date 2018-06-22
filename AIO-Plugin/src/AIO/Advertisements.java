@@ -100,7 +100,7 @@ public class Advertisements implements Listener {
 		sender.sendMessage(aio.colorize("&b/ad create&5: Opens the advertiesment creating GUI."));
 		//sender.sendMessage(aio.colorize("&b/ad edit&5: Edits the current advertisement that you have in queue."));
 		sender.sendMessage(aio.colorize("&b/ad time&5: Shows you the time left until your ad appears."));
-		sender.sendMessage(aio.colorize("&b/ad cancel&5: Cancels your advertisement"));
+		sender.sendMessage(aio.colorize("&b/ad cancel&5: Cancels your advertisement."));
 		sender.sendMessage(aio.colorize("&b/ad report&5: Reports an inappropriate advertisement."));
 		sender.sendMessage(aio.colorize("&b/ad reports&5: See reported advertisements."));
 		sender.sendMessage(aio.colorize("&b/ad help&5: Shows this help message."));
