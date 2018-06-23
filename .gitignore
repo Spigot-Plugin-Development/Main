@@ -3,6 +3,6 @@
 *.log
 
 AIO-Plugin/bin/
-
-AIO-Plugin/.classpath
-AIO-Plugin/.settings/
+AIO-Plugin/.idea/misc.xml
+AIO-Plugin/.idea
+*.iml
