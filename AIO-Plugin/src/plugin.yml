@@ -89,3 +89,4 @@ commands:
     lightning:
         aliases: [thor]
     spawner:
+    whois:

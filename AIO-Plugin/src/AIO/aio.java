@@ -77,6 +77,7 @@ public class aio extends JavaPlugin implements Listener {
 		antiItemlag = new AntiItemlag(this);
 		enchant = new Enchant(this);
 		warp = new Warp(this);
+
 		getServer().getPluginManager().registerEvents(new Warp(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
@@ -132,6 +133,20 @@ public class aio extends JavaPlugin implements Listener {
 				player.setDisplayName(colorize(args[0]));
 			} else {
 				sender.sendMessage("Only players can execute this command.");
+			}
+		}
+
+		if (command.getName().equalsIgnoreCase("whois")) {
+			if (args.length == 0) {
+				sender.sendMessage("Player not given.");
+			} else if (getServer().getPlayer(args[0]) == null) {
+				sender.sendMessage("Player not found.");
+			} else {
+				sender.sendMessage("Information about " + getServer().getPlayer(args[0]).getName());
+				sender.sendMessage("IP Address: " + getServer().getPlayer(args[0]).getAddress().toString());
+				sender.sendMessage("OP: " + getServer().getPlayer(args[0]).isOp());
+				sender.sendMessage("Fly mode: " + getServer().getPlayer(args[0]).getAllowFlight());
+				sender.sendMessage("God mode: " + godPlayers.contains(getServer().getPlayer(args[0])));
 			}
 		}
 		
