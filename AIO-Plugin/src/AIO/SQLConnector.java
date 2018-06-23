@@ -15,11 +15,8 @@ public class SQLConnector {
 	
 	public void connect(String ipaddress, String database, String username, String password) {
 		try {
-			System.out.println("TEST----------1");
 			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("TEST----------2");
 			connection = DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + database, username, password);
-			System.out.println("TEST----------3");
 			System.out.println(connection.getMetaData());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -30,10 +27,19 @@ public class SQLConnector {
 		try {
 			Statement statement = connection.createStatement();
 			return statement.executeQuery(query);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public void update(String query) {
+		try {
+			Statement statement = connection.createStatement();
+			statement.executeUpdate(query);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void disconnect() {
