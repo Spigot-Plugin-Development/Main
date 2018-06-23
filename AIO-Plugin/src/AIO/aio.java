@@ -1,5 +1,6 @@
 package AIO;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +47,8 @@ public class aio extends JavaPlugin implements Listener {
 	
 	private Chat chat;
 	private Economy economy;
-	
+
+	SQLConnector sqlconnector;
 	Enchant enchant;
 	AntiItemlag antiItemlag;
 	PrivateMessage privateMessage;
@@ -64,7 +66,8 @@ public class aio extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		getLogger().info("Starting All-In-One Plugin");
-		
+
+		sqlconnector = new SQLConnector(this);
 		//retrieve server id
 		//connect to mysql
 		//enable necessary parts
@@ -91,6 +94,7 @@ public class aio extends JavaPlugin implements Listener {
 		setupChat();
 		setupEconomy();
 		antiSpambot = new AntiSpambot(this);
+		sqlconnector.connect("127.0.0.1:8889", "minecraft", "root", "root");
 	}
 	
 	@Override
@@ -99,6 +103,7 @@ public class aio extends JavaPlugin implements Listener {
 		advertisements.removeBar();
 		saveConfig();
 		warp.saveWarps();
+		sqlconnector.disconnect();
 	}
 	
 	@Override
@@ -823,6 +828,14 @@ public class aio extends JavaPlugin implements Listener {
 			event.setCancelled(true);
 			event.setTo(event.getFrom());
 			event.getPlayer().sendMessage("You are frozen and can not move.");
+			try {
+				ResultSet result = sqlconnector.query("SELECT * FROM PLAYERS WHERE player_UUID = '" + event.getPlayer().getUniqueId() + "';");
+				while (result.next()) {
+					System.out.println(result);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
