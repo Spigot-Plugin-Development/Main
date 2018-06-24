@@ -812,14 +812,18 @@ public class aio extends JavaPlugin implements Listener {
 			event.setCancelled(true);
 			event.setTo(event.getFrom());
 			event.getPlayer().sendMessage("You are frozen and can not move.");
-			try {
-				ResultSet result = sqlconnector.query("SELECT * FROM PLAYERS WHERE player_UUID = '" + event.getPlayer().getUniqueId() + "';");
-				while (result.next()) {
-					System.out.println(result);
+			sqlconnector.query("SELECT * FROM PLAYERS WHERE player_UUID = '" + event.getPlayer().getUniqueId() + "';", new SQLCallback() {
+				@Override
+				public void callback(ResultSet result) {
+					try {
+						while (result.next()) {
+							System.out.println(result.getDouble("balance"));
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			});
 		}
 	}
 	

@@ -1,6 +1,7 @@
 package AIO;
 
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.*;
 
@@ -23,20 +24,26 @@ public class SQLConnector {
 		}
 	}
 	
-	public ResultSet query(String query) {
-		try {
-			Statement statement = connection.createStatement();
-			return statement.executeQuery(query);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+	public void query(String query, SQLCallback completed) {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				try {
+					Statement statement = connection.createStatement();
+					ResultSet result = statement.executeQuery(query);
+					completed.callback(result);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}.runTaskAsynchronously(plugin);
 	}
 
-	public void update(String query) {
+	public void update(String query, SQLCallback completed) {
 		try {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(query);
+			completed.callback();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
