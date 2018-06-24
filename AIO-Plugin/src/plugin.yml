@@ -90,3 +90,4 @@ commands:
         aliases: [thor]
     spawner:
     whois:
+    spawnmob:

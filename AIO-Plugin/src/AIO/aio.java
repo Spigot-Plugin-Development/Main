@@ -620,6 +620,20 @@ public class aio extends JavaPlugin implements Listener {
 				((Player)sender).openWorkbench(null, true);
 			}
 		}
+
+		if (command.getName().equalsIgnoreCase("spawnmob")) {
+			if (sender instanceof Player) {
+				if (args.length == 0) {
+					sender.sendMessage("Mob not given.");
+				} else if (args.length == 1) {
+					((Player) sender).getWorld().spawnEntity(((Player) sender).getLocation(), EntityType.valueOf(args[0].toUpperCase()));
+				} else if (args.length == 2) {
+					for (int i = 0; i < Integer.parseInt(args[1]); i++) {
+						((Player) sender).getWorld().spawnEntity(((Player) sender).getLocation(), EntityType.valueOf(args[0].toUpperCase()));
+					}
+				}
+			}
+		}
 		
 		if (command.getName().equalsIgnoreCase("nearby")) {
 			if (sender instanceof Player) {
