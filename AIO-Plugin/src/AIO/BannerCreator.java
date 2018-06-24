@@ -27,6 +27,7 @@ public class BannerCreator implements Listener {
 	
 	BannerCreator(Plugin plugin) {
 		this.plugin = plugin;
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 	
 	public void createBanner(Player player) {

@@ -1,5 +1,6 @@
 package AIO;
 
+import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,6 +13,7 @@ public class Enchant implements Listener {
 	
 	Enchant(Plugin plugin) {
 		this.plugin = plugin;
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 	public static Enchantment Translate(String str) {
 		if (Enchantment.getByName(str) != null) {
