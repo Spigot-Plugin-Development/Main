@@ -15,13 +15,19 @@ public class SQLConnector {
 	}
 	
 	public void connect(String ipaddress, String database, String username, String password) {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + database, username, password);
-			System.out.println(connection.getMetaData());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				try {
+					Class.forName("com.mysql.jdbc.Driver");
+					connection = DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + database, username, password);
+					System.out.println(connection.getMetaData());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+		}.runTaskAsynchronously(plugin);
 	}
 	
 	public void query(String query, SQLCallback completed) {
@@ -31,7 +37,11 @@ public class SQLConnector {
 				try {
 					Statement statement = connection.createStatement();
 					ResultSet result = statement.executeQuery(query);
-					completed.callback(result);
+					new BukkitRunnable() {
+						public void run() {
+							completed.callback(result);
+						}
+					}.runTask(plugin);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -40,20 +50,34 @@ public class SQLConnector {
 	}
 
 	public void update(String query, SQLCallback completed) {
-		try {
-			Statement statement = connection.createStatement();
-			statement.executeUpdate(query);
-			completed.callback();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				try {
+					Statement statement = connection.createStatement();
+					statement.executeUpdate(query);
+					new BukkitRunnable() {
+						public void run() {
+							completed.callback();
+						}
+					}.runTask(plugin);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}.runTaskAsynchronously(plugin);
 	}
 	
 	public void disconnect() {
-		try {
-			connection.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				try {
+					connection.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}.runTaskAsynchronously(plugin);
 	}
 }
