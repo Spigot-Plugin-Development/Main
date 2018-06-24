@@ -57,8 +57,8 @@ public class PrivateMessage implements Listener {
 	//Reply to player who previously sent a message to you
 	public void reply(Player sender, String[] args) {
 
-	    plugin.getLogger().info("Reply: sender is " + sender.getName() + ", pair in list is " + replyList.get(sender.getName()));
         plugin.getLogger().info("Number of elements in hashmap: " + replyList.size());
+        plugin.getLogger().info("Reply: sender is " + sender.getName() + ", pair in hashmap is " + replyList.get(sender.getName()));
 
 	    if(replyList.containsKey(sender.getName()) && args.length > 0) {
             Player target = plugin.getServer().getPlayer(replyList.get(sender.getName()));
