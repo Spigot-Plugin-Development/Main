@@ -26,6 +26,7 @@ public class BannerCreator implements Listener {
 	List<ItemStack> createdBanners = new ArrayList<ItemStack>();
 	
 	BannerCreator(Plugin plugin) {
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.plugin = plugin;
 	}
 	

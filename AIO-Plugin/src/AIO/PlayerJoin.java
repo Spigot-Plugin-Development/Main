@@ -7,9 +7,9 @@ import org.bukkit.plugin.Plugin;
 
 public class PlayerJoin implements Listener {
 	
-	private Plugin plugin;
+	private aio plugin;
 	
-	PlayerJoin(Plugin plugin) {
+	PlayerJoin(aio plugin) {
 		this.plugin = plugin;
 	}
 	

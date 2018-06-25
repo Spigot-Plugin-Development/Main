@@ -56,10 +56,10 @@ public class aio extends JavaPlugin implements Listener {
 	AntiSpambot antiSpambot;
 	Warp warp;
 	GodManager godManager;
+	Commands commands;
 
 	Location spawn;
 
-    List<Player> godPlayers = new ArrayList<Player>();
     List<Player> frozenPlayers = new ArrayList<Player>();
 	
 	@Override
@@ -68,7 +68,6 @@ public class aio extends JavaPlugin implements Listener {
 
 		sqlconnector = new SQLConnector(this);
 		//retrieve server id
-		//connect to mysql
 		//enable necessary parts
 		getConfig().options().copyDefaults(true);
 		saveDefaultConfig();
@@ -79,29 +78,27 @@ public class aio extends JavaPlugin implements Listener {
 		antiItemlag = new AntiItemlag(this);
 		enchant = new Enchant(this);
 		warp = new Warp(this);
+		commands = new Commands(this);
 
 		godManager = new GodManager(this);
 
-		getServer().getPluginManager().registerEvents(new Warp(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerMessage(this), this);
-		Bukkit.getPluginManager().registerEvents(bannerCreator, this);
 		Bukkit.getPluginManager().registerEvents(this, this);
 		teleporta = new TeleportA(this);
 		privateMessage = new PrivateMessage(this);
-		Bukkit.getPluginManager().registerEvents(enchant, this);
 		Bukkit.getPluginManager().registerEvents(privateMessage, this);
 		setupChat();
 		setupEconomy();
 		setupPermissions();
 		antiSpambot = new AntiSpambot(this);
-		sqlconnector.connect("127.0.0.1", "minecraft", "root", "");
+		sqlconnector.connect(getConfig().getString("mysql-ip"), "minecraft", getConfig().getString("mysql-username"), getConfig().getString("mysql-password"));
 
-		getCommand("kickall").setExecutor(new Commands(this));
-		getCommand("kick").setExecutor(new Commands(this));
-		getCommand("msg").setExecutor(new Commands(this));
-		getCommand("reply").setExecutor(new Commands(this));
+		getCommand("kickall").setExecutor(commands);
+		getCommand("kick").setExecutor(commands);
+		getCommand("msg").setExecutor(commands);
+		getCommand("reply").setExecutor(commands);
 	}
 	
 	@Override
@@ -131,8 +128,7 @@ public class aio extends JavaPlugin implements Listener {
 		return (economy != null);
 	}
 
-	private boolean setupPermissions()
-	{
+	private boolean setupPermissions() {
 		RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
 		if (permissionProvider != null) {
 			permission = permissionProvider.getProvider();

@@ -24,7 +24,7 @@ import org.bukkit.plugin.Plugin;
 
 public class Warp implements Listener {
 
-	private Plugin plugin;
+	private aio plugin;
 	private File warpfile;
 	private FileConfiguration warpconfig;
 	
@@ -42,8 +42,9 @@ public class Warp implements Listener {
 	String player_only;
 	
 	//Constructor
-	Warp(Plugin plugin) {
+	Warp(aio plugin) {
 		this.plugin = plugin;
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 		File warps = new File(plugin.getDataFolder(), "warps.yml");
 		if(!warps.exists()){
 			try{
