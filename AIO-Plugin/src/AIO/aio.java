@@ -22,11 +22,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.entity.Entity;
@@ -42,11 +38,13 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.*;
 
 public class aio extends JavaPlugin implements Listener {
 	
 	private Chat chat;
 	private Economy economy;
+	private Permission permission;
 
 	SQLConnector sqlconnector;
 	Enchant enchant;
@@ -58,11 +56,11 @@ public class aio extends JavaPlugin implements Listener {
 	AntiSpambot antiSpambot;
 	Warp warp;
 	GodManager godManager;
-	
+
 	Location spawn;
-	
-	List<Player> godPlayers = new ArrayList<Player>();
-	List<Player> frozenPlayers = new ArrayList<Player>();
+
+    List<Player> godPlayers = new ArrayList<Player>();
+    List<Player> frozenPlayers = new ArrayList<Player>();
 	
 	@Override
 	public void onEnable() {
@@ -74,7 +72,7 @@ public class aio extends JavaPlugin implements Listener {
 		//enable necessary parts
 		getConfig().options().copyDefaults(true);
 		saveDefaultConfig();
-		
+
 		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));
 		bannerCreator = new BannerCreator(this);
 		advertisements = new Advertisements(this);
@@ -96,8 +94,14 @@ public class aio extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(privateMessage, this);
 		setupChat();
 		setupEconomy();
+		setupPermissions();
 		antiSpambot = new AntiSpambot(this);
-		sqlconnector.connect("127.0.0.1:8889", "minecraft", "root", "root");
+		sqlconnector.connect("127.0.0.1", "minecraft", "root", "");
+
+		getCommand("kickall").setExecutor(new Commands(this));
+		getCommand("kick").setExecutor(new Commands(this));
+		getCommand("msg").setExecutor(new Commands(this));
+		getCommand("reply").setExecutor(new Commands(this));
 	}
 	
 	@Override
@@ -108,41 +112,6 @@ public class aio extends JavaPlugin implements Listener {
 		warp.saveWarps();
 		sqlconnector.disconnect();
 	}
-	
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (command.getName().equalsIgnoreCase("kickall")) {
-			if (sender instanceof Player) {
-				for (Player player: getServer().getOnlinePlayers()) {
-					if (sender == player) {
-						continue;
-					}
-					player.kickPlayer(String.join(" ", args));
-				}
-			} else {
-				for (Player player: getServer().getOnlinePlayers()) {
-					player.kickPlayer(String.join(" ", args));
-				}
-			}
-			getLogger().info(sender.getName() + " kicked all players.");
-		}
-		
-		if (command.getName().equalsIgnoreCase("kick")) {
-			if (args.length > 0 && getServer().getPlayer(args[0]) != null) {
-				getServer().getPlayer(args[0]).kickPlayer(String.join(" ", allButFirst(args)));
-			} else {
-				sender.sendMessage("Player not found.");
-			}
-		}
-		
-		if (command.getName().equalsIgnoreCase("nick")) {
-			if (sender instanceof Player) {
-				Player player = (Player)sender;
-				player.setDisplayName(colorize(args[0]));
-			} else {
-				sender.sendMessage("Only players can execute this command.");
-			}
-		}
 
 		if (command.getName().equalsIgnoreCase("whois")) {
 			if (args.length == 0) {
@@ -762,43 +731,45 @@ public class aio extends JavaPlugin implements Listener {
 			}
 			sender.sendMessage(colorize(warp.warp_list.replace("{list}", list.substring(0, list.length() - 2)).replace("{amount}", String.valueOf(warps.size()))));
 			return false;
+
+	private boolean setupChat() {
+		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+		if (chatProvider != null) {
+			chat = chatProvider.getProvider();
 		}
-		
-		if (command.getName().equalsIgnoreCase("lightning")) {
-			if (sender instanceof Player && args.length == 0) {
-				((Player)sender).getWorld().strikeLightning(((Player)sender).getTargetBlock(null, 600).getLocation());
-			} else if (args.length == 0) {
-				sender.sendMessage("Player not given.");
-			} else if (getServer().getPlayer(args[0]) == null) {
-				sender.sendMessage("Player not found.");
-			} else {
-				getServer().getPlayer(args[0]).getWorld().strikeLightning(getServer().getPlayer(args[0]).getLocation());
-			}
-		}
-		
-		if (command.getName().equalsIgnoreCase("spawner")) {
-			if (sender instanceof Player) {
-				if (args.length == 0) {
-					sender.sendMessage("No mob type given");
-				} else if (EntityType.valueOf(args[0].toUpperCase()) == null) {
-					sender.sendMessage("Invalid mob type given.");
-				} else {
-					if (!((Player)sender).getTargetBlock(null, 10).getType().equals(Material.MOB_SPAWNER)) {
-						sender.sendMessage("You must be looking at a mob spawner to change its type");
-					} else {
-						CreatureSpawner spawner = (CreatureSpawner)((Player)sender).getTargetBlock(null, 10).getState();
-						spawner.setSpawnedType(EntityType.valueOf(args[0].toUpperCase()));
-						spawner.update();
-					}
-				}
-			} else {
-				sender.sendMessage("Only players can execute this command.");
-			}
-		}
-		
-		return false;
+
+		return (chat != null);
 	}
-	
+
+	private boolean setupEconomy() {
+		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+		if (economyProvider != null) {
+			economy = economyProvider.getProvider();
+		}
+
+		return (economy != null);
+	}
+
+	private boolean setupPermissions()
+	{
+		RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+		if (permissionProvider != null) {
+			permission = permissionProvider.getProvider();
+		}
+		return (permission != null);
+	}
+
+	public static String[] allButFirst(String[] input) {
+		return Arrays.copyOfRange(input, 1, input.length);
+	}
+
+	public static String colorize(String input) {
+		return ChatColor.translateAlternateColorCodes('&', input);
+	}
+
+	@EventHandler
+	private void playerChat(AsyncPlayerChatEvent event)
+
 	@EventHandler
 	private void playerMove(PlayerMoveEvent event) {
 		if (frozenPlayers.contains(event.getPlayer())) {
@@ -836,32 +807,6 @@ public class aio extends JavaPlugin implements Listener {
 		if (frozenPlayers.contains(event.getPlayer()) && event.getReason().equals("Flying is not enabled on this server")) {
 			event.setCancelled(true);
 		}
-	}
-	
-	private boolean setupChat() {
-        RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-        if (chatProvider != null) {
-            chat = chatProvider.getProvider();
-        }
-
-        return (chat != null);
-    }
-	
-	private boolean setupEconomy() {
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            economy = economyProvider.getProvider();
-        }
-
-        return (economy != null);
-    }
-	
-	public static String[] allButFirst(String[] input) {
-		return Arrays.copyOfRange(input, 1, input.length);
-	}
-	
-	public static String colorize(String input) {
-		return ChatColor.translateAlternateColorCodes('&', input);
 	}
 	
 	@EventHandler
