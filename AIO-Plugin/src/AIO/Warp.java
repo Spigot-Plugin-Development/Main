@@ -58,7 +58,7 @@ public class Warp implements Listener {
 				ex.printStackTrace();
 			}
 		}
-		
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.load();
 	}
 	

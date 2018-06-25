@@ -28,6 +28,7 @@ public class BannerCreator implements Listener {
 	BannerCreator(Plugin plugin) {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.plugin = plugin;
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 	
 	public void createBanner(Player player) {
@@ -77,24 +78,20 @@ public class BannerCreator implements Listener {
 	
 	@EventHandler
 	public void playerClickInventory(InventoryClickEvent event) {
-		if (creatingBanners.contains((Player)event.getWhoClicked())) {
+		if (creatingBanners.contains(event.getWhoClicked())) {
 			switch (event.getCurrentItem().getType()) {
 			case WOOL:
-				ItemStack newBanner = createdBanners.get(creatingBanners.indexOf(event.getWhoClicked()));
-				BannerMeta newMeta = (BannerMeta)newBanner.getItemMeta();
-				newMeta.setBaseColor(DyeColor.getByWoolData(event.getCurrentItem().getData().getData()));
-				newBanner.setItemMeta(newMeta);
+				ItemStack newBanner = new ItemStack(Material.BANNER, 1, Convert.WoolToDye(event.getCurrentItem().getData().getData()));
 				createdBanners.set(creatingBanners.indexOf(event.getWhoClicked()), newBanner);
 				openDyeColor((Player)event.getWhoClicked());
 				break;
 			case INK_SACK:
 				ItemStack banner = createdBanners.get(creatingBanners.indexOf(event.getWhoClicked()));
 				BannerMeta meta = (BannerMeta)banner.getItemMeta();
-				meta.addPattern(new Pattern(DyeColor.getByDyeData(event.getCurrentItem().getData().getData()), PatternType.BORDER));
+				meta.addPattern(new Pattern(Convert.ByteToDye(event.getCurrentItem().getData().getData()), PatternType.BORDER));
 				banner.setItemMeta(meta);
 				createdBanners.set(creatingBanners.indexOf(event.getWhoClicked()), banner);
-				openPattern((Player)event.getWhoClicked(), DyeColor.getByDyeData(event.getCurrentItem().getData().getData()));
-				System.out.println(DyeColor.getByDyeData(event.getCurrentItem().getData().getData()));
+				openPattern((Player)event.getWhoClicked(), Convert.ByteToDye(event.getCurrentItem().getData().getData()));
 				break;
 			case BANNER:
 				ItemStack progressBanner = createdBanners.get(creatingBanners.indexOf(event.getWhoClicked()));
@@ -174,10 +171,10 @@ public class BannerCreator implements Listener {
 	}
 	
 	public static ItemStack getCharacter(String string, String foregroundColor, String backgroundColor, boolean border) {
-		DyeColor fgColor = DyeColor.valueOf(foregroundColor.toUpperCase());
-		DyeColor bgColor = DyeColor.valueOf(backgroundColor.toUpperCase());
+		DyeColor fgColor = Convert.StringtoDye(foregroundColor);
+		DyeColor bgColor = Convert.StringtoDye(backgroundColor);
 		if (border) {
-			ItemStack banner = new ItemStack(Material.BANNER, 1, bgColor.getDyeData());
+			ItemStack banner = new ItemStack(Material.BANNER, 1, Convert.DyeToByte(bgColor));
 			BannerMeta bannerMeta = (BannerMeta)banner.getItemMeta();
 			List<Pattern> patterns = new ArrayList<Pattern>();
 			switch (string.toLowerCase()) {
@@ -232,7 +229,7 @@ public class BannerCreator implements Listener {
 				patterns.add(new Pattern(bgColor, PatternType.BORDER));
 				break;
 			case "q":
-				banner = new ItemStack(Material.BANNER, 1, fgColor.getDyeData());
+				banner = new ItemStack(Material.BANNER, 1, Convert.DyeToByte(fgColor));
 				patterns.add(new Pattern(bgColor, PatternType.RHOMBUS_MIDDLE));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
@@ -274,7 +271,7 @@ public class BannerCreator implements Listener {
 			banner.setItemMeta(bannerMeta);
 			return banner;
 		} else {
-			ItemStack banner = new ItemStack(Material.BANNER, 1, bgColor.getDyeData());
+			ItemStack banner = new ItemStack(Material.BANNER, 1,Convert.DyeToByte(bgColor));
 			BannerMeta bannerMeta = (BannerMeta)banner.getItemMeta();
 			List<Pattern> patterns = new ArrayList<Pattern>();
 			switch (string.toLowerCase()) {
@@ -297,7 +294,7 @@ public class BannerCreator implements Listener {
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
 				break;
 			case "d":
-				banner = new ItemStack(Material.BANNER, 1, fgColor.getDyeData());
+				banner = new ItemStack(Material.BANNER, 1, Convert.DyeToByte(fgColor));
 				patterns.add(new Pattern(bgColor, PatternType.RHOMBUS_MIDDLE));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_LEFT));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_TOP));
@@ -324,7 +321,7 @@ public class BannerCreator implements Listener {
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));
 				break;
 			case "h":
-				banner = new ItemStack(Material.BANNER, 1, fgColor.getDyeData());
+				banner = new ItemStack(Material.BANNER, 1, Convert.DyeToByte(fgColor));
 				patterns.add(new Pattern(bgColor, PatternType.STRIPE_TOP));
 				patterns.add(new Pattern(bgColor, PatternType.STRIPE_BOTTOM));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_RIGHT));
@@ -473,7 +470,7 @@ public class BannerCreator implements Listener {
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_MIDDLE));
 				break;
 			case "5":
-				banner = new ItemStack(Material.BANNER, 1, fgColor.getDyeData());
+				banner = new ItemStack(Material.BANNER, 1, Convert.DyeToByte(fgColor));
 				patterns.add(new Pattern(bgColor, PatternType.HALF_VERTICAL_MIRROR));
 				patterns.add(new Pattern(bgColor, PatternType.HALF_HORIZONTAL_MIRROR));
 				patterns.add(new Pattern(fgColor, PatternType.STRIPE_BOTTOM));

@@ -1,20 +1,17 @@
 package AIO;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Set;
-
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
@@ -25,20 +22,15 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.*;
+import java.sql.ResultSet;
+import java.util.*;
 
 public class aio extends JavaPlugin implements Listener {
 	
@@ -60,8 +52,10 @@ public class aio extends JavaPlugin implements Listener {
 	Commands commands;
 
 	Location spawn;
+	List<Player> frozenPlayers = new ArrayList<Player>();
 
-    List<Player> frozenPlayers = new ArrayList<Player>();
+	CacheManager cacheManager;
+	List<Player> cachedPlayers = new ArrayList<Player>();
 	
 	@Override
 	public void onEnable() {
@@ -74,6 +68,7 @@ public class aio extends JavaPlugin implements Listener {
 		saveDefaultConfig();
 
 		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));
+
 		bannerCreator = new BannerCreator(this);
 		advertisements = new Advertisements(this);
 		antiItemlag = new AntiItemlag(this);
@@ -83,6 +78,9 @@ public class aio extends JavaPlugin implements Listener {
 
 		godManager = new GodManager(this);
 		flyManager = new FlyManager(this);
+		teleporta = new TeleportA(this);
+		privateMessage = new PrivateMessage(this);
+		antiSpambot = new AntiSpambot(this);
 
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
@@ -99,6 +97,13 @@ public class aio extends JavaPlugin implements Listener {
 
 		getCommand("kickall").setExecutor(commands);
 		getCommand("kick").setExecutor(commands);
+		setupChat();
+		setupEconomy();
+		sqlconnector.connect("127.0.0.1:8889", "minecraft", "root", "root");
+
+		for (Player player: getServer().getOnlinePlayers()) {
+			//cachedPlayers.add()
+		}
 	}
 	
 	@Override
@@ -114,8 +119,6 @@ public class aio extends JavaPlugin implements Listener {
 		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
 		if (chatProvider != null) {
 			chat = chatProvider.getProvider();
-		}
-
 		return (chat != null);
 	}
 
@@ -150,14 +153,18 @@ public class aio extends JavaPlugin implements Listener {
 			event.setCancelled(true);
 			event.setTo(event.getFrom());
 			event.getPlayer().sendMessage("You are frozen and can not move.");
-			try {
-				ResultSet result = sqlconnector.query("SELECT * FROM PLAYERS WHERE player_UUID = '" + event.getPlayer().getUniqueId() + "';");
-				while (result.next()) {
-					System.out.println(result);
+			sqlconnector.query("SELECT * FROM PLAYERS WHERE player_UUID = '" + event.getPlayer().getUniqueId() + "';", new SQLCallback() {
+				@Override
+				public void callback(ResultSet result) {
+					try {
+						while (result.next()) {
+							System.out.println(result.getDouble("balance"));
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			});
 		}
 	}
 	

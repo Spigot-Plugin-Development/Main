@@ -14,6 +14,7 @@ public class Enchant implements Listener {
 	Enchant(Plugin plugin) {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.plugin = plugin;
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 	public static Enchantment Translate(String str) {
 		if (Enchantment.getByName(str) != null) {
