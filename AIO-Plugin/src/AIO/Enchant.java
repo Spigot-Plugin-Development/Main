@@ -12,6 +12,7 @@ public class Enchant implements Listener {
 	Plugin plugin;
 	
 	Enchant(Plugin plugin) {
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.plugin = plugin;
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
