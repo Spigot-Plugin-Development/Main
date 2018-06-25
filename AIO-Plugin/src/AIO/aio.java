@@ -57,6 +57,7 @@ public class aio extends JavaPlugin implements Listener {
 	BannerCreator bannerCreator;
 	AntiSpambot antiSpambot;
 	Warp warp;
+	GodManager godManager;
 	
 	Location spawn;
 	
@@ -80,6 +81,8 @@ public class aio extends JavaPlugin implements Listener {
 		antiItemlag = new AntiItemlag(this);
 		enchant = new Enchant(this);
 		warp = new Warp(this);
+
+		godManager = new GodManager(this);
 
 		getServer().getPluginManager().registerEvents(new Warp(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
@@ -164,7 +167,7 @@ public class aio extends JavaPlugin implements Listener {
 			if (args.length > 1 && getServer().getPlayer(args[0]) != null) {
 				if (sender instanceof Player) {
 					Player player = (Player)sender;
-					privateMessage.message(player, getServer().getPlayer(args[0]), String.join(" ", allButFirst(args)));
+					//privateMessage.message(player, getServer().getPlayer(args[0]), String.join(" ", allButFirst(args)));
 				} else {
 					sender.sendMessage("Only players can execute this command.");
 				}
@@ -178,7 +181,7 @@ public class aio extends JavaPlugin implements Listener {
 			if (args.length > 0) {
 				if (sender instanceof Player) {
 					Player player = (Player)sender;
-					privateMessage.reply(player, String.join(" ", args));
+					//privateMessage.reply(player, String.join(" ", args));
 				} else {
 					sender.sendMessage("Only players can execute this command.");
 				}
@@ -424,32 +427,6 @@ public class aio extends JavaPlugin implements Listener {
 				sender.sendMessage("Player not found.");
 			} else {
 				getServer().getPlayer(args[0]).setAllowFlight(!getServer().getPlayer(args[0]).getAllowFlight());
-			}
-		}
-		
-		if (command.getName().equalsIgnoreCase("god")) {
-			if (sender instanceof Player) {
-				if (args.length == 0) {
-					if (godPlayers.contains((Player)sender)) {
-						godPlayers.remove((Player)sender);
-					} else {
-						godPlayers.add((Player)sender);
-					}
-				} else {
-					if (godPlayers.contains(getServer().getPlayer(args[0]))) {
-						godPlayers.remove(getServer().getPlayer(args[0]));
-					} else {
-						godPlayers.add(getServer().getPlayer(args[0]));
-					}
-				}
-			} else if (args.length == 0) {
-				sender.sendMessage("Player not found.");
-			} else {
-				if (godPlayers.contains(getServer().getPlayer(args[0]))) {
-					godPlayers.remove(getServer().getPlayer(args[0]));
-				} else {
-					godPlayers.add(getServer().getPlayer(args[0]));
-				}
 			}
 		}
 		
@@ -904,19 +881,6 @@ public class aio extends JavaPlugin implements Listener {
 		}
 		for (int j = 0; j < i; j++) {
 			event.getBlock().getRelative(0, j, 0).breakNaturally(event.getPlayer().getInventory().getItem(event.getPlayer().getInventory().getHeldItemSlot()));
-		}
-	}
-	
-	@EventHandler
-	private void playerHarm(EntityDamageEvent event) {
-		if (event.getEntity() instanceof Player) {
-			if (godPlayers.contains((Player)event.getEntity())) {
-				event.setCancelled(true);
-				((Player)event.getEntity()).setHealth(20.0);
-				((Player)event.getEntity()).setFoodLevel(20);
-				((Player)event.getEntity()).setRemainingAir(((Player)event.getEntity()).getMaximumAir());
-				((Player)event.getEntity()).setFireTicks(0);
-			}
 		}
 	}
 	

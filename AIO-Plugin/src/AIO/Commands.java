@@ -374,33 +374,6 @@ public class Commands implements CommandExecutor {
             }
         }
 
-        /* //God - turn on/off god mode
-        if(cmd.getName().equalsIgnoreCase("god")) {
-            if(sender instanceof Player) {
-                if(args.length == 0) {
-                    if(godPlayers.contains((Player)sender)) {
-                        godPlayers.remove((Player)sender);
-                    } else {
-                        godPlayers.add((Player)sender);
-                    }
-                } else {
-                    if(godPlayers.contains(plugin.getServer().getPlayer(args[0]))) {
-                        godPlayers.remove(plugin.getServer().getPlayer(args[0]));
-                    } else {
-                        godPlayers.add(plugin.getServer().getPlayer(args[0]));
-                    }
-                }
-            } else if(args.length == 0) {
-                sender.sendMessage("Player not found.");
-            } else {
-                if(godPlayers.contains(plugin.getServer().getPlayer(args[0]))) {
-                    godPlayers.remove(plugin.getServer().getPlayer(args[0]));
-                } else {
-                    godPlayers.add(plugin.getServer().getPlayer(args[0]));
-                }
-            }
-        } */
-
         //Kittycannon - shoot exploding ocelot baby
         if(cmd.getName().equalsIgnoreCase("kittycannon")) {
             if(sender instanceof Player) {
