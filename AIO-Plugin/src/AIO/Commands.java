@@ -26,7 +26,7 @@ public class Commands implements CommandExecutor {
     BannerCreator bannerCreator;
     Advertisements advertisements;
 
-    Commands(Plugin plugin) {
+    Commands(aio plugin) {
         this.plugin = plugin;
         privateMessage = new PrivateMessage(plugin);
     }
@@ -90,24 +90,6 @@ public class Commands implements CommandExecutor {
         //Ping - ping-pong test command
         if(cmd.getName().equalsIgnoreCase("ping")) {
             sender.sendMessage("Pong!");
-        }
-
-        //Msg - send private message to another player
-        if(cmd.getName().equalsIgnoreCase("msg")) {
-            if(sender instanceof Player) {
-                privateMessage.message((Player)sender, args);
-            } else {
-                sender.sendMessage("Only players can execute this command.");
-            }
-        }
-
-        //Reply - reply to previous message
-        if(cmd.getName().equalsIgnoreCase("reply")) {
-            if(sender instanceof Player) {
-                privateMessage.reply((Player)sender, args);
-            } else {
-                sender.sendMessage("Only players can execute this command.");
-            }
         }
 
         //Sun - set weather to sunny

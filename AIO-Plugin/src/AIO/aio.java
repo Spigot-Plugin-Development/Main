@@ -99,8 +99,6 @@ public class aio extends JavaPlugin implements Listener {
 
 		getCommand("kickall").setExecutor(commands);
 		getCommand("kick").setExecutor(commands);
-		getCommand("msg").setExecutor(commands);
-		getCommand("reply").setExecutor(commands);
 	}
 	
 	@Override
