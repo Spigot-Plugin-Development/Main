@@ -27,7 +27,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 
 public class aio extends JavaPlugin implements Listener {
@@ -49,6 +48,9 @@ public class aio extends JavaPlugin implements Listener {
 	
 	List<Player> godPlayers = new ArrayList<Player>();
 	List<Player> frozenPlayers = new ArrayList<Player>();
+
+	CacheManager cacheManager;
+	List<Player> cachedPlayers = new ArrayList<Player>();
 	
 	@Override
 	public void onEnable() {
@@ -79,6 +81,10 @@ public class aio extends JavaPlugin implements Listener {
 		setupChat();
 		setupEconomy();
 		sqlconnector.connect("127.0.0.1:8889", "minecraft", "root", "root");
+
+		for (Player player: getServer().getOnlinePlayers()) {
+			//cachedPlayers.add()
+		}
 	}
 	
 	@Override
