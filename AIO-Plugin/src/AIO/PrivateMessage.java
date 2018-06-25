@@ -43,17 +43,13 @@ public class PrivateMessage implements Listener, CommandExecutor {
                     target.sendMessage("[ " + player.getName() + " ] >> [ " + target.getName() + " ] : " + message);
                     if(replyList.containsKey(target.getName())) {
                         replyList.replace(target.getName(), player.getName());
-                        plugin.getLogger().info("Replace: " + target.getName() + " > " + replyList.get(target.getName()));
                     } else {
                         replyList.put(target.getName(), player.getName());
-                        plugin.getLogger().info("Put: " + target.getName() + " > " + replyList.get(target.getName()));
                     }
                     if(replyList.containsKey(player.getName())) {
                         replyList.replace(player.getName(), target.getName());
-                        plugin.getLogger().info("Replace: " + player.getName() + " > " + replyList.get(player.getName()));
                     } else {
                         replyList.put(player.getName(), target.getName());
-                        plugin.getLogger().info("Put: " + player.getName() + " > " + replyList.get(player.getName()));
                     }
                 } else if(args.length == 1 && plugin.getServer().getPlayer(args[0]) != null) {
                     player.sendMessage("You have to enter a message.");
@@ -68,9 +64,6 @@ public class PrivateMessage implements Listener, CommandExecutor {
         if(cmd.getName().equalsIgnoreCase("reply")) {
             if(sender instanceof Player) {
                 Player player = (Player)sender;
-                plugin.getLogger().info("Reply: sender is " + player.getName() + ", pair in list is " + replyList.get(player.getName()));
-                plugin.getLogger().info("Number of elements in hashmap: " + replyList.size());
-
                 if(replyList.containsKey(player.getName()) && args.length > 0) {
                     Player target = plugin.getServer().getPlayer(replyList.get(player.getName()));
                     String message = String.join(" ", aio.allButFirst(args));
