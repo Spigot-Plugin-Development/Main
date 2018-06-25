@@ -56,6 +56,7 @@ public class aio extends JavaPlugin implements Listener {
 	AntiSpambot antiSpambot;
 	Warp warp;
 	GodManager godManager;
+	FlyManager flyManager;
 	Commands commands;
 
 	Location spawn;
@@ -81,6 +82,7 @@ public class aio extends JavaPlugin implements Listener {
 		commands = new Commands(this);
 
 		godManager = new GodManager(this);
+		flyManager = new FlyManager(this);
 
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
