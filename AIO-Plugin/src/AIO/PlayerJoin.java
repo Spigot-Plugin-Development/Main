@@ -23,7 +23,7 @@ public class PlayerJoin implements Listener {
 		if (plugin.cacheManager.containsPlayer(event.getPlayer().getUniqueId())) {
 			PlayerInfo info = plugin.cacheManager.getPlayer(event.getPlayer().getUniqueId());
 			if (info.godMode) {
-				plugin.godPlayers.add(event.getPlayer());
+				plugin.godManager.addGod(event.getPlayer());
 			}
 
 		}

@@ -92,14 +92,10 @@ public class aio extends JavaPlugin implements Listener {
 		setupChat();
 		setupEconomy();
 		setupPermissions();
-		antiSpambot = new AntiSpambot(this);
 		sqlconnector.connect(getConfig().getString("mysql-ip"), "minecraft", getConfig().getString("mysql-username"), getConfig().getString("mysql-password"));
 
 		getCommand("kickall").setExecutor(commands);
 		getCommand("kick").setExecutor(commands);
-		setupChat();
-		setupEconomy();
-		sqlconnector.connect("127.0.0.1:8889", "minecraft", "root", "root");
 
 		for (Player player: getServer().getOnlinePlayers()) {
 			//cachedPlayers.add()
@@ -119,6 +115,7 @@ public class aio extends JavaPlugin implements Listener {
 		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
 		if (chatProvider != null) {
 			chat = chatProvider.getProvider();
+		}
 		return (chat != null);
 	}
 
