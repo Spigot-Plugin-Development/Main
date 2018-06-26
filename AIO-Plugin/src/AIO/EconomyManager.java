@@ -102,7 +102,7 @@ public class EconomyManager implements CommandExecutor {
 			if (args.length == 1) {
 				if (sender.hasPermission("aio.balance.others")) {
 					if (plugin.getServer().getPlayer(args[0]) != null) {
-						sender.sendMessage("Balance of " + plugin.getServer().getPlayer(args[0]) + ": $" + getBalance(plugin.getServer().getPlayer(args[0]).getUniqueId()));
+						sender.sendMessage("Balance of " + plugin.getServer().getPlayer(args[0]).getDisplayName() + ": $" + getBalance(plugin.getServer().getPlayer(args[0]).getUniqueId()));
 						return false;
 					}
 				} else {
