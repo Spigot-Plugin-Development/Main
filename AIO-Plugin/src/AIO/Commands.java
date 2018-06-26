@@ -11,21 +11,12 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
-
 public class Commands implements CommandExecutor {
 
-    private Plugin plugin;
-
-    PrivateMessage privateMessage;
-    TeleportA teleporta;
-    Warp warp;
-    BannerCreator bannerCreator;
-    Advertisements advertisements;
+    private aio plugin;
 
     Commands(aio plugin) {
         this.plugin = plugin;
-        privateMessage = new PrivateMessage(plugin);
         Bukkit.getServer().getPluginCommand("flyspeed").setExecutor(this);
         Bukkit.getServer().getPluginCommand("giveself").setExecutor(this);
         Bukkit.getServer().getPluginCommand("spawner").setExecutor(this);
@@ -72,7 +63,7 @@ public class Commands implements CommandExecutor {
             }
         }
 
-        /* //WhoIs - information about specified player
+        //WhoIs - information about specified player
         if(cmd.getName().equalsIgnoreCase("whois")) {
             if(args.length == 0) {
                 sender.sendMessage("Player not given.");
@@ -82,10 +73,10 @@ public class Commands implements CommandExecutor {
                 sender.sendMessage("Information about " + plugin.getServer().getPlayer(args[0]).getName());
                 sender.sendMessage("IP Address: " + plugin.getServer().getPlayer(args[0]).getAddress().toString());
                 sender.sendMessage("OP: " + plugin.getServer().getPlayer(args[0]).isOp());
-                sender.sendMessage("Fly mode: " + plugin.getServer().getPlayer(args[0]).getAllowFlight());
-                sender.sendMessage("God mode: " + godPlayers.contains(plugin.getServer().getPlayer(args[0])));
+                sender.sendMessage("Fly: " + plugin.flyManager.canFly(plugin.getServer().getPlayer(args[0])));
+                sender.sendMessage("God mode: " + plugin.godManager.isGod(plugin.getServer().getPlayer(args[0])));
             }
-        } */
+        }
 
         //Ping - ping-pong test command
         if(cmd.getName().equalsIgnoreCase("ping")) {
@@ -195,41 +186,45 @@ public class Commands implements CommandExecutor {
         //Giveself - give items to player
         if(cmd.getName().equalsIgnoreCase("giveself")) {
             if(sender instanceof Player) {
-                ItemStack toGive = new ItemStack(Material.matchMaterial(args[0]));
-                if(args.length > 1) {
-                    toGive.setAmount(Integer.parseInt(args[1]));
+                if (args.length == 0) {
+                    sender.sendMessage("No material given.");
                 } else {
-                    toGive.setAmount(1);
+                    ItemStack toGive = new ItemStack(Material.matchMaterial(args[0]));
+                    if(args.length > 1) {
+                        toGive.setAmount(Integer.parseInt(args[1]));
+                    } else {
+                        toGive.setAmount(1);
+                    }
+                    ((Player)sender).getInventory().addItem(toGive);
                 }
-                ((Player)sender).getInventory().addItem(toGive);
             }
         }
 
         //Tpa - send teleport request to player
         if(cmd.getName().equalsIgnoreCase("tpa")) {
             if(sender instanceof Player && args.length > 0 && plugin.getServer().getPlayer(args[0]) != null) {
-                teleporta.request((Player)sender, plugin.getServer().getPlayer(args[0]), false);
+                plugin.teleporta.request((Player)sender, plugin.getServer().getPlayer(args[0]), false);
             }
         }
 
         //Tpahere - send teleport-here request to player
         if(cmd.getName().equalsIgnoreCase("tpahere")) {
             if(sender instanceof Player && args.length > 0 && plugin.getServer().getPlayer(args[0]) != null) {
-                teleporta.request((Player)sender, plugin.getServer().getPlayer(args[0]), true);
+                plugin.teleporta.request((Player)sender, plugin.getServer().getPlayer(args[0]), true);
             }
         }
 
         //Tpaccept - accept tpa/tpahere request
         if(cmd.getName().equalsIgnoreCase("tpaccept")) {
             if(sender instanceof Player) {
-                teleporta.decide((Player)sender, true);
+                plugin.teleporta.decide((Player)sender, true);
             }
         }
 
         //Tpdeny - deny tpa/tpahere request
         if(cmd.getName().equalsIgnoreCase("tpdeny")) {
             if(sender instanceof Player) {
-                teleporta.decide((Player)sender, false);
+                plugin.teleporta.decide((Player)sender, false);
             }
         }
 
@@ -246,7 +241,7 @@ public class Commands implements CommandExecutor {
         if(cmd.getName().equalsIgnoreCase("banner")) {
             if(sender instanceof Player) {
                 if(args.length == 0) {
-                    bannerCreator.createBanner((Player)sender);
+                    plugin.bannerCreator.createBanner((Player)sender);
                 } else if(args[0].equalsIgnoreCase("get")) {
                     if(BannerCreator.getByName(String.join(" ", aio.allButFirst(args))) != null) {
                         ((Player)sender).getInventory().addItem(BannerCreator.getByName(String.join(" ", aio.allButFirst(args))));
