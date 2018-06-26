@@ -228,6 +228,26 @@ public class Commands implements CommandExecutor {
             }
         }
 
+        if (cmd.getName().equalsIgnoreCase("adminonly")) {
+            if (sender instanceof Player) {
+                if (((Player)sender).hasPermission("aio.ao.send") {
+                    for (Player player: plugin.getServer().getOnlinePlayers()) {
+                        if (player.hasPermission("aio.ao")) {
+                            player.sendMessage(aio.colorize("&c&lAdmin Only: " + sender.getName() + ": " + String.join(" ", args)));
+                        }
+                    }
+                } else {
+                    sender.sendMessage("You don't have permission to execute that command.");
+                }
+            } else {
+                for (Player player: plugin.getServer().getOnlinePlayers()) {
+                    if (player.hasPermission("aio.ao")) {
+                        player.sendMessage(aio.colorize("&c&lAdmin Only: " + sender.getName() + ": " + String.join(" ", args)));
+                    }
+                }
+            }
+        }
+
         /* //Spawn - teleport to spawn location
         if(cmd.getName().equalsIgnoreCase("spawn")) {
             if(sender instanceof Player) {
