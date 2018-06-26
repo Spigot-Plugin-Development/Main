@@ -80,7 +80,6 @@ public class PrivateMessage implements Listener, CommandExecutor {
         }
 
         return false;
-
     }
 	
 }
