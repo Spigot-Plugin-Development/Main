@@ -2,6 +2,7 @@ package AIO;
 
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 
 public class Convert {
@@ -12,6 +13,26 @@ public class Convert {
 
     public static Location StringToLocation(String string) {
         return new Location(Bukkit.getServer().getWorld(string.split(";")[0]), Double.parseDouble(string.split(";")[1]), Double.parseDouble(string.split(";")[2]), Double.parseDouble(string.split(";")[3]), Float.parseFloat(string.split(";")[4]), Float.parseFloat(string.split(";")[5]));
+    }
+
+    public static GameMode IntToGamemode(int gamemode) {
+        switch (gamemode) {
+            case 0: return GameMode.SURVIVAL;
+            case 1: return GameMode.CREATIVE;
+            case 2: return GameMode.ADVENTURE;
+            case 3: return GameMode.SPECTATOR;
+        }
+        return GameMode.SURVIVAL;
+    }
+
+    public static int GamemodeToInt(GameMode gamemode) {
+        switch (gamemode) {
+            case SURVIVAL: return 0;
+            case CREATIVE: return 1;
+            case ADVENTURE: return 2;
+            case SPECTATOR: return 3;
+        }
+        return 0;
     }
 
     public static DyeColor ByteToDye(byte color) {
