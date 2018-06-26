@@ -96,7 +96,7 @@ public class Commands implements CommandExecutor {
         if(cmd.getName().equalsIgnoreCase("worlds")) {
             sender.sendMessage("Worlds: " + plugin.getServer().getWorlds().toString());
         }
-        
+
         //Heal - fill up health and food bar
         if(cmd.getName().equalsIgnoreCase("heal")) {
             if(args.length == 0 && !(sender instanceof Player)) {
