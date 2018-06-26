@@ -98,10 +98,6 @@ public class aio extends JavaPlugin implements Listener {
 
 		getCommand("kickall").setExecutor(commands);
 		getCommand("kick").setExecutor(commands);
-
-		for (Player player: getServer().getOnlinePlayers()) {
-			new AsyncPlayerPreLoginEvent(player.getName(), player.getAddress().getAddress(), player.getUniqueId());
-		}
 	}
 	
 	@Override
@@ -110,6 +106,10 @@ public class aio extends JavaPlugin implements Listener {
 		advertisements.removeBar();
 		saveConfig();
 		warp.saveWarps();
+		for (Player player: getServer().getOnlinePlayers()) {
+			cacheManager.updatePlayer(player.getUniqueId());
+			cacheManager.savePlayer(cacheManager.getPlayer(player.getUniqueId()));
+		}
 		sqlconnector.disconnect();
 	}
 

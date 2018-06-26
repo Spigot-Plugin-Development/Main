@@ -49,22 +49,36 @@ public class SQLConnector {
 	}
 
 	public void update(String query, SQLCallback completed) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				try {
-					Statement statement = connection.createStatement();
-					statement.executeUpdate(query);
-					new BukkitRunnable() {
-						public void run() {
-							completed.callback();
-						}
-					}.runTask(plugin);
-				} catch (Exception e) {
-					e.printStackTrace();
+		if (plugin.isEnabled()) {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					try {
+						Statement statement = connection.createStatement();
+						statement.executeUpdate(query);
+						new BukkitRunnable() {
+							public void run() {
+								completed.callback();
+							}
+						}.runTask(plugin);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+			}.runTaskAsynchronously(plugin);
+		} else {
+			try {
+				Statement statement = connection.createStatement();
+				statement.executeUpdate(query);
+				new BukkitRunnable() {
+					public void run() {
+						completed.callback();
+					}
+				}.runTask(plugin);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		}.runTaskAsynchronously(plugin);
+		}
 	}
 	
 	public void disconnect() {
