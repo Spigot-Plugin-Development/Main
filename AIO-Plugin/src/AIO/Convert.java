@@ -5,6 +5,9 @@ import org.bukkit.DyeColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Convert {
 
     public static String LocationToString(Location location) {
@@ -33,6 +36,19 @@ public class Convert {
             case SPECTATOR: return 3;
         }
         return 0;
+    }
+
+    public static String DateToString(Date date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formatter.format(date);
+    }
+
+    public static int BooleanToInt(boolean value) {
+        if (value) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public static DyeColor ByteToDye(byte color) {
