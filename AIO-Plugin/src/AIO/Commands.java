@@ -1,9 +1,6 @@
 package AIO;
 
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,6 +26,9 @@ public class Commands implements CommandExecutor {
     Commands(aio plugin) {
         this.plugin = plugin;
         privateMessage = new PrivateMessage(plugin);
+        Bukkit.getServer().getPluginCommand("flyspeed").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("giveself").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("spawner").setExecutor(this);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
