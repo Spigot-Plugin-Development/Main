@@ -50,6 +50,7 @@ public class aio extends JavaPlugin implements Listener {
 	GodManager godManager;
 	FlyManager flyManager;
 	Commands commands;
+	EconomyManager economyManager;
 	VanishManager vanishManager;
 
 	Location spawn;
@@ -77,6 +78,7 @@ public class aio extends JavaPlugin implements Listener {
 		warp = new Warp(this);
 		commands = new Commands(this);
 
+		economyManager = new EconomyManager(this);
 		godManager = new GodManager(this);
 		flyManager = new FlyManager(this);
 		teleporta = new TeleportA(this);
