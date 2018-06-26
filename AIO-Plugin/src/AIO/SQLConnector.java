@@ -69,15 +69,23 @@ public class SQLConnector {
 	}
 	
 	public void disconnect() {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				try {
-					connection.close();
-				} catch (Exception e) {
-					e.printStackTrace();
+		if (plugin.isEnabled()) {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					try {
+						connection.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+			}.runTaskAsynchronously(plugin);
+		} else {
+			try {
+				connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		}.runTaskAsynchronously(plugin);
+		}
 	}
 }
