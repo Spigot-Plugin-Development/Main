@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class FreezeManager implements Listener, CommandExecutor {
     aio plugin;
 
     List<Player> frozenPlayers = new ArrayList<Player>();
+    List<Player> unfrozenPlayers = new ArrayList<>();
 
     FreezeManager(aio plugin) {
         this.plugin = plugin;
@@ -46,6 +48,16 @@ public class FreezeManager implements Listener, CommandExecutor {
     public void removeFrozen(Player player) {
         if (isFrozen(player)) {
             frozenPlayers.remove(player);
+            unfrozenPlayers.add(player);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (player.isOnGround() || !player.isOnline()) {
+                        unfrozenPlayers.remove(player);
+                        cancel();
+                    }
+                }
+            }.runTaskTimer(plugin, 1, 2);
         }
     }
 
@@ -68,7 +80,7 @@ public class FreezeManager implements Listener, CommandExecutor {
 
     @EventHandler
     private void playerKick(PlayerKickEvent event) {
-        if (frozenPlayers.contains(event.getPlayer()) && event.getReason().equals("Flying is not enabled on this server")) {
+        if ((unfrozenPlayers.contains(event.getPlayer()) || frozenPlayers.contains(event.getPlayer())) && event.getReason().equals("Flying is not enabled on this server")) {
             event.setCancelled(true);
         }
     }
