@@ -289,22 +289,6 @@ public class Commands implements CommandExecutor {
             }
         }
 
-        //Ad - create new ad
-        if(cmd.getName().equalsIgnoreCase("ad")) {
-            if(sender instanceof Player) {
-                advertisements.adCommand((Player)sender, args);
-            }
-        }
-
-        /*//Balance - get balance
-        if(cmd.getName().equalsIgnoreCase("balance")) {
-            if(sender instanceof Player) {
-                Player player = (Player)sender;
-                economy.depositPlayer(player, 10);
-                player.sendMessage("Current balance: " + economy.getBalance(player));
-            }
-        } */
-
         //Heal - fill up health and food bar
         if(cmd.getName().equalsIgnoreCase("heal")) {
             if(args.length == 0 && !(sender instanceof Player)) {
