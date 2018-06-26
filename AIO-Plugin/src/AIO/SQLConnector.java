@@ -21,7 +21,6 @@ public class SQLConnector {
 				try {
 					Class.forName("com.mysql.jdbc.Driver");
 					connection = DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + database, username, password);
-					System.out.println(connection.getMetaData());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
