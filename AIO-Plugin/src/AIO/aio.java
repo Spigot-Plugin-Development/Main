@@ -5,29 +5,21 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Sign;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import net.milkbowl.vault.chat.Chat;
-import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.*;
 import java.sql.ResultSet;
 import java.util.*;
@@ -58,7 +50,6 @@ public class aio extends JavaPlugin implements Listener {
 	List<Player> frozenPlayers = new ArrayList<Player>();
 
 	CacheManager cacheManager;
-	List<Player> cachedPlayers = new ArrayList<Player>();
 	
 	@Override
 	public void onEnable() {
@@ -67,11 +58,10 @@ public class aio extends JavaPlugin implements Listener {
 		sqlconnector = new SQLConnector(this);
 		//retrieve server id
 		//enable necessary parts
-		getConfig().options().copyDefaults(true);
-		saveDefaultConfig();
 
 		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));
 
+		cacheManager = new CacheManager(this);
 		bannerCreator = new BannerCreator(this);
 		advertisements = new Advertisements(this);
 		antiItemlag = new AntiItemlag(this);
@@ -96,13 +86,13 @@ public class aio extends JavaPlugin implements Listener {
 		setupChat();
 		setupEconomy();
 		setupPermissions();
-		sqlconnector.connect(getConfig().getString("mysql-ip"), "minecraft", getConfig().getString("mysql-username"), getConfig().getString("mysql-password"));
+		sqlconnector.connect("127.0.0.1:8889", "minecraft", "root", "root");
 
 		getCommand("kickall").setExecutor(commands);
 		getCommand("kick").setExecutor(commands);
 
 		for (Player player: getServer().getOnlinePlayers()) {
-			//cachedPlayers.add()
+			new AsyncPlayerPreLoginEvent(player.getName(), player.getAddress().getAddress(), player.getUniqueId());
 		}
 	}
 	
