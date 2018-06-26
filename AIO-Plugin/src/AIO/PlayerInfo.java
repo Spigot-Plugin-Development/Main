@@ -29,12 +29,12 @@ public class PlayerInfo {
 
     PlayerInfo(UUID uuid) {
         this.uuid = uuid;
-        this.name = Bukkit.getServer().getPlayer(uuid).getName();
-        this.lastJoin = lastJoin;
-        this.lastQuit = lastJoin;
-        this.ip = Bukkit.getServer().getPlayer(uuid).getAddress().toString();
+        this.name = "";
+        this.lastJoin = new Date();
+        this.lastQuit = new Date();
+        this.ip = "";
         this.server = Bukkit.getServerName();
-        this.location = Bukkit.getServer().getPlayer(uuid).getLocation();
+        this.location = new Location(Bukkit.getWorld("world"), 0.0, 255.0, 0.0);
         this.gamemode = 0;
         this.godMode = false;
         this.fly = false;
@@ -43,7 +43,7 @@ public class PlayerInfo {
         this.muted = new Date();
         this.banned = new Date();
         this.coins = 0;
-        this.nick = Bukkit.getServer().getPlayer(uuid).getName();
+        this.nick = "";
         this.balance = 0;
         this.warnings = "";
     }
