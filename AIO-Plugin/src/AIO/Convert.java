@@ -8,7 +8,7 @@ import org.bukkit.Location;
 public class Convert {
 
     public static String LocationToString(Location location) {
-        return location.getWorld() + ";" + location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + location.getPitch() + ";" + location.getYaw();
+        return location.getWorld().getName() + ";" + location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + location.getPitch() + ";" + location.getYaw();
     }
 
     public static Location StringToLocation(String string) {
