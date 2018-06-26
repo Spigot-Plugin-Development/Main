@@ -52,7 +52,7 @@ public class aio extends JavaPlugin implements Listener {
 
 	Location spawn;
 	PlayerMessage playerMessage;
-	List<Player> frozenPlayers = new ArrayList<Player>();
+	FreezeManager freezeManager;
 
 	CacheManager cacheManager;
 	
@@ -88,6 +88,7 @@ public class aio extends JavaPlugin implements Listener {
 		privateMessage = new PrivateMessage(this);
 		playerJoin = new PlayerJoin(this);
 		playerLeave = new PlayerLeave(this);
+		freezeManager = new FreezeManager(this);
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
@@ -144,47 +145,11 @@ public class aio extends JavaPlugin implements Listener {
 	public static String colorize(String input) {
 		return ChatColor.translateAlternateColorCodes('&', input);
 	}
-
-	@EventHandler
-	private void playerMove(PlayerMoveEvent event) {
-		if (frozenPlayers.contains(event.getPlayer())) {
-			event.setCancelled(true);
-			event.setTo(event.getFrom());
-			event.getPlayer().sendMessage("You are frozen and can not move.");
-			sqlconnector.query("SELECT * FROM PLAYERS WHERE player_UUID = '" + event.getPlayer().getUniqueId() + "';", new SQLCallback() {
-				@Override
-				public void callback(ResultSet result) {
-					try {
-						while (result.next()) {
-							System.out.println(result.getDouble("balance"));
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-		}
-	}
 	
 	@EventHandler
 	private void signColor(SignChangeEvent event) {
 		for (int i = 0; i < 4; i++) {
 			event.setLine(i, aio.colorize(event.getLine(i)));
-		}
-	}
-	
-	@EventHandler
-	private void playerTeleport(PlayerTeleportEvent event) {
-		if (frozenPlayers.contains(event.getPlayer())) {
-			event.setCancelled(true);
-			event.getPlayer().sendMessage("You are frozen and can not teleport.");
-		}
-	}
-	
-	@EventHandler
-	private void playerKick(PlayerKickEvent event) {
-		if (frozenPlayers.contains(event.getPlayer()) && event.getReason().equals("Flying is not enabled on this server")) {
-			event.setCancelled(true);
 		}
 	}
 	

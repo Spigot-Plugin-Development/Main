@@ -378,23 +378,6 @@ public class Commands implements CommandExecutor {
             sender.sendMessage("Eat, sleep, code, repeat");
         }
 
-        /* //Freeze - freeze a player
-        if(cmd.getName().equalsIgnoreCase("freeze")) {
-            if(args.length == 0) {
-                sender.sendMessage("Player not given.");
-            } else {
-                if(plugin.getServer().getPlayer(args[0]) == null) {
-                    sender.sendMessage("Player not found.");
-                } else {
-                    if(frozenPlayers.contains(plugin.getServer().getPlayer(args[0]))) {
-                        frozenPlayers.remove(plugin.getServer().getPlayer(args[0]));
-                    } else {
-                        frozenPlayers.add(plugin.getServer().getPlayer(args[0]));
-                    }
-                }
-            }
-        } */
-
         //Unsafeenchant - put unsafe enchants on items
         if(cmd.getName().equalsIgnoreCase("unsafeenchant")) {
             if(sender instanceof Player) {
