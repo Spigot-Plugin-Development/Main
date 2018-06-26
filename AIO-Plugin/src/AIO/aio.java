@@ -49,6 +49,8 @@ public class aio extends JavaPlugin implements Listener {
 	Warp warp;
 	GodManager godManager;
 	FlyManager flyManager;
+	WeatherManager weatherManager;
+	GamemodeManager gamemodeManager;
 	Commands commands;
 
 	Location spawn;
@@ -81,6 +83,8 @@ public class aio extends JavaPlugin implements Listener {
 		teleporta = new TeleportA(this);
 		privateMessage = new PrivateMessage(this);
 		antiSpambot = new AntiSpambot(this);
+		weatherManager = new WeatherManager(this);
+		gamemodeManager = new GamemodeManager(this);
 
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
