@@ -50,6 +50,7 @@ public class aio extends JavaPlugin implements Listener {
 	GodManager godManager;
 	FlyManager flyManager;
 	Commands commands;
+	VanishManager vanishManager;
 
 	Location spawn;
 	List<Player> frozenPlayers = new ArrayList<Player>();
@@ -81,6 +82,7 @@ public class aio extends JavaPlugin implements Listener {
 		teleporta = new TeleportA(this);
 		privateMessage = new PrivateMessage(this);
 		antiSpambot = new AntiSpambot(this);
+		vanishManager = new VanishManager(this);
 
 		Bukkit.getPluginManager().registerEvents(new PlayerJoin(this), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerLeave(this), this);
