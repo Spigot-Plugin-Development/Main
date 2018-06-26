@@ -9,6 +9,9 @@ import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Advertisements implements Listener {
+public class Advertisements implements Listener, CommandExecutor {
 
 	private Plugin plugin;
 	
@@ -42,6 +45,7 @@ public class Advertisements implements Listener {
 		this.plugin = plugin;
 
 		Bukkit.getPluginManager().registerEvents(this, plugin);
+		Bukkit.getPluginCommand("ad").setExecutor(this);
 		
 		serverAd.add(new Advertisement(null, "&aAdvertise your shop: &b/ad create", BarColor.WHITE, BarStyle.SOLID, 60.0));
 		serverAd.add(new Advertisement(null, "&aCheck out server news: &b/news", BarColor.WHITE, BarStyle.SOLID, 60.0));
@@ -82,6 +86,15 @@ public class Advertisements implements Listener {
 				
 			}
 		}.runTaskTimer(plugin, 20, 1);
+	}
+
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if(command.getName().equalsIgnoreCase("ad")) {
+			if(sender instanceof Player) {
+				adCommand((Player)sender, args);
+			}
+		}
+		return false;
 	}
 	
 	@EventHandler

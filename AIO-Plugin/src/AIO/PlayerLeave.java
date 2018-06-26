@@ -1,15 +1,16 @@
 package AIO;
 
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
 
 public class PlayerLeave implements Listener {
 	
-	private Plugin plugin;
+	private aio plugin;
 	
-	PlayerLeave(Plugin plugin) {
+	PlayerLeave(aio plugin) {
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.plugin = plugin;
 	}
 	

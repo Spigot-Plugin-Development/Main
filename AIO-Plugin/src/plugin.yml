@@ -2,7 +2,7 @@ main: AIO.aio
 version: 1.0
 developers: [DaniFoldi, ApocalypseDJ]
 name: All-In-One_Plugin
-softdepend: [Vault]
+depend: [Vault, SuperVanish]
 commands:
     kickall:
     kick:
@@ -26,7 +26,7 @@ commands:
     reply:
         aliases: [r]
     ad:
-        aliases: [advertise]
+        aliases: [advertise, advertisement]
     dawn:
     morning:
     day:
@@ -36,7 +36,11 @@ commands:
     dusk:
     midnight:
     balance:
-        aliases: [b, bal, money]
+        aliases: [b, bal, money, mon]
+    pay:
+        aliases: [transfer]
+    economy:
+        aliases: [eco]
     heal:
     feed:
     fly:
@@ -91,3 +95,5 @@ commands:
     spawner:
     whois:
     spawnmob:
+    vanish:
+        aliases: [v]
