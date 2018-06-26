@@ -8,6 +8,9 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,18 +19,17 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.plugin.Plugin;
 
-public class BannerCreator implements Listener {
+public class BannerCreator implements Listener, CommandExecutor {
 	
-	private Plugin plugin;
+	private aio plugin;
 	
 	List<Player> creatingBanners = new ArrayList<Player>();
 	List<ItemStack> createdBanners = new ArrayList<ItemStack>();
 	
-	BannerCreator(Plugin plugin) {
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+	BannerCreator(aio plugin) {
 		this.plugin = plugin;
+		Bukkit.getPluginCommand("banner").setExecutor(this);
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 	
@@ -67,6 +69,34 @@ public class BannerCreator implements Listener {
 			inventory.setItem(i, bannerCopy);
 		}
 		player.openInventory(inventory);
+	}
+
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if(command.getName().equalsIgnoreCase("banner")) {
+			if(sender instanceof Player) {
+				if(args.length == 0) {
+					createBanner((Player)sender);
+				} else if(args[0].equalsIgnoreCase("get")) {
+					if(BannerCreator.getByName(String.join(" ", aio.allButFirst(args))) != null) {
+						((Player)sender).getInventory().addItem(BannerCreator.getByName(String.join(" ", aio.allButFirst(args))));
+					}
+				} else if(args[0].equalsIgnoreCase("letter")) {
+					String[] borderWanted = {"yes", "y", "true", "border", "bordered"};
+					boolean bordered = false;
+					if(args.length > 4) {
+						for(String border: borderWanted) {
+							if(args[4].equals(border)) {
+								bordered = true;
+							}
+						}
+					}
+					if(BannerCreator.getCharacter(args[1], args[2], args[3], bordered) != null) {
+						((Player)sender).getInventory().addItem(BannerCreator.getCharacter(args[1], args[2], args[3], bordered));
+					}
+				}
+			}
+		}
+		return false;
 	}
 	
 	@EventHandler 

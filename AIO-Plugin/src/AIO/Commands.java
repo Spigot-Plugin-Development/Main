@@ -237,32 +237,6 @@ public class Commands implements CommandExecutor {
             }
         } */
 
-        //Banner - create banner
-        if(cmd.getName().equalsIgnoreCase("banner")) {
-            if(sender instanceof Player) {
-                if(args.length == 0) {
-                    plugin.bannerCreator.createBanner((Player)sender);
-                } else if(args[0].equalsIgnoreCase("get")) {
-                    if(BannerCreator.getByName(String.join(" ", aio.allButFirst(args))) != null) {
-                        ((Player)sender).getInventory().addItem(BannerCreator.getByName(String.join(" ", aio.allButFirst(args))));
-                    }
-                } else if(args[0].equalsIgnoreCase("letter")) {
-                    String[] borderWanted = {"yes", "y", "true", "border", "bordered"};
-                    boolean bordered = false;
-                    if(args.length > 4) {
-                        for(String border: borderWanted) {
-                            if(args[4].equals(border)) {
-                                bordered = true;
-                            }
-                        }
-                    }
-                    if(BannerCreator.getCharacter(args[1], args[2], args[3], bordered) != null) {
-                        ((Player)sender).getInventory().addItem(BannerCreator.getCharacter(args[1], args[2], args[3], bordered));
-                    }
-                }
-            }
-        }
-
         /* //Setspawn - set spawn location
         if(cmd.getName().equalsIgnoreCase("setspawn")) {
             if(sender instanceof Player) {
