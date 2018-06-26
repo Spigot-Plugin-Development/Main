@@ -230,7 +230,7 @@ public class Commands implements CommandExecutor {
 
         if (cmd.getName().equalsIgnoreCase("adminonly")) {
             if (sender instanceof Player) {
-                if (((Player)sender).hasPermission("aio.ao.send") {
+                if (((Player)sender).hasPermission("aio.ao.send")) {
                     for (Player player: plugin.getServer().getOnlinePlayers()) {
                         if (player.hasPermission("aio.ao")) {
                             player.sendMessage(aio.colorize("&c&lAdmin Only: " + sender.getName() + ": " + String.join(" ", args)));
