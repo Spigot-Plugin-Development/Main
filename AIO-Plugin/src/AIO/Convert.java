@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,6 +38,54 @@ public class Convert {
             case SPECTATOR: return 3;
         }
         return 0;
+    }
+
+    public static BarColor StringToColor(String string) {
+        switch (string) {
+            case "red": return BarColor.RED;
+            case "pink": return BarColor.PINK;
+            case "yellow": return BarColor.YELLOW;
+            case "green": return BarColor.GREEN;
+            case "blue": return BarColor.BLUE;
+            case "purple": return BarColor.PURPLE;
+            case "white": return BarColor.WHITE;
+        }
+        return BarColor.WHITE;
+    }
+
+    public static String ColorToString(BarColor color) {
+        switch (color) {
+            case WHITE: return "white";
+            case YELLOW: return "yellow";
+            case BLUE: return "blue";
+            case GREEN: return "green";
+            case RED: return "red";
+            case PURPLE: return "purple";
+            case PINK: return "pink";
+        }
+        return "white";
+    }
+
+    public static BarStyle StringToStyle(String string) {
+        switch (string) {
+            case "solid": return BarStyle.SOLID;
+            case "segmented6": return BarStyle.SEGMENTED_6;
+            case "segmented10": return BarStyle.SEGMENTED_10;
+            case "segmented12": return BarStyle.SEGMENTED_12;
+            case "segmented20": return BarStyle.SEGMENTED_20;
+        }
+        return BarStyle.SEGMENTED_20;
+    }
+
+    public static String StyleToString(BarStyle style) {
+        switch (style) {
+            case SOLID: return "solid";
+            case SEGMENTED_6: return "segmented6";
+            case SEGMENTED_10: return "segmented10";
+            case SEGMENTED_12: return "segmented12";
+            case SEGMENTED_20: return "segmented20";
+        }
+        return "segmented20";
     }
 
     public static String DateToString(Date date) {

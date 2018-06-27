@@ -63,10 +63,10 @@ public class aio extends JavaPlugin implements Listener {
 		sqlconnector = new SQLConnector(this);
 		//retrieve server id
 		//enable necessary parts
+		sqlconnector.connect("127.0.0.1:8889", "minecraft", "root", "root", false);
 
 		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));
 
-		cacheManager = new CacheManager(this);
 		bannerCreator = new BannerCreator(this);
 		advertisements = new Advertisements(this);
 		antiItemlag = new AntiItemlag(this);
@@ -86,18 +86,15 @@ public class aio extends JavaPlugin implements Listener {
 		timeManager = new TimeManager(this);
 		teleporta = new TeleportA(this);
 		privateMessage = new PrivateMessage(this);
+		freezeManager = new FreezeManager(this);
+		cacheManager = new CacheManager(this);
 		playerJoin = new PlayerJoin(this);
 		playerLeave = new PlayerLeave(this);
-		freezeManager = new FreezeManager(this);
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
 		setupEconomy();
 		setupPermissions();
-		sqlconnector.connect("127.0.0.1:8889", "minecraft", "root", "root");
-
-		getCommand("kickall").setExecutor(commands);
-		getCommand("kick").setExecutor(commands);
 	}
 	
 	@Override
@@ -144,6 +141,19 @@ public class aio extends JavaPlugin implements Listener {
 
 	public static String colorize(String input) {
 		return ChatColor.translateAlternateColorCodes('&', input);
+	}
+
+	@EventHandler
+	public void playerToggleFlight(PlayerToggleFlightEvent event) {
+		if (!event.getPlayer().hasPermission("aio.doublejump")) {
+			return;
+		}
+		if (event.getPlayer().getGameMode() == GameMode.CREATIVE || event.getPlayer().getGameMode() == GameMode.SPECTATOR) {
+			return;
+		}
+		event.setCancelled(true);
+		event.getPlayer().setFlying(false);
+		event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(5.0).setY(7.0));
 	}
 	
 	@EventHandler
