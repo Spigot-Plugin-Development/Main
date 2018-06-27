@@ -8,7 +8,7 @@ public class SQLCreator {
                 "CREATE TABLE `minecraft_player` (\n" +
                 " `minecraft_player_ID` int(11) NOT NULL AUTO_INCREMENT,\n" +
                 " `minecraft_player_UUID` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
-                " `minecraft_player_names` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                " `minecraft_player_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
                 " `minecraft_player_last_login` datetime NOT NULL,\n" +
                 " `minecraft_player_last_logout` datetime NOT NULL,\n" +
                 " `minecraft_player_last_ip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +

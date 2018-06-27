@@ -61,7 +61,7 @@ public class WeatherManager implements CommandExecutor {
                 if(args.length == 0) {
                     ((Player) sender).getLocation().getWorld().setThundering(true);
                     ((Player) sender).getLocation().getWorld().setStorm(false);
-                    sender.sendMessage("Weather set to sunny!");
+                    sender.sendMessage("Weather set to rainy!");
                     return false;
                 }
             }
@@ -69,7 +69,7 @@ public class WeatherManager implements CommandExecutor {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setThundering(true);
                     plugin.getServer().getWorld(args[0]).setStorm(false);
-                    sender.sendMessage("Weather set to sunny in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Weather set to rainy in " + plugin.getServer().getWorld(args[0]) + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
@@ -94,7 +94,7 @@ public class WeatherManager implements CommandExecutor {
                 if(args.length == 0) {
                     ((Player) sender).getLocation().getWorld().setThundering(true);
                     ((Player) sender).getLocation().getWorld().setStorm(true);
-                    sender.sendMessage("Weather set to sunny!");
+                    sender.sendMessage("Weather set to stormy!");
                     return false;
                 }
             }
@@ -102,7 +102,7 @@ public class WeatherManager implements CommandExecutor {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setThundering(true);
                     plugin.getServer().getWorld(args[0]).setStorm(true);
-                    sender.sendMessage("Weather set to sunny in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Weather set to stormy in " + plugin.getServer().getWorld(args[0]) + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
