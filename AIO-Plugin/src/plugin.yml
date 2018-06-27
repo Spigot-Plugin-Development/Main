@@ -28,12 +28,14 @@ commands:
     ad:
         aliases: [advertise, advertisement]
     dawn:
+        aliases: [sunrise]
     morning:
     day:
     noon:
     afternoon:
     night:
     dusk:
+        aliases: [sunset]
     midnight:
     balance:
         aliases: [b, bal, money, mon]

@@ -21,14 +21,13 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.permission.*;
-import java.sql.ResultSet;
 import java.util.*;
 
 public class aio extends JavaPlugin implements Listener {
 	
-	private Chat chat;
-	private Economy economy;
-	private Permission permission;
+	Chat chat;
+	Economy economy;
+	Permission permission;
 
 	SQLConnector sqlconnector;
 	Enchant enchant;
