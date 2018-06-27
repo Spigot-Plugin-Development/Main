@@ -59,16 +59,16 @@ public class WeatherManager implements CommandExecutor {
                     return false;
                 }
                 if(args.length == 0) {
-                    ((Player) sender).getLocation().getWorld().setThundering(true);
-                    ((Player) sender).getLocation().getWorld().setStorm(false);
+                    ((Player) sender).getLocation().getWorld().setThundering(false);
+                    ((Player) sender).getLocation().getWorld().setStorm(true);
                     sender.sendMessage("Weather set to rainy!");
                     return false;
                 }
             }
             if(args.length == 1) {
                 if(plugin.getServer().getWorld(args[0]) != null) {
-                    plugin.getServer().getWorld(args[0]).setThundering(true);
-                    plugin.getServer().getWorld(args[0]).setStorm(false);
+                    plugin.getServer().getWorld(args[0]).setThundering(false);
+                    plugin.getServer().getWorld(args[0]).setStorm(true);
                     sender.sendMessage("Weather set to rainy in " + plugin.getServer().getWorld(args[0]) + "!");
                     return false;
                 } else {
