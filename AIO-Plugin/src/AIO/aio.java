@@ -50,7 +50,7 @@ public class aio extends JavaPlugin implements Listener {
 	PlayerLeave playerLeave;
 	SpecialChests specialChests;
 
-	Location spawn;
+	static Location spawn;
 	PlayerMessage playerMessage;
 	FreezeManager freezeManager;
 

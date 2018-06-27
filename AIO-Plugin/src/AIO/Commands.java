@@ -269,7 +269,7 @@ public class Commands implements CommandExecutor {
         //Flyspeed - change speed of flight
         if(cmd.getName().equalsIgnoreCase("flyspeed")) {
             if(sender instanceof Player && args.length == 1) {
-                ((Player)sender).setFlySpeed(Float.parseFloat(args[0]));
+                ((Player)sender).setFlySpeed(Float.parseFloat(args[0]) / 10f);
             } else {
                 plugin.getServer().getPlayer(args[1]).setFlySpeed(Float.parseFloat(args[0]) / 10f);
             }
