@@ -101,3 +101,4 @@ commands:
         aliases: [v]
     adminonly:
         aliases: [ao, ac, adminchat]
+    rename:
