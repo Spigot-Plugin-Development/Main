@@ -50,6 +50,7 @@ public class aio extends JavaPlugin implements Listener {
 	PlayerLeave playerLeave;
 	SpecialChests specialChests;
 	EntityRename entityRename;
+	Lottery lottery;
 
 	static Location spawn;
 	PlayerMessage playerMessage;
@@ -94,6 +95,7 @@ public class aio extends JavaPlugin implements Listener {
 		playerJoin = new PlayerJoin(this);
 		playerLeave = new PlayerLeave(this);
 		specialChests = new SpecialChests(this);
+		lottery = new Lottery(this);
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
@@ -106,6 +108,7 @@ public class aio extends JavaPlugin implements Listener {
 		getLogger().info("Stopping All-In-One Plugin");
 		advertisements.removeBar();
 		saveConfig();
+		lottery.disable();
 		warp.saveWarps();
 		for (Player player: getServer().getOnlinePlayers()) {
 			cacheManager.updatePlayer(player.getUniqueId());
@@ -144,7 +147,7 @@ public class aio extends JavaPlugin implements Listener {
 	}
 
 	public static String colorize(String input) {
-		return ChatColor.translateAlternateColorCodes('&', input);
+		return ChatColor.translateAlternateColorCodes('&', input + "&r");
 	}
 
 	@EventHandler

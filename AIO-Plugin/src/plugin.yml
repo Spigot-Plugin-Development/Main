@@ -102,3 +102,5 @@ commands:
     adminonly:
         aliases: [ao, ac, adminchat]
     rename:
+    lottery:
+        aliases: [lot]

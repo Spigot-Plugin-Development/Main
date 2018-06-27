@@ -1,11 +1,8 @@
 package AIO;
 
 public class SQLCreator {
-    public static String create() {
-        return "CREATE DATABASE minecraft" +
-                "CHARACTER SET utf8" +
-                "COLLATION utf8mb4_unicode_ci;" +
-                "CREATE TABLE `minecraft_player` (\n" +
+    public static String playerCreate() {
+        return "CREATE TABLE `minecraft_player` (\n" +
                 " `minecraft_player_ID` int(11) NOT NULL AUTO_INCREMENT,\n" +
                 " `minecraft_player_UUID` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
                 " `minecraft_player_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
@@ -42,5 +39,14 @@ public class SQLCreator {
                 " `minecraft_ad_reported` tinyint(1) NOT NULL,\n" +
                 " PRIMARY KEY (`minecraft_ad_id`)\n" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
+    }
+
+    public static String lotteryCreate() {
+        return "CREATE TABLE `minecraft_lottery` (\n" +
+                " `minecraft_lottery_uuid` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                " `minecraft_lottery_prize` int(11) NOT NULL DEFAULT '0',\n" +
+                " `minecraft_lottery_tickets` int(11) NOT NULL DEFAULT '0',\n" +
+                " PRIMARY KEY (`minecraft_lottery_uuid`)\n" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
     }
 }
