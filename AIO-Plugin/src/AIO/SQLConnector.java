@@ -78,11 +78,6 @@ public class SQLConnector {
 			try {
 				Statement statement = connection.createStatement();
 				statement.executeUpdate(query);
-				new BukkitRunnable() {
-					public void run() {
-						completed.callback();
-					}
-				}.runTask(plugin);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
