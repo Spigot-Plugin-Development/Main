@@ -144,19 +144,6 @@ public class aio extends JavaPlugin implements Listener {
 	}
 
 	@EventHandler
-	public void playerToggleFlight(PlayerToggleFlightEvent event) {
-		if (!event.getPlayer().hasPermission("aio.doublejump")) {
-			return;
-		}
-		if (event.getPlayer().getGameMode() == GameMode.CREATIVE || event.getPlayer().getGameMode() == GameMode.SPECTATOR) {
-			return;
-		}
-		event.setCancelled(true);
-		event.getPlayer().setFlying(false);
-		event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(5.0).setY(7.0));
-	}
-	
-	@EventHandler
 	private void signColor(SignChangeEvent event) {
 		for (int i = 0; i < 4; i++) {
 			event.setLine(i, aio.colorize(event.getLine(i)));

@@ -1,14 +1,25 @@
 package AIO;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlyManager implements Listener, CommandExecutor {
+
     aio plugin;
+
+    List<Player> flyingPlayers = new ArrayList<>();
 
     FlyManager(aio plugin) {
         this.plugin = plugin;
@@ -17,7 +28,7 @@ public class FlyManager implements Listener, CommandExecutor {
     }
 
     public boolean canFly(Player player) {
-        return player.getAllowFlight();
+        return flyingPlayers.contains(player);
     }
 
     public void changeFly(Player player) {
@@ -30,14 +41,19 @@ public class FlyManager implements Listener, CommandExecutor {
 
     public void addFly(Player player) {
         if (!canFly(player)) {
-            player.setAllowFlight(true);
+            flyingPlayers.add(player);
         }
     }
 
     public void removeFly(Player player) {
         if (canFly(player)) {
-            player.setAllowFlight(false);
+            flyingPlayers.remove(player);
         }
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        event.getPlayer().setAllowFlight(true);
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -163,5 +179,38 @@ public class FlyManager implements Listener, CommandExecutor {
             }
         }
         return false;
+    }
+
+
+    @EventHandler
+    public void playerToggleFlight(PlayerToggleFlightEvent event) {
+        if (flyingPlayers.contains(event.getPlayer())) {
+            return;
+        }
+        if (!event.getPlayer().hasPermission("aio.doublejump")) {
+            return;
+        }
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE || event.getPlayer().getGameMode() == GameMode.SPECTATOR) {
+            return;
+        }
+        event.setCancelled(true);
+        event.getPlayer().setFlying(false);
+        event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().multiply(6.0).setY(2.0));
+    }
+
+    @EventHandler
+    public void playerToggleSneak(PlayerToggleSneakEvent event) {
+        if (flyingPlayers.contains(event.getPlayer())) {
+            return;
+        }
+        if (!event.getPlayer().hasPermission("aio.doublejump")) {
+            return;
+        }
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE || event.getPlayer().getGameMode() == GameMode.SPECTATOR) {
+            return;
+        }
+        event.setCancelled(true);
+        event.getPlayer().setFlying(false);
+        event.getPlayer().setVelocity(event.getPlayer().getLocation().getDirection().setX(0).setY(-10.0).setZ(0));
     }
 }
