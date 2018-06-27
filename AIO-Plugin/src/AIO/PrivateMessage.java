@@ -36,6 +36,10 @@ public class PrivateMessage implements Listener, CommandExecutor {
         if(cmd.getName().equalsIgnoreCase("msg")) {
             if(sender instanceof Player) {
                 Player player = (Player)sender;
+                if(!player.hasPermission("aio.msg")) {
+                    player.sendMessage("You don't have permission to execute this command.");
+                    return false;
+                }
                 if(args.length > 1 && plugin.getServer().getPlayer(args[0]) != null) {
                     Player target = plugin.getServer().getPlayer(args[0]);
                     String message = String.join(" ", aio.allButFirst(args));
@@ -51,31 +55,43 @@ public class PrivateMessage implements Listener, CommandExecutor {
                     } else {
                         replyList.put(player.getName(), target.getName());
                     }
+                    return false;
                 } else if(args.length == 1 && plugin.getServer().getPlayer(args[0]) != null) {
                     player.sendMessage("You have to enter a message.");
+                    return false;
                 } else if(args.length == 1 && plugin.getServer().getPlayer(args[0]) == null) {
                     player.sendMessage("Player not found.");
+                    return false;
                 }
             } else {
                 sender.sendMessage("Only players can execute this command.");
+                return false;
             }
         }
 
         if(cmd.getName().equalsIgnoreCase("reply")) {
             if(sender instanceof Player) {
                 Player player = (Player)sender;
+                if(!player.hasPermission("aio.reply")) {
+                    player.sendMessage("You don't have permission to execute this command.");
+                    return false;
+                }
                 if(replyList.containsKey(player.getName()) && args.length > 0) {
                     Player target = plugin.getServer().getPlayer(replyList.get(player.getName()));
                     String message = String.join(" ", aio.allButFirst(args));
                     target.sendMessage("[ " + player.getName() + " ] >> [ " + target.getName() + " ] : " + message);
                     player.sendMessage("[ " + player.getName() + " ] >> [ " + target.getName() + " ] : " + message);
+                    return false;
                 } else if(args.length == 0) {
                     player.sendMessage("You have to enter a message.");
+                    return false;
                 } else {
                     player.sendMessage("You don't have anyone to reply to.");
+                    return false;
                 }
             } else {
                 sender.sendMessage("Only players can execute this command.");
+                return false;
             }
         }
 
