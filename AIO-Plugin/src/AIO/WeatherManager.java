@@ -36,7 +36,7 @@ public class WeatherManager implements CommandExecutor {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setThundering(false);
                     plugin.getServer().getWorld(args[0]).setStorm(false);
-                    sender.sendMessage("Weather set to sunny in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Weather set to sunny in " + plugin.getServer().getWorld(args[0]).getName() + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
@@ -69,7 +69,7 @@ public class WeatherManager implements CommandExecutor {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setThundering(false);
                     plugin.getServer().getWorld(args[0]).setStorm(true);
-                    sender.sendMessage("Weather set to rainy in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Weather set to rainy in " + plugin.getServer().getWorld(args[0]).getName() + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
@@ -102,7 +102,7 @@ public class WeatherManager implements CommandExecutor {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setThundering(true);
                     plugin.getServer().getWorld(args[0]).setStorm(true);
-                    sender.sendMessage("Weather set to stormy in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Weather set to stormy in " + plugin.getServer().getWorld(args[0]).getName() + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");

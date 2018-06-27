@@ -39,7 +39,7 @@ public class TimeManager implements CommandExecutor {
             if(args.length == 1) {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setTime(0);
-                    sender.sendMessage("Time set to dawn in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Time set to dawn in " + plugin.getServer().getWorld(args[0]).getName() + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
@@ -71,7 +71,7 @@ public class TimeManager implements CommandExecutor {
             if(args.length == 1) {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setTime(450);
-                    sender.sendMessage("Time set to morning in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Time set to morning in " + plugin.getServer().getWorld(args[0]).getName() + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
@@ -103,7 +103,7 @@ public class TimeManager implements CommandExecutor {
             if(args.length == 1) {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setTime(1000);
-                    sender.sendMessage("Time set to day in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Time set to day in " + plugin.getServer().getWorld(args[0]).getName() + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
@@ -135,7 +135,7 @@ public class TimeManager implements CommandExecutor {
             if(args.length == 1) {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setTime(6000);
-                    sender.sendMessage("Time set to noon in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Time set to noon in " + plugin.getServer().getWorld(args[0]).getName() + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
@@ -167,7 +167,7 @@ public class TimeManager implements CommandExecutor {
             if(args.length == 1) {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setTime(10000);
-                    sender.sendMessage("Time set to afternoon in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Time set to afternoon in " + plugin.getServer().getWorld(args[0]).getName() + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
@@ -199,7 +199,7 @@ public class TimeManager implements CommandExecutor {
             if(args.length == 1) {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setTime(12500);
-                    sender.sendMessage("Time set to dusk in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Time set to dusk in " + plugin.getServer().getWorld(args[0]).getName() + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
@@ -231,7 +231,7 @@ public class TimeManager implements CommandExecutor {
             if(args.length == 1) {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setTime(13000);
-                    sender.sendMessage("Time set to night in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Time set to night in " + plugin.getServer().getWorld(args[0]).getName() + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
@@ -263,7 +263,7 @@ public class TimeManager implements CommandExecutor {
             if(args.length == 1) {
                 if(plugin.getServer().getWorld(args[0]) != null) {
                     plugin.getServer().getWorld(args[0]).setTime(18000);
-                    sender.sendMessage("Time set to midnight in " + plugin.getServer().getWorld(args[0]) + "!");
+                    sender.sendMessage("Time set to midnight in " + plugin.getServer().getWorld(args[0]).getName() + "!");
                     return false;
                 } else {
                     sender.sendMessage("World not found.");
