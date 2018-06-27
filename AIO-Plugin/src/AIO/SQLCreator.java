@@ -11,6 +11,8 @@ public class SQLCreator {
                 " `minecraft_player_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
                 " `minecraft_player_last_join` datetime NOT NULL,\n" +
                 " `minecraft_player_last_quit` datetime NOT NULL,\n" +
+                " `minecraft_player_last_login` datetime NOT NULL,\n" +
+                " `minecraft_player_last_logout` datetime NOT NULL,\n" +
                 " `minecraft_player_last_ip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
                 " `minecraft_player_server` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
                 " `minecraft_player_location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
