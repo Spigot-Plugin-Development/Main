@@ -2,7 +2,7 @@ package AIO;
 
 public class SQLCreator {
     public static String create() {
-        return "CREATE DATABASE minecraft IF NOT EXISTS" +
+        return "CREATE DATABASE minecraft" +
                 "CHARACTER SET utf8" +
                 "COLLATION utf8mb4_unicode_ci;" +
                 "CREATE TABLE `minecraft_player` (\n" +
@@ -39,6 +39,6 @@ public class SQLCreator {
                 " `minecraft_ad_maxtime` decimal(10,2) NOT NULL,\n" +
                 " `minecraft_ad_reported` tinyint(1) NOT NULL,\n" +
                 " PRIMARY KEY (`minecraft_ad_id`)\n" +
-                ") ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
     }
 }

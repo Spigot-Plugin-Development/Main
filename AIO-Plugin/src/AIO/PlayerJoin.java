@@ -23,72 +23,43 @@ public class PlayerJoin implements Listener {
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
-		if (plugin.cacheManager.containsPlayer(event.getPlayer().getUniqueId())) {
-			PlayerInfo info = plugin.cacheManager.getPlayer(event.getPlayer().getUniqueId());
-			if (info.banned.after(new Date())) {
-				event.getPlayer().kickPlayer("You are banned!");
+		event.setJoinMessage("");
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (plugin.cacheManager.containsPlayer(event.getPlayer().getUniqueId())) {
+					PlayerInfo info = plugin.cacheManager.getPlayer(event.getPlayer().getUniqueId());
+					if (new Date().before(info.banned)) {
+						event.getPlayer().kickPlayer("You are banned!");
+					}
+					event.getPlayer().teleport(info.location);
+					event.getPlayer().setGameMode(Convert.IntToGamemode(info.gamemode));
+					event.getPlayer().setDisplayName(info.nick);
+					if (info.godMode) {
+						plugin.godManager.addGod(event.getPlayer());
+					}
+					if (info.fly) {
+						plugin.flyManager.addFly(event.getPlayer());
+					}
+					if (info.frozen) {
+						plugin.freezeManager.addFrozen(event.getPlayer());
+					}
+					if (info.vanished) {
+						plugin.vanishManager.addVanish(event.getPlayer());
+					} else {
+						event.setJoinMessage(event.getPlayer().getDisplayName() + " has joined the game.");
+					}
+					if (new Date().before(info.muted)) {
+						plugin.playerMessage.mutePlayer(event.getPlayer());
+					}
+					plugin.economyManager.set(event.getPlayer().getUniqueId(), info.balance);
+					if (info.lastQuit.equals(info.lastJoin)) {
+						event.setJoinMessage("Welcome " + event.getPlayer().getDisplayName() + " to the server!");
+					}
+					cancel();
+				}
 			}
-			event.getPlayer().teleport(info.location);
-			event.getPlayer().setGameMode(Convert.IntToGamemode(info.gamemode));
-			if (info.godMode) {
-				plugin.godManager.addGod(event.getPlayer());
-			}
-			if (info.fly) {
-				plugin.flyManager.addFly(event.getPlayer());
-			}
-			if (info.frozen) {
-				plugin.freezeManager.addFrozen(event.getPlayer());
-			}
-			if (info.vanished) {
-				plugin.vanishManager.addVanish(event.getPlayer());
-			} else {
-                event.setJoinMessage(event.getPlayer().getDisplayName() + " has joined the game.");
-            }
-			if (new Date().before(info.muted)) {
-				plugin.playerMessage.mutePlayer(event.getPlayer());
-			}
-			plugin.economyManager.set(event.getPlayer().getUniqueId(), info.balance);
-			if (info.lastQuit.equals(info.lastJoin)) {
-                event.setJoinMessage("Welcome " + event.getPlayer().getDisplayName() + " to the server!");
-            }
-		} else {
-		    event.setJoinMessage("");
-		    new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (plugin.cacheManager.containsPlayer(event.getPlayer().getUniqueId())) {
-                        PlayerInfo info = plugin.cacheManager.getPlayer(event.getPlayer().getUniqueId());
-                        if (new Date().before(info.banned)) {
-                            event.getPlayer().kickPlayer("You are banned!");
-                        }
-                        event.getPlayer().teleport(info.location);
-                        event.getPlayer().setGameMode(Convert.IntToGamemode(info.gamemode));
-                        if (info.godMode) {
-                            plugin.godManager.addGod(event.getPlayer());
-                        }
-                        if (info.fly) {
-                            plugin.flyManager.addFly(event.getPlayer());
-                        }
-                        if (info.frozen) {
-                            plugin.freezeManager.addFrozen(event.getPlayer());
-                        }
-                        if (info.vanished) {
-                            plugin.vanishManager.addVanish(event.getPlayer());
-                        } else {
-                            event.setJoinMessage(event.getPlayer().getDisplayName() + " has joined the game.");
-                        }
-                        if (new Date().before(info.muted)) {
-                            plugin.playerMessage.mutePlayer(event.getPlayer());
-                        }
-                        plugin.economyManager.set(event.getPlayer().getUniqueId(), info.balance);
-                        if (info.lastQuit.equals(info.lastJoin)) {
-                            event.setJoinMessage("Welcome " + event.getPlayer().getDisplayName() + " to the server!");
-                        }
-                        cancel();
-                    }
-                }
-            }.runTaskTimer(plugin, 5, 1);
-        }
+		}.runTaskTimer(plugin, 1, 1);
 	}
 
 	@EventHandler
