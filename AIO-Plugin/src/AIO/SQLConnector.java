@@ -14,19 +14,27 @@ public class SQLConnector {
 		this.plugin = plugin;
 	}
 	
-	public void connect(String ipaddress, String database, String username, String password) {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				try {
-					Class.forName("com.mysql.jdbc.Driver");
-					connection = DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + database, username, password);
-				} catch (Exception e) {
-					e.printStackTrace();
+	public void connect(String ipaddress, String database, String username, String password, boolean async) {
+		if (async && plugin.isEnabled()) {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					try {
+						Class.forName("com.mysql.jdbc.Driver");
+						connection = DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + database, username, password);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
+			}.runTaskAsynchronously(plugin);
+		} else {
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				connection = DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + database, username, password);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-		}.runTaskAsynchronously(plugin);
+		}
 	}
 	
 	public void query(String query, SQLCallback completed) {
