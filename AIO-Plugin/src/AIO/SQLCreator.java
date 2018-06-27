@@ -28,4 +28,17 @@ public class SQLCreator {
                 " PRIMARY KEY (`minecraft_player_ID`)\n" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
     }
+    public static String adCreate() {
+        return "CREATE TABLE `minecraft_ad` (\n" +
+                " `minecraft_ad_id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                " `minecraft_ad_player` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                " `minecraft_ad_color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                " `minecraft_ad_style` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                " `minecraft_ad_text` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                " `minecraft_ad_time` decimal(10,2) NOT NULL,\n" +
+                " `minecraft_ad_maxtime` decimal(10,2) NOT NULL,\n" +
+                " `minecraft_ad_reported` tinyint(1) NOT NULL,\n" +
+                " PRIMARY KEY (`minecraft_ad_id`)\n" +
+                ") ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+    }
 }
