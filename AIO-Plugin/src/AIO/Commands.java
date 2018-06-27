@@ -20,6 +20,11 @@ public class Commands implements CommandExecutor {
         Bukkit.getServer().getPluginCommand("flyspeed").setExecutor(this);
         Bukkit.getServer().getPluginCommand("giveself").setExecutor(this);
         Bukkit.getServer().getPluginCommand("spawner").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("nick").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("ping").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("adminonly").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("kick").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("kickall").setExecutor(this);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -121,21 +126,6 @@ public class Commands implements CommandExecutor {
                         sender.sendMessage("Player not found.");
                     }
                 }
-            }
-        }
-
-        //Fly - turn on/off fly mode
-        if(cmd.getName().equalsIgnoreCase("fly")) {
-            if(sender instanceof Player) {
-                if(args.length == 0) {
-                    ((Player)sender).setAllowFlight(!((Player)sender).getAllowFlight());
-                } else {
-                    plugin.getServer().getPlayer(args[0]).setAllowFlight(!plugin.getServer().getPlayer(args[0]).getAllowFlight());
-                }
-            } else if(args.length == 0) {
-                sender.sendMessage("Player not found.");
-            } else {
-                plugin.getServer().getPlayer(args[0]).setAllowFlight(!plugin.getServer().getPlayer(args[0]).getAllowFlight());
             }
         }
 
