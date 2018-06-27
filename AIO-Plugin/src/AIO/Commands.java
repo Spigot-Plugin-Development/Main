@@ -23,41 +23,9 @@ public class Commands implements CommandExecutor {
         Bukkit.getServer().getPluginCommand("nick").setExecutor(this);
         Bukkit.getServer().getPluginCommand("ping").setExecutor(this);
         Bukkit.getServer().getPluginCommand("adminonly").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("kick").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("kickall").setExecutor(this);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
-        //Kickall - player: kick all except sender; console: kick all
-        if(cmd.getName().equalsIgnoreCase("kickall")) {
-            if(sender instanceof Player) {
-                if(sender.hasPermission("")) {
-                    for(Player player : plugin.getServer().getOnlinePlayers()) {
-                        if(sender == player) { continue; }
-                        player.kickPlayer(String.join(" ", args));
-                    }
-                    sender.sendMessage("You kicked all players.");
-                } else {
-                    sender.sendMessage("You don't have permission to execute this command.");
-                }
-            } else {
-                for(Player player: plugin.getServer().getOnlinePlayers()) {
-                    player.kickPlayer(String.join(" ", args));
-                }
-            }
-            plugin.getLogger().info(sender.getName() + " kicked all players.");
-        }
-
-        //Kick - kick the specified player
-        if(cmd.getName().equalsIgnoreCase("kick")) {
-            if(args.length > 0 && plugin.getServer().getPlayer(args[0]) != null) {
-                plugin.getServer().getPlayer(args[0]).kickPlayer(String.join(" ", aio.allButFirst(args)));
-            } else {
-                sender.sendMessage("Player not found.");
-            }
-        }
-
         //Nick - change the displayed name of the player
         if(cmd.getName().equalsIgnoreCase("nick")) {
             if(sender instanceof Player) {
