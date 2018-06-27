@@ -49,6 +49,7 @@ public class aio extends JavaPlugin implements Listener {
 	PlayerJoin playerJoin;
 	PlayerLeave playerLeave;
 	SpecialChests specialChests;
+	EntityRename entityRename;
 
 	static Location spawn;
 	PlayerMessage playerMessage;
@@ -63,7 +64,8 @@ public class aio extends JavaPlugin implements Listener {
 		sqlconnector = new SQLConnector(this);
 		//retrieve server id
 		//enable necessary parts
-        sqlconnector.connect("127.0.0.1:8889", "minecraft", "root", "root", false);
+		System.out.println(getConfig().getString("mysql-server"));
+        sqlconnector.connect(getConfig().getString("mysql-server"), "minecraft", getConfig().getString("mysql-username"), getConfig().getString("mysql-password"), false);
 
 		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));
 
@@ -71,6 +73,7 @@ public class aio extends JavaPlugin implements Listener {
 		advertisements = new Advertisements(this);
 		antiItemlag = new AntiItemlag(this);
 		enchant = new Enchant(this);
+		entityRename = new EntityRename(this);
 		warp = new Warp(this);
 		commands = new Commands(this);
 		economyManager = new EconomyManager(this);
