@@ -65,7 +65,6 @@ public class aio extends JavaPlugin implements Listener {
 		sqlconnector = new SQLConnector(this);
 		//retrieve server id
 		//enable necessary parts
-		System.out.println(getConfig().getString("mysql-server"));
         sqlconnector.connect(getConfig().getString("mysql-server"), "minecraft", getConfig().getString("mysql-username"), getConfig().getString("mysql-password"), false);
 
 		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));

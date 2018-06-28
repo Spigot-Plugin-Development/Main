@@ -210,7 +210,7 @@ public class Advertisements implements Listener, CommandExecutor {
 			creatingAds.add(sender);
 			createdAds.add(new Advertisement());
 			createdAds.get(createdAds.size() - 1).setPlayer(sender);
-			openInventory(sender);
+			showInventory(sender);
 			return;
 		}
 		if (command[0].equalsIgnoreCase("cancel")) {
@@ -320,14 +320,14 @@ public class Advertisements implements Listener, CommandExecutor {
 		bossBar.removeAll();
 	}
 	
-	private void openInventory(Player player) {
-		Inventory inventory = Bukkit.createInventory(null, 6 * 9);
-		updateInventory(player, inventory);
-		player.openInventory(inventory);
-	}
-	
 	private void showInventory(Player player) {
-		Inventory inventory = player.getOpenInventory().getTopInventory();
+		Inventory inventory;
+		if (player.getOpenInventory().getTopInventory().getViewers().isEmpty()) {
+			inventory = player.getOpenInventory().getTopInventory();
+		} else {
+			inventory = Bukkit.createInventory(null, 6 * 9);
+			player.openInventory(inventory);
+		}
 		updateInventory(player, inventory);
 	}
 	
@@ -548,7 +548,7 @@ public class Advertisements implements Listener, CommandExecutor {
 					public void run() {
 						namingAds.remove(event.getPlayer());
 						createdAds.get(creatingAds.indexOf(event.getPlayer())).setText(event.getMessage().trim());
-						openInventory(event.getPlayer());
+						showInventory(event.getPlayer());
 					}
 				}.runTask(plugin);
 				
@@ -669,7 +669,7 @@ public class Advertisements implements Listener, CommandExecutor {
 	@EventHandler
 	public void inventoryCloseEvent(InventoryCloseEvent event) {
 		if (creatingAds.contains(event.getPlayer()) && !namingAds.contains(event.getPlayer())) {
-			openInventory((Player)event.getPlayer());
+			showInventory((Player)event.getPlayer());
 		}
 	}
 }

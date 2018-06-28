@@ -28,6 +28,7 @@ public class CacheManager {
 
     public void addPlayer(PlayerInfo info) {
         cachedPlayers.put(info.uuid, info);
+        System.out.println(info.uuid.toString());
     }
 
     public boolean containsPlayer(UUID uuid) {
