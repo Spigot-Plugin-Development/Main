@@ -53,6 +53,7 @@ public class aio extends JavaPlugin implements Listener {
 	Lottery lottery;
 	DropParty dropParty;
 	InventoryCheck inventoryCheck;
+	ChatGames chatGames;
 
 	static Location spawn;
 	PlayerMessage playerMessage;
@@ -99,6 +100,7 @@ public class aio extends JavaPlugin implements Listener {
 		lottery = new Lottery(this);
 		dropParty = new DropParty(this);
 		inventoryCheck = new InventoryCheck(this);
+		chatGames = new ChatGames(this);
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
