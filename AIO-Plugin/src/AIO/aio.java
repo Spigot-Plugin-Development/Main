@@ -3,24 +3,19 @@ package AIO;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.permission.*;
+
 import java.util.*;
 
 public class aio extends JavaPlugin implements Listener {
@@ -54,6 +49,7 @@ public class aio extends JavaPlugin implements Listener {
 	DropParty dropParty;
 	InventoryCheck inventoryCheck;
 	ChatGames chatGames;
+	AntiSwear antiSwear;
 
 	static Location spawn;
 	PlayerMessage playerMessage;
@@ -65,15 +61,15 @@ public class aio extends JavaPlugin implements Listener {
 	public void onEnable() {
 		getLogger().info("Starting All-In-One Plugin");
 
-		sqlconnector = new SQLConnector(this);
-		//retrieve server id
-		//enable necessary parts
-        sqlconnector.connect(getConfig().getString("mysql-server"), "minecraft", getConfig().getString("mysql-username"), getConfig().getString("mysql-password"), false);
+        saveDefaultConfig();
 
-		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));
+        sqlconnector = new SQLConnector(this);
+        sqlconnector.connect(getConfig().getString("mysql.server"), "minecraft", getConfig().getString("mysql.username"), getConfig().getString("mysql.password"), false);
+
+        spawn = new Location(getServer().getWorld(getConfig().getString("spawn.world")), getConfig().getDouble("spawn.x"), getConfig().getDouble("spawn.y"), getConfig().getDouble("spawn.z"), (float)getConfig().getDouble("spawn.yaw"), (float)getConfig().getDouble("spawn.pitch"));
 
 		bannerCreator = new BannerCreator(this);
-		advertisements = new Advertisements(this);
+		//advertisements = new Advertisements(this);
 		antiItemlag = new AntiItemlag(this);
 		enchant = new Enchant(this);
 		entityRename = new EntityRename(this);
@@ -90,8 +86,6 @@ public class aio extends JavaPlugin implements Listener {
 		weatherManager = new WeatherManager(this);
 		gamemodeManager = new GamemodeManager(this);
 		timeManager = new TimeManager(this);
-		teleporta = new TeleportA(this);
-		privateMessage = new PrivateMessage(this);
 		freezeManager = new FreezeManager(this);
 		cacheManager = new CacheManager(this);
 		playerJoin = new PlayerJoin(this);
@@ -101,6 +95,7 @@ public class aio extends JavaPlugin implements Listener {
 		dropParty = new DropParty(this);
 		inventoryCheck = new InventoryCheck(this);
 		chatGames = new ChatGames(this);
+		antiSwear = new AntiSwear(this);
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
@@ -115,7 +110,7 @@ public class aio extends JavaPlugin implements Listener {
 		saveConfig();
 		lottery.disable();
 		warp.saveWarps();
-		for (Player player: getServer().getOnlinePlayers()) {
+		for(Player player: getServer().getOnlinePlayers()) {
 			cacheManager.updatePlayer(player.getUniqueId());
 			cacheManager.savePlayer(cacheManager.getPlayer(player.getUniqueId()));
 		}

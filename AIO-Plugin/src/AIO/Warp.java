@@ -39,7 +39,7 @@ public class Warp implements Listener, CommandExecutor {
         Bukkit.getServer().getPluginCommand("warplist").setExecutor(this);
         Bukkit.getServer().getPluginCommand("warpreload").setExecutor(this);
 		File warps = new File(plugin.getDataFolder(), "warps.yml");
-		if(!warps.exists()){
+		if(!warps.exists()) {
 			try {
 				warps.createNewFile();
 				PrintWriter pw = new PrintWriter(new FileWriter(warps));
@@ -71,12 +71,12 @@ public class Warp implements Listener, CommandExecutor {
 	
 	//Save warp file
     public void saveWarps() {
-		if(warpconfig == null || warpfile == null){
+		if(warpconfig == null || warpfile == null) {
 			return;
 		}
-		try{
+		try {
 			getWarps().save(warpfile);
-		}catch(IOException ex){
+		} catch(IOException ex) {
 			ex.printStackTrace();
 		}
 	}
