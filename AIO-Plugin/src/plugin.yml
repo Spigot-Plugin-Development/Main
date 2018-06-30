@@ -108,3 +108,5 @@ commands:
         aliases: [dp]
     invsee:
     endersee:
+    nightvision:
+        aliases: [nv]

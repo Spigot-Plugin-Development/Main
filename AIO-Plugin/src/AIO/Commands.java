@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Commands implements CommandExecutor {
@@ -23,9 +25,26 @@ public class Commands implements CommandExecutor {
         Bukkit.getServer().getPluginCommand("ping").setExecutor(this);
         Bukkit.getServer().getPluginCommand("adminonly").setExecutor(this);
         Bukkit.getServer().getPluginCommand("unsafeenchant").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("nightvision").setExecutor(this);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
+        if (cmd.getName().equalsIgnoreCase("nightvision")) {
+            if (sender instanceof Player) {
+                if (sender.hasPermission("aio.nightvision")) {
+                    if (((Player)sender).hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+                        ((Player)sender).removePotionEffect(PotionEffectType.NIGHT_VISION);
+                    } else {
+                        ((Player)sender).addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 10000000, 1, false, false), true);
+                    }
+                } else {
+                    sender.sendMessage("You don't have permission to execute that command.");
+                }
+            } else {
+                sender.sendMessage("Only players can execute this command.");
+            }
+        }
 
         //Nick - change the displayed name of the player
         if(cmd.getName().equalsIgnoreCase("nick")) {
