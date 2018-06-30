@@ -52,6 +52,7 @@ public class aio extends JavaPlugin implements Listener {
 	EntityRename entityRename;
 	Lottery lottery;
 	DropParty dropParty;
+	InventoryCheck inventoryCheck;
 
 	static Location spawn;
 	PlayerMessage playerMessage;
@@ -97,6 +98,7 @@ public class aio extends JavaPlugin implements Listener {
 		specialChests = new SpecialChests(this);
 		lottery = new Lottery(this);
 		dropParty = new DropParty(this);
+		inventoryCheck = new InventoryCheck(this);
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
