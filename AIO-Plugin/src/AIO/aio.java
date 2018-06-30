@@ -110,9 +110,9 @@ public class aio extends JavaPlugin implements Listener {
 	public void onDisable() {
 		getLogger().info("Stopping All-In-One Plugin");
 		advertisements.removeBar();
-		saveConfig();
 		lottery.disable();
 		warp.saveWarps();
+		saveConfig();
 		for(Player player: getServer().getOnlinePlayers()) {
 			cacheManager.updatePlayer(player.getUniqueId());
 			cacheManager.savePlayer(cacheManager.getPlayer(player.getUniqueId()));
