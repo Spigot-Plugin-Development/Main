@@ -12,14 +12,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.ResultSet;
+import java.util.*;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
 
 public class Lottery implements Listener,CommandExecutor {
     aio plugin;
     double untilDraw;
+    int count;
     Map<UUID, Integer> tickets = new HashMap<>();
     Map<UUID, Integer> prizes = new HashMap<>();
 
@@ -53,12 +52,18 @@ public class Lottery implements Listener,CommandExecutor {
                 if (untilDraw <= 0) {
                     untilDraw = 20 * 60 * 60;
                     if (tickets.size() > 0) {
-                        OfflinePlayer winner = plugin.getServer().getOfflinePlayer((UUID)tickets.keySet().toArray()[new Random().nextInt(tickets.size())]);
-                        plugin.getServer().broadcastMessage(winner.getName() + " won $" + 1000 * tickets.size() + " in the lottery with " + ticketCount(winner.getUniqueId()) + " tickets!");
+                        List<UUID> allTickets = new ArrayList<>();
+                        tickets.forEach((uuid, count) -> {
+                            for (int i = 0; i < count; i++) {
+                                allTickets.add(uuid);
+                            }
+                        });
+                        OfflinePlayer winner = plugin.getServer().getOfflinePlayer(allTickets.get(new Random().nextInt(allTickets.size())));
+                        plugin.getServer().broadcastMessage(winner.getName() + " won $" + 1000 * totalTickets() + " in the lottery with " + ticketCount(winner.getUniqueId()) + " tickets!");
                         if (prizes.containsKey(winner.getUniqueId())) {
-                            prizes.replace(winner.getUniqueId(), prizes.get(winner.getUniqueId()) + 1000 * tickets.size());
+                            prizes.replace(winner.getUniqueId(), prizes.get(winner.getUniqueId()) + 1000 * totalTickets());
                         } else {
-                            prizes.put(winner.getUniqueId(), 1000 * tickets.size());
+                            prizes.put(winner.getUniqueId(), 1000 * totalTickets());
                         }
                         tickets.clear();
                     } else {
@@ -70,6 +75,7 @@ public class Lottery implements Listener,CommandExecutor {
     }
 
     public void disable() {
+        plugin.sqlconnector.update("TRUNCATE TABLE minecraft_lottery;", new SQLCallback());
         tickets.forEach((uuid, tickets) -> {
             plugin.sqlconnector.update("INSERT INTO minecraft_lottery (minecraft_lottery_uuid, minecraft_lottery_tickets) VALUES (" +
                     "'" + uuid + "', " +
@@ -107,7 +113,7 @@ public class Lottery implements Listener,CommandExecutor {
                 } else {
                     sender.sendMessage("You don't have any tickets. Buy with /lot buy");
                 }
-                sender.sendMessage("Total tickets: " + tickets.size());
+                sender.sendMessage("Total tickets: " + totalTickets());
                 return false;
             }
             if (args[0].equalsIgnoreCase("buy")) {
@@ -165,19 +171,25 @@ public class Lottery implements Listener,CommandExecutor {
 
     public void buyTicket(Player player, int amount) {
         if (tickets.containsKey(player.getUniqueId())) {
-            tickets.replace(player.getUniqueId(), tickets.get(player.getUniqueId()) + amount);
+            tickets.replace(player.getUniqueId(), ticketCount(player.getUniqueId()) + amount);
         } else {
             tickets.put(player.getUniqueId(), amount);
         }
     }
 
-    public int ticketCount(UUID uuid) {
-        int count = 0;
-        for (UUID ticketHolder: tickets.keySet()) {
-            if (uuid.equals(ticketHolder)) {
-                count++;
-            }
-        }
+    public int totalTickets() {
+        count = 0;
+        tickets.forEach((uuid, ticketCount) -> {
+            count += ticketCount;
+        });
         return count;
+    }
+
+    public int ticketCount(UUID uuid) {
+        if (tickets.containsKey(uuid)) {
+            return tickets.get(uuid);
+        } else {
+            return 0;
+        }
     }
 }

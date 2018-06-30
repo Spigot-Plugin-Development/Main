@@ -104,3 +104,5 @@ commands:
     rename:
     lottery:
         aliases: [lot]
+    dropparty:
+        aliases: [dp]
