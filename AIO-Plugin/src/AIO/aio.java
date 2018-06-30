@@ -50,6 +50,7 @@ public class aio extends JavaPlugin implements Listener {
 	InventoryCheck inventoryCheck;
 	ChatGames chatGames;
 	AntiSwear antiSwear;
+	Crates crates;
 
 	static Location spawn;
 	PlayerMessage playerMessage;
@@ -69,7 +70,7 @@ public class aio extends JavaPlugin implements Listener {
         spawn = new Location(getServer().getWorld(getConfig().getString("spawn.world")), getConfig().getDouble("spawn.x"), getConfig().getDouble("spawn.y"), getConfig().getDouble("spawn.z"), (float)getConfig().getDouble("spawn.yaw"), (float)getConfig().getDouble("spawn.pitch"));
 
 		bannerCreator = new BannerCreator(this);
-		//advertisements = new Advertisements(this);
+		advertisements = new Advertisements(this);
 		antiItemlag = new AntiItemlag(this);
 		enchant = new Enchant(this);
 		entityRename = new EntityRename(this);
@@ -96,6 +97,8 @@ public class aio extends JavaPlugin implements Listener {
 		inventoryCheck = new InventoryCheck(this);
 		chatGames = new ChatGames(this);
 		antiSwear = new AntiSwear(this);
+		crates = new Crates(this);
+		crates.giveKey(getServer().getPlayer("DaniFoldi"), "Vote");
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
