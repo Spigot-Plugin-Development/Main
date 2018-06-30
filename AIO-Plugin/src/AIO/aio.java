@@ -69,7 +69,7 @@ public class aio extends JavaPlugin implements Listener {
         spawn = new Location(getServer().getWorld(getConfig().getString("spawn.world")), getConfig().getDouble("spawn.x"), getConfig().getDouble("spawn.y"), getConfig().getDouble("spawn.z"), (float)getConfig().getDouble("spawn.yaw"), (float)getConfig().getDouble("spawn.pitch"));
 
 		bannerCreator = new BannerCreator(this);
-		//advertisements = new Advertisements(this);
+		advertisements = new Advertisements(this);
 		antiItemlag = new AntiItemlag(this);
 		enchant = new Enchant(this);
 		entityRename = new EntityRename(this);
@@ -107,9 +107,9 @@ public class aio extends JavaPlugin implements Listener {
 	public void onDisable() {
 		getLogger().info("Stopping All-In-One Plugin");
 		advertisements.removeBar();
-		saveConfig();
 		lottery.disable();
 		warp.saveWarps();
+		saveConfig();
 		for(Player player: getServer().getOnlinePlayers()) {
 			cacheManager.updatePlayer(player.getUniqueId());
 			cacheManager.savePlayer(cacheManager.getPlayer(player.getUniqueId()));

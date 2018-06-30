@@ -18,6 +18,8 @@ public class Commands implements CommandExecutor {
 
     Commands(aio plugin) {
         this.plugin = plugin;
+        Bukkit.getServer().getPluginCommand("spawn").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("setspawn").setExecutor(this);
         Bukkit.getServer().getPluginCommand("flyspeed").setExecutor(this);
         Bukkit.getServer().getPluginCommand("giveself").setExecutor(this);
         Bukkit.getServer().getPluginCommand("spawner").setExecutor(this);
@@ -254,30 +256,51 @@ public class Commands implements CommandExecutor {
             }
         }
 
-        /* //Spawn - teleport to spawn location
+        //Spawn
         if(cmd.getName().equalsIgnoreCase("spawn")) {
             if(sender instanceof Player) {
-                ((Player)sender).teleport(spawn);
+                if(!sender.hasPermission("aio.spawn")) {
+                    sender.sendMessage(aio.colorize("&cYou don't have permission to execute this command."));
+                    return false;
+                }
+                if(plugin.getConfig().getString("spawn.world").equalsIgnoreCase("")) {
+                    sender.sendMessage(aio.colorize("&cSpawn not set."));
+                    return false;
+                }
+                if(plugin.getServer().getWorld(plugin.getConfig().getString("spawn.world")) == null) {
+                    sender.sendMessage(aio.colorize("&cUnable to reach spawn location."));
+                    return false;
+                }
+                ((Player)sender).teleport(aio.spawn);
+                return false;
             } else {
-                sender.sendMessage("Only players can execute this command");
+                sender.sendMessage(aio.colorize("&cOnly players can execute this command"));
+                return false;
             }
-        } */
+        }
 
-        /* //Setspawn - set spawn location
+        //Setspawn
         if(cmd.getName().equalsIgnoreCase("setspawn")) {
             if(sender instanceof Player) {
-                plugin.getConfig().set("spawn-world", ((Player)sender).getLocation().getWorld().getName());
-                plugin.getConfig().set("spawn-x", ((Player)sender).getLocation().getX());
-                plugin.getConfig().set("spawn-y", ((Player)sender).getLocation().getY());
-                plugin.getConfig().set("spawn-z", ((Player)sender).getLocation().getZ());
-                plugin.getConfig().set("spawn-yaw", ((Player)sender).getLocation().getYaw());
-                plugin.getConfig().set("spawn-pitch", ((Player)sender).getLocation().getPitch());
+                if(!sender.hasPermission("aio.setspawn")) {
+                    sender.sendMessage(aio.colorize("&cYou don't have permission to execute this command."));
+                    return false;
+                }
+                plugin.getConfig().set("spawn.world", ((Player)sender).getLocation().getWorld().getName());
+                plugin.getConfig().set("spawn.x", ((Player)sender).getLocation().getX());
+                plugin.getConfig().set("spawn.y", ((Player)sender).getLocation().getY());
+                plugin.getConfig().set("spawn.z", ((Player)sender).getLocation().getZ());
+                plugin.getConfig().set("spawn.yaw", ((Player)sender).getLocation().getYaw());
+                plugin.getConfig().set("spawn.pitch", ((Player)sender).getLocation().getPitch());
                 plugin.saveConfig();
-                spawn = ((Player)sender).getLocation();
+                aio.spawn = ((Player)sender).getLocation();
+                sender.sendMessage(aio.colorize("&aSpawn location set."));
+                return false;
             } else {
-                sender.sendMessage("Only players can execute this command");
+                sender.sendMessage(aio.colorize("&cOnly players can execute this command"));
+                return false;
             }
-        } */
+        }
 
         //More - increase amount of held item
         if(cmd.getName().equalsIgnoreCase("more")) {
