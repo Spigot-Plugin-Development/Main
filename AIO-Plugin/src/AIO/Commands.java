@@ -22,9 +22,11 @@ public class Commands implements CommandExecutor {
         Bukkit.getServer().getPluginCommand("nick").setExecutor(this);
         Bukkit.getServer().getPluginCommand("ping").setExecutor(this);
         Bukkit.getServer().getPluginCommand("adminonly").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("unsafeenchant").setExecutor(this);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
         //Nick - change the displayed name of the player
         if(cmd.getName().equalsIgnoreCase("nick")) {
             if(sender instanceof Player) {
