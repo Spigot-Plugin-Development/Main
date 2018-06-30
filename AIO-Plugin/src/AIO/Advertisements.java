@@ -311,7 +311,7 @@ public class Advertisements implements Listener, CommandExecutor {
 			return;
 		}
 		/*
-		 * edit, report, reports?
+		 * edit
 		 */
 		showHelp(sender);
 	}
