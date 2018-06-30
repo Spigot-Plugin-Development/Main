@@ -36,10 +36,12 @@ public class ChatGames implements Listener {
                     case 1:
                         goal = words[new Random().nextInt(words.length)];
                         plugin.getServer().broadcastMessage(aio.colorize("The first player to type " + goal + " into chat wins $100!"));
+                        break;
                     case 2:
                         goal = words[new Random().nextInt(words.length)];
                         JSONMessage message = JSONMessage.create("The first player to type ").then("the word hidden here").tooltip(goal).then(" in chat wins $100!");
                         sendAll(message);
+                        break;
                     default: break;
                 }
             }
