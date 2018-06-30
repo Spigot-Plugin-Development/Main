@@ -44,8 +44,17 @@ public class ChatGames implements Listener {
                         break;
                     default: break;
                 }
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (!goal.isEmpty()) {
+                            plugin.getServer().broadcastMessage("No one got it right this time.");
+                            goal = "";
+                        }
+                    }
+                }.runTaskLater(plugin, 20 * 20);
             }
-        }.runTaskTimer(plugin, 60 * 20, 60 * 20);
+        }.runTaskTimer(plugin, 5 * 60 * 20, 10 * 60 * 20);
     }
 
     public void sendAll(JSONMessage message) {
