@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Commands implements CommandExecutor {
@@ -29,10 +28,38 @@ public class Commands implements CommandExecutor {
         //Nick - change the displayed name of the player
         if(cmd.getName().equalsIgnoreCase("nick")) {
             if(sender instanceof Player) {
-                Player player = (Player)sender;
-                player.setDisplayName(aio.colorize(args[0]));
+                if(!sender.hasPermission("aio.nick")) {
+                    sender.sendMessage(aio.colorize("&cYou don't have permission to execute this command."));
+                    return false;
+                }
+                if(args.length == 1) {
+                    if(args[0].equalsIgnoreCase("clear")) {
+                        ((Player) sender).setDisplayName("");
+                        sender.sendMessage(aio.colorize("&aYou removed your nickname."));
+                        return false;
+                    }
+                    ((Player) sender).setDisplayName(args[0]);
+                    sender.sendMessage(aio.colorize("&aYou set your nickname to '" + args[0] + "'."));
+                    return false;
+                }
+            }
+            if(args.length != 2) {
+                sender.sendMessage(aio.colorize("&c/nick <new_nick | clear> <player>"));
+                return false;
+            }
+            if(plugin.getServer().getPlayer(args[1]) == null) {
+                sender.sendMessage(aio.colorize("&cPlayer not found."));
+                return false;
             } else {
-                sender.sendMessage("Only players can execute this command.");
+                Player target = plugin.getServer().getPlayer(args[1]);
+                if(args[0].equalsIgnoreCase("clear")) {
+                    target.setDisplayName("");
+                    sender.sendMessage(aio.colorize("&aYou removed the nickname of " + target.getName() + "."));
+                    return false;
+                }
+                target.setDisplayName(args[0]);
+                sender.sendMessage(aio.colorize("&aYou set the nickname of " + target.getName() + " to '" + args[0] + "'."));
+                return false;
             }
         }
 
