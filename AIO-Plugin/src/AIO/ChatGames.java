@@ -1,9 +1,7 @@
 package AIO;
 
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,13 +9,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Random;
+import java.util.*;
 
 public class ChatGames implements Listener {
 
     aio plugin;
     String goal = "";
-    String[] words = {"apple", "key", "desk", "melody", "card", "flower", "pencil", "bucket", "industry"};
+    String[] words = {"glasses", "toothbrush", "bracelet", "cupcake", "apple", "key", "desk", "melody", "card", "flower", "pencil", "bucket", "industry"};
 
     ChatGames(aio plugin) {
         this.plugin = plugin;
@@ -26,12 +24,12 @@ public class ChatGames implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                switch (new Random().nextInt(2)) {
+                switch (new Random().nextInt(4)) {
                     case 0:
-                        int os1 = new Random().nextInt(900) + 100;
-                        int os2 = new Random().nextInt(900) + 100;
-                        goal = "" + (os1 + os2);
-                        plugin.getServer().broadcastMessage(aio.colorize("The first player to correctly type the result of " + os1 + " + " + os2 + " wins $100!"));
+                        int o1 = new Random().nextInt(900) + 100;
+                        int o2 = new Random().nextInt(900) + 100;
+                        goal = "" + (o1 + o2);
+                        plugin.getServer().broadcastMessage(aio.colorize("The first player to correctly type the result of " + o1 + " + " + o2 + " wins $100!"));
                         break;
                     case 1:
                         goal = words[new Random().nextInt(words.length)];
@@ -42,13 +40,28 @@ public class ChatGames implements Listener {
                         JSONMessage message = JSONMessage.create("The first player to type ").then("the word hidden here").tooltip(goal).then(" in chat wins $100!");
                         sendAll(message);
                         break;
+                    case 3:
+                        int ox1 = new Random().nextInt(40) + 10;
+                        int ox2 = new Random().nextInt(40) + 10;
+                        goal = "" + (ox1 * ox2);
+                        plugin.getServer().broadcastMessage("The first player to correctly type the result of " + ox1 + " * " + ox2 + " wins $100!");
+                    case 4:
+                        goal = words[new Random().nextInt(words.length)];
+                        List<String> scrambled = Arrays.asList(goal.split(""));
+                        Collections.shuffle(scrambled);
+                        String scramble = "";
+                        for (String letter: scrambled) {
+                            scramble += letter;
+                        }
+                        JSONMessage message1 = JSONMessage.create("The first player to unscramble the characters ").then(scramble).color(ChatColor.GREEN).then(" wins $100!");
+                        sendAll(message1);
                     default: break;
                 }
                 new BukkitRunnable() {
                     @Override
                     public void run() {
                         if (!goal.isEmpty()) {
-                            plugin.getServer().broadcastMessage("No one got it right this time.");
+                            plugin.getServer().broadcastMessage("No one got it right this time. The solution was " + goal);
                             goal = "";
                         }
                     }
