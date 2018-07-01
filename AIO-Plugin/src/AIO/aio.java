@@ -69,6 +69,7 @@ public class aio extends JavaPlugin implements Listener {
 
         spawn = new Location(getServer().getWorld(getConfig().getString("spawn.world")), getConfig().getDouble("spawn.x"), getConfig().getDouble("spawn.y"), getConfig().getDouble("spawn.z"), (float)getConfig().getDouble("spawn.yaw"), (float)getConfig().getDouble("spawn.pitch"));
 
+		antiSwear = new AntiSwear(this);
 		bannerCreator = new BannerCreator(this);
 		advertisements = new Advertisements(this);
 		antiItemlag = new AntiItemlag(this);

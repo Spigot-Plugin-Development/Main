@@ -112,3 +112,5 @@ commands:
         aliases: [nv]
     crates:
         aliases: [crate]
+    antiswear:
+        aliases: [as]

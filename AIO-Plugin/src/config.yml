@@ -1,5 +1,4 @@
-### All-In-One Config ###
-
+# All-In-One Config #
 spawn:
   world: ''
   x: 0
@@ -11,3 +10,4 @@ mysql:
   server: ''
   username: ''
   password: ''
+antiswear-enabled: false
