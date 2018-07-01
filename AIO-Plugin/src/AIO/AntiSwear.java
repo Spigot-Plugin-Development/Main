@@ -180,14 +180,18 @@ public class AntiSwear implements Listener, CommandExecutor {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
+        if (event.getPlayer().hasPermission("aio.antiswear.exception")) {
+            return;
+        }
 
-        List<String> message = Arrays.asList(event.getMessage().split(" "));
+        List<String> message = Arrays.asList(event.getMessage().toLowerCase().split(" "));
         List<String> swearList = getAntiswear().getStringList("antiswear");
 
         for(String swearword : swearList) {
-            if(message.contains(swearword) && !event.getPlayer().hasPermission("aio.antiswear.exception")) {
+            if(message.contains(swearword)) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(aio.colorize(prefix + "&cYou are not allowed to swear on this server."));
+                return;
             }
         }
     }
