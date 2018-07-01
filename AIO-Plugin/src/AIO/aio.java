@@ -97,7 +97,6 @@ public class aio extends JavaPlugin implements Listener {
 		dropParty = new DropParty(this);
 		inventoryCheck = new InventoryCheck(this);
 		chatGames = new ChatGames(this);
-		antiSwear = new AntiSwear(this);
 		crates = new Crates(this);
 
 		Bukkit.getPluginManager().registerEvents(this, this);

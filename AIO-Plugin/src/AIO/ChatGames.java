@@ -16,7 +16,7 @@ import java.util.Random;
 public class ChatGames implements Listener {
 
     aio plugin;
-    String goal;
+    String goal = "";
     String[] words = {"apple", "key", "desk", "melody", "card", "flower", "pencil", "bucket", "industry"};
 
     ChatGames(aio plugin) {
