@@ -12,6 +12,14 @@ import java.util.Date;
 
 public class Convert {
 
+    public static String LocationToStringNoPY(Location location) {
+        return location.getWorld().getName() + ";" + location.getX() + ";" + location.getY() + ";" + location.getZ();
+    }
+
+    public static Location StringToLocationNoPY(String string) {
+        return new Location(Bukkit.getServer().getWorld(string.split(";")[0]), Double.parseDouble(string.split(";")[1]), Double.parseDouble(string.split(";")[2]), Double.parseDouble(string.split(";")[3]));
+    }
+
     public static String LocationToString(Location location) {
         return location.getWorld().getName() + ";" + location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + location.getPitch() + ";" + location.getYaw();
     }

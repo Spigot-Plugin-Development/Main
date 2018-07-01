@@ -98,7 +98,6 @@ public class aio extends JavaPlugin implements Listener {
 		chatGames = new ChatGames(this);
 		antiSwear = new AntiSwear(this);
 		crates = new Crates(this);
-		crates.giveKey(getServer().getPlayer("DaniFoldi"), "Vote");
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
