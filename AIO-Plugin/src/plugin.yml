@@ -110,5 +110,7 @@ commands:
     endersee:
     nightvision:
         aliases: [nv]
+    crates:
+        aliases: [crate]
     antiswear:
         aliases: [as]
