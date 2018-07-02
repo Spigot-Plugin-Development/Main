@@ -30,6 +30,7 @@ public class AntiSwear implements Listener, CommandExecutor {
         this.plugin = plugin;
         this.prefix = aio.colorize("&7[&fAIO » &cAntiswear&7]&r ");
         Bukkit.getServer().getPluginCommand("antiswear").setExecutor(this);
+        Bukkit.getPluginManager().registerEvents(this, plugin);
         File antiswear = new File(plugin.getDataFolder(), "antiswear.yml");
         if(!antiswear.exists()) {
             try {
@@ -180,7 +181,7 @@ public class AntiSwear implements Listener, CommandExecutor {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        if (event.getPlayer().hasPermission("aio.antiswear.exception")) {
+        if(event.getPlayer().hasPermission("aio.antiswear.bypass")) {
             return;
         }
 
