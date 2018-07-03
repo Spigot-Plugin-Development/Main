@@ -3,6 +3,8 @@ package AIO;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +18,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.permission.*;
 
+import java.io.File;
 import java.util.*;
+import java.util.logging.Level;
 
 public class aio extends JavaPlugin implements Listener {
 	
@@ -57,12 +61,21 @@ public class aio extends JavaPlugin implements Listener {
 	FreezeManager freezeManager;
 
 	CacheManager cacheManager;
+
+	private File messageFile;
+	private FileConfiguration messageConfig;
 	
 	@Override
 	public void onEnable() {
 		getLogger().info("Starting All-In-One Plugin");
 
         saveDefaultConfig();
+
+		File messages = new File(getDataFolder(), "messages.yml");
+		if(!messages.exists()) {
+			getLogger().log(Level.SEVERE, "Unable to read messages file! Server shutdown initiated.");
+			getServer().shutdown();
+		}
 
         sqlconnector = new SQLConnector(this);
         sqlconnector.connect(getConfig().getString("mysql.server"), "minecraft", getConfig().getString("mysql.username"), getConfig().getString("mysql.password"), false);
@@ -117,6 +130,20 @@ public class aio extends JavaPlugin implements Listener {
 		}
 		sqlconnector.disconnect();
 	}
+
+    private FileConfiguration getMessagesFile() {
+        if(messageConfig == null) {
+            if(messageFile == null) {
+                messageFile = new File(getDataFolder(), "messages.yml");
+            }
+            messageConfig = YamlConfiguration.loadConfiguration(messageFile);
+        }
+        return messageConfig;
+    }
+
+    String getMessage(String path) {
+        return aio.colorize(getMessagesFile().getString(path));
+    }
 
 	private boolean setupChat() {
 		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
