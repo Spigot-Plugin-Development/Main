@@ -34,7 +34,7 @@ public class PlayerInfo {
         this.lastQuit = new Date();
         this.ip = "";
         this.server = Bukkit.getServerName();
-        this.location = aio.spawn;
+        this.location = null;
         this.gamemode = 0;
         this.godMode = false;
         this.fly = false;
