@@ -55,8 +55,8 @@ public class aio extends JavaPlugin implements Listener {
 	ChatGames chatGames;
 	AntiSwear antiSwear;
 	Crates crates;
+	Spawn spawn;
 
-	static Location spawn;
 	PlayerMessage playerMessage;
 	FreezeManager freezeManager;
 
@@ -79,8 +79,6 @@ public class aio extends JavaPlugin implements Listener {
 
         sqlconnector = new SQLConnector(this);
         sqlconnector.connect(getConfig().getString("mysql.server"), "minecraft", getConfig().getString("mysql.username"), getConfig().getString("mysql.password"), false);
-
-        spawn = new Location(getServer().getWorld(getConfig().getString("spawn.world")), getConfig().getDouble("spawn.x"), getConfig().getDouble("spawn.y"), getConfig().getDouble("spawn.z"), (float)getConfig().getDouble("spawn.yaw"), (float)getConfig().getDouble("spawn.pitch"));
 
 		antiSwear = new AntiSwear(this);
 		bannerCreator = new BannerCreator(this);
@@ -111,6 +109,7 @@ public class aio extends JavaPlugin implements Listener {
 		inventoryCheck = new InventoryCheck(this);
 		chatGames = new ChatGames(this);
 		crates = new Crates(this);
+		spawn = new Spawn(this);
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
@@ -200,11 +199,6 @@ public class aio extends JavaPlugin implements Listener {
 		for (int j = 0; j < i; j++) {
 			event.getBlock().getRelative(0, j, 0).breakNaturally(event.getPlayer().getInventory().getItem(event.getPlayer().getInventory().getHeldItemSlot()));
 		}
-	}
-	
-	@EventHandler
-	private void playerDeath(PlayerRespawnEvent event) {
-		event.setRespawnLocation(spawn);
 	}
 	
 	@EventHandler
