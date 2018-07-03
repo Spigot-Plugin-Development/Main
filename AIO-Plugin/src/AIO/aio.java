@@ -12,6 +12,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -176,6 +177,12 @@ public class aio extends JavaPlugin implements Listener {
 
 	public static String colorize(String input) {
 		return ChatColor.translateAlternateColorCodes('&', input + "&r");
+	}
+
+	@EventHandler
+	public void ping(ServerListPingEvent event) {
+		event.setMaxPlayers(event.getNumPlayers() + 1);
+		event.setMotd(aio.colorize("Join our &0&kii&4&lAwesome&0&kii&r server!"));
 	}
 
 	@EventHandler
