@@ -45,16 +45,18 @@ public class ChatGames implements Listener {
                         int ox2 = new Random().nextInt(40) + 10;
                         goal = "" + (ox1 * ox2);
                         plugin.getServer().broadcastMessage("The first player to correctly type the result of " + ox1 + " * " + ox2 + " wins $100!");
+                        break;
                     case 4:
                         goal = words[new Random().nextInt(words.length)];
                         List<String> scrambled = Arrays.asList(goal.split(""));
                         Collections.shuffle(scrambled);
-                        String scramble = "";
+                        StringBuilder scramble = new StringBuilder();
                         for (String letter: scrambled) {
-                            scramble += letter;
+                            scramble.append(letter);
                         }
-                        JSONMessage message1 = JSONMessage.create("The first player to unscramble the characters ").then(scramble).color(ChatColor.GREEN).then(" wins $100!");
+                        JSONMessage message1 = JSONMessage.create("The first player to unscramble the characters ").then(scramble.toString()).color(ChatColor.GREEN).then(" wins $100!");
                         sendAll(message1);
+                        break;
                     default: break;
                 }
                 new BukkitRunnable() {
