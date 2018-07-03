@@ -131,7 +131,7 @@ public class aio extends JavaPlugin implements Listener {
 		sqlconnector.disconnect();
 	}
 
-    public FileConfiguration getMessages() {
+    private FileConfiguration getMessagesFile() {
         if(messageConfig == null) {
             if(messageFile == null) {
                 messageFile = new File(getDataFolder(), "messages.yml");
@@ -139,6 +139,10 @@ public class aio extends JavaPlugin implements Listener {
             messageConfig = YamlConfiguration.loadConfiguration(messageFile);
         }
         return messageConfig;
+    }
+
+    String getMessage(String path) {
+        return aio.colorize(getMessagesFile().getString(path));
     }
 
 	private boolean setupChat() {
