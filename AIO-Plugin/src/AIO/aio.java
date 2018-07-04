@@ -182,7 +182,8 @@ public class aio extends JavaPlugin implements Listener {
 	@EventHandler
 	public void ping(ServerListPingEvent event) {
 		event.setMaxPlayers(event.getNumPlayers() + 1);
-		event.setMotd(aio.colorize("Join our &0&kii&4&lAwesome&0&kii&r server!"));
+		String[] adj = {"amazing", "awesome", "lag-free", "brand new", "cool"};
+		event.setMotd(aio.colorize("Join our &5&l" + adj[new Random().nextInt(adj.length)] + "&r server!"));
 	}
 
 	@EventHandler
