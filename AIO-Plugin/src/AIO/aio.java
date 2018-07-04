@@ -1,5 +1,7 @@
 package AIO;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
@@ -12,6 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -27,6 +30,8 @@ public class aio extends JavaPlugin implements Listener {
 	Chat chat;
 	Economy economy;
 	Permission permission;
+	WorldEditPlugin worldEdit;
+	WorldGuardPlugin worldGuard;
 
 	SQLConnector sqlconnector;
 	Enchant enchant;
@@ -115,6 +120,8 @@ public class aio extends JavaPlugin implements Listener {
 		setupChat();
 		setupEconomy();
 		setupPermissions();
+		setupWorldEdit();
+		setupWorldGuard();
 	}
 	
 	@Override
@@ -149,6 +156,14 @@ public class aio extends JavaPlugin implements Listener {
         return message;
     }
 
+    private void setupWorldEdit() {
+		worldEdit = (WorldEditPlugin)getServer().getPluginManager().getPlugin("WorldEdit");
+	}
+
+	private void setupWorldGuard() {
+		worldGuard = (WorldGuardPlugin)getServer().getPluginManager().getPlugin("WorldGuard");
+	}
+
 	private boolean setupChat() {
 		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
 		if (chatProvider != null) {
@@ -180,6 +195,13 @@ public class aio extends JavaPlugin implements Listener {
 
 	public static String colorize(String input) {
 		return ChatColor.translateAlternateColorCodes('&', input + "&r");
+	}
+
+	@EventHandler
+	public void ping(ServerListPingEvent event) {
+		event.setMaxPlayers(event.getNumPlayers() + 1);
+		String[] adj = {"amazing", "awesome", "lag-free", "brand new", "cool"};
+		event.setMotd(aio.colorize("Join our &5&l" + adj[new Random().nextInt(adj.length)] + "&r server!"));
 	}
 
 	@EventHandler
