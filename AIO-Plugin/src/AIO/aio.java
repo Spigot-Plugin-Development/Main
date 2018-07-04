@@ -138,22 +138,20 @@ public class aio extends JavaPlugin implements Listener {
 		sqlconnector.disconnect();
 	}
 
-    private FileConfiguration getMessagesFile() {
-        if(messageConfig == null) {
-            if(messageFile == null) {
-                messageFile = new File(getDataFolder(), "messages.yml");
-            }
-            messageConfig = YamlConfiguration.loadConfiguration(messageFile);
+    String getMessage(String path, String... strings) {
+		if(messageConfig == null) {
+			if(messageFile == null) { messageFile = new File(getDataFolder(), "messages.yml"); }
+			messageConfig = YamlConfiguration.loadConfiguration(messageFile);
+		}
+	    String message = messageConfig.getString(path);
+	    if(messageConfig.getString(path.split("\\.")[0] + ".prefix") != null && message.contains("{prefix}")) {
+            message = message.replace("{prefix}", messageConfig.getString(path.split("\\.")[0] + ".prefix"));
         }
-        return messageConfig;
-    }
-
-    String getMessage(String path) {
-	    String message = aio.colorize(getMessagesFile().getString(path));
-	    if(getMessagesFile().getString(path.split("\\.")[0] + ".prefix") != null) {
-            message = message.replace("{prefix}", getMessage(path.split("\\.")[0] + ".prefix"));
+        for(String newSubString : strings) {
+            String oldSubString = message.substring(message.indexOf("{"), message.indexOf("}")+1);
+            message = message.replace(oldSubString, newSubString);
         }
-        return message;
+        return aio.colorize(message);
     }
 
     private void setupWorldEdit() {
