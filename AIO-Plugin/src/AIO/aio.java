@@ -1,5 +1,7 @@
 package AIO;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
@@ -28,6 +30,8 @@ public class aio extends JavaPlugin implements Listener {
 	Chat chat;
 	Economy economy;
 	Permission permission;
+	WorldEditPlugin worldEdit;
+	WorldGuardPlugin worldGuard;
 
 	SQLConnector sqlconnector;
 	Enchant enchant;
@@ -116,6 +120,8 @@ public class aio extends JavaPlugin implements Listener {
 		setupChat();
 		setupEconomy();
 		setupPermissions();
+		setupWorldEdit();
+		setupWorldGuard();
 	}
 	
 	@Override
@@ -145,6 +151,14 @@ public class aio extends JavaPlugin implements Listener {
     String getMessage(String path) {
         return aio.colorize(getMessagesFile().getString(path));
     }
+
+    private void setupWorldEdit() {
+		worldEdit = (WorldEditPlugin)getServer().getPluginManager().getPlugin("WorldEdit");
+	}
+
+	private void setupWorldGuard() {
+		worldGuard = (WorldGuardPlugin)getServer().getPluginManager().getPlugin("WorldGuard");
+	}
 
 	private boolean setupChat() {
 		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
