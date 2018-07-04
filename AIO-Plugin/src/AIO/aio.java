@@ -142,7 +142,11 @@ public class aio extends JavaPlugin implements Listener {
     }
 
     String getMessage(String path) {
-        return aio.colorize(getMessagesFile().getString(path));
+	    String message = aio.colorize(getMessagesFile().getString(path));
+	    if(getMessagesFile().getString(path.split("\\.")[0] + ".prefix") != null) {
+            message = message.replace("{prefix}", getMessage(path.split("\\.")[0] + ".prefix"));
+        }
+        return message;
     }
 
 	private boolean setupChat() {
