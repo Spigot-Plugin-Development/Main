@@ -136,17 +136,12 @@ public class AntiSwear implements Listener, CommandExecutor {
             if(args[0].equalsIgnoreCase("list")) {
                 List<String> swearList = getAntiswear().getStringList("antiswear");
                 StringBuilder swearwords = new StringBuilder();
-                int count = 0;
-                for(String word : swearList) {
-                    swearwords.append(word).append("&7, &f");
-                    count++;
-                }
-                if(count == 0) {
-                    sender.sendMessage(plugin.getMessage("antiswear.lsit_empty"));
+                for(String word : swearList) { swearwords.append(word).append(plugin.getMessage("antiswear.list_separator")); }
+                if(swearList.isEmpty()) {
+                    sender.sendMessage(plugin.getMessage("antiswear.list_empty"));
                     return false;
                 }
-                sender.sendMessage(plugin.getMessage("antiswear.list", swearwords.substring(0, swearwords.length() - 6)));
-                sender.sendMessage(plugin.getMessage("antiswear.list_count", "" + count));
+                sender.sendMessage(plugin.getMessage("antiswear.list", String.valueOf(swearList.size()), swearwords.substring(0, swearwords.length() - 6)));
                 return false;
             }
 
