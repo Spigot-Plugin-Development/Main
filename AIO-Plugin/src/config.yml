@@ -1,0 +1,7 @@
+# All-In-One Config #
+spawn: 'world;0;0;0;0;0'
+mysql:
+  server: ''
+  username: ''
+  password: ''
+antiswear-enabled: false

@@ -8,7 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Commands implements CommandExecutor {
@@ -23,16 +24,63 @@ public class Commands implements CommandExecutor {
         Bukkit.getServer().getPluginCommand("nick").setExecutor(this);
         Bukkit.getServer().getPluginCommand("ping").setExecutor(this);
         Bukkit.getServer().getPluginCommand("adminonly").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("unsafeenchant").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("nightvision").setExecutor(this);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+
+        if (cmd.getName().equalsIgnoreCase("nightvision")) {
+            if (sender instanceof Player) {
+                if (sender.hasPermission("aio.nightvision")) {
+                    if (((Player)sender).hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
+                        ((Player)sender).removePotionEffect(PotionEffectType.NIGHT_VISION);
+                    } else {
+                        ((Player)sender).addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 10000000, 1, false, false), true);
+                    }
+                } else {
+                    sender.sendMessage("You don't have permission to execute that command.");
+                }
+            } else {
+                sender.sendMessage("Only players can execute this command.");
+            }
+        }
+
         //Nick - change the displayed name of the player
         if(cmd.getName().equalsIgnoreCase("nick")) {
             if(sender instanceof Player) {
-                Player player = (Player)sender;
-                player.setDisplayName(aio.colorize(args[0]));
+                if(!sender.hasPermission("aio.nick")) {
+                    sender.sendMessage(aio.colorize("&cYou don't have permission to execute this command."));
+                    return false;
+                }
+                if(args.length == 1) {
+                    if(args[0].equalsIgnoreCase("clear")) {
+                        ((Player) sender).setDisplayName("");
+                        sender.sendMessage(aio.colorize("&aYou removed your nickname."));
+                        return false;
+                    }
+                    ((Player) sender).setDisplayName(args[0]);
+                    sender.sendMessage(aio.colorize("&aYou set your nickname to '" + args[0] + "'."));
+                    return false;
+                }
+            }
+            if(args.length != 2) {
+                sender.sendMessage(aio.colorize("&c/nick <new_nick | clear> <player>"));
+                return false;
+            }
+            if(plugin.getServer().getPlayer(args[1]) == null) {
+                sender.sendMessage(aio.colorize("&cPlayer not found."));
+                return false;
             } else {
-                sender.sendMessage("Only players can execute this command.");
+                Player target = plugin.getServer().getPlayer(args[1]);
+                if(args[0].equalsIgnoreCase("clear")) {
+                    target.setDisplayName("");
+                    sender.sendMessage(aio.colorize("&aYou removed the nickname of " + target.getName() + "."));
+                    return false;
+                }
+                target.setDisplayName(args[0]);
+                sender.sendMessage(aio.colorize("&aYou set the nickname of " + target.getName() + " to '" + args[0] + "'."));
+                return false;
             }
         }
 
@@ -205,31 +253,6 @@ public class Commands implements CommandExecutor {
                 }
             }
         }
-
-        /* //Spawn - teleport to spawn location
-        if(cmd.getName().equalsIgnoreCase("spawn")) {
-            if(sender instanceof Player) {
-                ((Player)sender).teleport(spawn);
-            } else {
-                sender.sendMessage("Only players can execute this command");
-            }
-        } */
-
-        /* //Setspawn - set spawn location
-        if(cmd.getName().equalsIgnoreCase("setspawn")) {
-            if(sender instanceof Player) {
-                plugin.getConfig().set("spawn-world", ((Player)sender).getLocation().getWorld().getName());
-                plugin.getConfig().set("spawn-x", ((Player)sender).getLocation().getX());
-                plugin.getConfig().set("spawn-y", ((Player)sender).getLocation().getY());
-                plugin.getConfig().set("spawn-z", ((Player)sender).getLocation().getZ());
-                plugin.getConfig().set("spawn-yaw", ((Player)sender).getLocation().getYaw());
-                plugin.getConfig().set("spawn-pitch", ((Player)sender).getLocation().getPitch());
-                plugin.saveConfig();
-                spawn = ((Player)sender).getLocation();
-            } else {
-                sender.sendMessage("Only players can execute this command");
-            }
-        } */
 
         //More - increase amount of held item
         if(cmd.getName().equalsIgnoreCase("more")) {

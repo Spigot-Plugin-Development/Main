@@ -1,33 +1,37 @@
 package AIO;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Sign;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.permission.*;
+
+import java.io.File;
 import java.util.*;
+import java.util.logging.Level;
 
 public class aio extends JavaPlugin implements Listener {
 	
 	Chat chat;
 	Economy economy;
 	Permission permission;
+	WorldEditPlugin worldEdit;
+	WorldGuardPlugin worldGuard;
 
 	SQLConnector sqlconnector;
 	Enchant enchant;
@@ -51,25 +55,37 @@ public class aio extends JavaPlugin implements Listener {
 	SpecialChests specialChests;
 	EntityRename entityRename;
 	Lottery lottery;
+	DropParty dropParty;
+	InventoryCheck inventoryCheck;
+	ChatGames chatGames;
+	AntiSwear antiSwear;
+	Crates crates;
+	Spawn spawn;
 
-	static Location spawn;
 	PlayerMessage playerMessage;
 	FreezeManager freezeManager;
 
 	CacheManager cacheManager;
+
+	private File messageFile;
+	private FileConfiguration messageConfig;
 	
 	@Override
 	public void onEnable() {
 		getLogger().info("Starting All-In-One Plugin");
 
-		sqlconnector = new SQLConnector(this);
-		//retrieve server id
-		//enable necessary parts
-		System.out.println(getConfig().getString("mysql-server"));
-        sqlconnector.connect(getConfig().getString("mysql-server"), "minecraft", getConfig().getString("mysql-username"), getConfig().getString("mysql-password"), false);
+        saveDefaultConfig();
 
-		spawn = new Location(getServer().getWorld(getConfig().getString("spawn-world")), getConfig().getDouble("spawn-x"), getConfig().getDouble("spawn-y"), getConfig().getDouble("spawn-z"), (float)getConfig().getDouble("spawn-yaw"), (float)getConfig().getDouble("spawn-pitch"));
+		File messages = new File(getDataFolder(), "messages.yml");
+		if(!messages.exists()) {
+			getLogger().log(Level.SEVERE, "Unable to read messages file! Server shutdown initiated.");
+			getServer().shutdown();
+		}
 
+        sqlconnector = new SQLConnector(this);
+        sqlconnector.connect(getConfig().getString("mysql.server"), "minecraft", getConfig().getString("mysql.username"), getConfig().getString("mysql.password"), false);
+
+		antiSwear = new AntiSwear(this);
 		bannerCreator = new BannerCreator(this);
 		advertisements = new Advertisements(this);
 		antiItemlag = new AntiItemlag(this);
@@ -88,33 +104,62 @@ public class aio extends JavaPlugin implements Listener {
 		weatherManager = new WeatherManager(this);
 		gamemodeManager = new GamemodeManager(this);
 		timeManager = new TimeManager(this);
-		teleporta = new TeleportA(this);
-		privateMessage = new PrivateMessage(this);
 		freezeManager = new FreezeManager(this);
 		cacheManager = new CacheManager(this);
 		playerJoin = new PlayerJoin(this);
 		playerLeave = new PlayerLeave(this);
 		specialChests = new SpecialChests(this);
 		lottery = new Lottery(this);
+		dropParty = new DropParty(this);
+		inventoryCheck = new InventoryCheck(this);
+		chatGames = new ChatGames(this);
+		crates = new Crates(this);
+		spawn = new Spawn(this);
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
 		setupEconomy();
 		setupPermissions();
+		setupWorldEdit();
+		setupWorldGuard();
 	}
 	
 	@Override
 	public void onDisable() {
 		getLogger().info("Stopping All-In-One Plugin");
 		advertisements.removeBar();
-		saveConfig();
 		lottery.disable();
 		warp.saveWarps();
-		for (Player player: getServer().getOnlinePlayers()) {
+		saveConfig();
+		for(Player player: getServer().getOnlinePlayers()) {
 			cacheManager.updatePlayer(player.getUniqueId());
 			cacheManager.savePlayer(cacheManager.getPlayer(player.getUniqueId()));
 		}
 		sqlconnector.disconnect();
+	}
+
+    String getMessage(String path, String... strings) {
+		if(messageConfig == null) {
+			if(messageFile == null) { messageFile = new File(getDataFolder(), "messages.yml"); }
+			messageConfig = YamlConfiguration.loadConfiguration(messageFile);
+		}
+	    String message = messageConfig.getString(path);
+	    if(messageConfig.getString(path.split("\\.")[0] + ".prefix") != null && message.contains("{prefix}")) {
+            message = message.replace("{prefix}", messageConfig.getString(path.split("\\.")[0] + ".prefix"));
+        }
+        for(String newSubString : strings) {
+            String oldSubString = message.substring(message.indexOf("{"), message.indexOf("}")+1);
+            message = message.replace(oldSubString, newSubString);
+        }
+        return aio.colorize(message);
+    }
+
+    private void setupWorldEdit() {
+		worldEdit = (WorldEditPlugin)getServer().getPluginManager().getPlugin("WorldEdit");
+	}
+
+	private void setupWorldGuard() {
+		worldGuard = (WorldGuardPlugin)getServer().getPluginManager().getPlugin("WorldGuard");
 	}
 
 	private boolean setupChat() {
@@ -151,6 +196,13 @@ public class aio extends JavaPlugin implements Listener {
 	}
 
 	@EventHandler
+	public void ping(ServerListPingEvent event) {
+		event.setMaxPlayers(event.getNumPlayers() + 1);
+		String[] adj = {"amazing", "awesome", "lag-free", "brand new", "cool"};
+		event.setMotd(aio.colorize("Join our &5&l" + adj[new Random().nextInt(adj.length)] + "&r server!"));
+	}
+
+	@EventHandler
 	private void signColor(SignChangeEvent event) {
 		for (int i = 0; i < 4; i++) {
 			event.setLine(i, aio.colorize(event.getLine(i)));
@@ -175,11 +227,6 @@ public class aio extends JavaPlugin implements Listener {
 		for (int j = 0; j < i; j++) {
 			event.getBlock().getRelative(0, j, 0).breakNaturally(event.getPlayer().getInventory().getItem(event.getPlayer().getInventory().getHeldItemSlot()));
 		}
-	}
-	
-	@EventHandler
-	private void playerDeath(PlayerRespawnEvent event) {
-		event.setRespawnLocation(spawn);
 	}
 	
 	@EventHandler

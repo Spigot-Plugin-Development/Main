@@ -2,7 +2,7 @@ main: AIO.aio
 version: 1.0
 developers: [DaniFoldi, ApocalypseDJ]
 name: All-In-One_Plugin
-depend: [Vault, SuperVanish]
+depend: [Vault, SuperVanish, WorldEdit, WorldGuard]
 commands:
     kickall:
     kick:
@@ -105,3 +105,13 @@ commands:
     lottery:
         aliases: [lot]
     hologram:
+    dropparty:
+        aliases: [dp]
+    invsee:
+    endersee:
+    nightvision:
+        aliases: [nv]
+    crates:
+        aliases: [crate]
+    antiswear:
+        aliases: [as]

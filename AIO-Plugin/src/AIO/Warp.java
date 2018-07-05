@@ -32,14 +32,14 @@ public class Warp implements Listener, CommandExecutor {
 
 	Warp(aio plugin) {
 		this.plugin = plugin;
-        Bukkit.getPluginManager().registerEvents(this, plugin);
-        Bukkit.getServer().getPluginCommand("delwarp").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("setwarp").setExecutor(this);
         Bukkit.getServer().getPluginCommand("warp").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("setwarp").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("delwarp").setExecutor(this);
         Bukkit.getServer().getPluginCommand("warplist").setExecutor(this);
         Bukkit.getServer().getPluginCommand("warpreload").setExecutor(this);
-		File warps = new File(plugin.getDataFolder(), "warps.yml");
-		if(!warps.exists()){
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+        File warps = new File(plugin.getDataFolder(), "warps.yml");
+		if(!warps.exists()) {
 			try {
 				warps.createNewFile();
 				PrintWriter pw = new PrintWriter(new FileWriter(warps));
@@ -47,7 +47,7 @@ public class Warp implements Listener, CommandExecutor {
 				pw.flush();
 				pw.close();
 			} catch(IOException ex) {
-				plugin.getLogger().log(Level.SEVERE, "Unable to create warp file!");
+				plugin.getLogger().log(Level.SEVERE, plugin.getMessage("message.file_not_created", "warps"));
 				ex.printStackTrace();
 			}
 		}
@@ -71,12 +71,12 @@ public class Warp implements Listener, CommandExecutor {
 	
 	//Save warp file
     public void saveWarps() {
-		if(warpconfig == null || warpfile == null){
+		if(warpconfig == null || warpfile == null) {
 			return;
 		}
-		try{
+		try {
 			getWarps().save(warpfile);
-		}catch(IOException ex){
+		} catch(IOException ex) {
 			ex.printStackTrace();
 		}
 	}
@@ -119,7 +119,7 @@ public class Warp implements Listener, CommandExecutor {
 		if(event.getAction().equals(Action.LEFT_CLICK_BLOCK) && isSign(block)) {
 			Sign sign = (Sign)block.getState();
 			if(!player.hasPermission("aio.sign.warp") && sign.getLine(0).equals(aio.colorize("&1&l[Warp]"))) {
-				player.sendMessage("You don't have permission to remove this sign.");
+				player.sendMessage(plugin.getMessage("message.no_permission_sign"));
 				event.setCancelled(true);
 			}
 		}
@@ -127,7 +127,7 @@ public class Warp implements Listener, CommandExecutor {
 			Sign sign = (Sign)block.getState();
 			if(player.hasPermission("aio.warp") && sign.getLine(0).equals(aio.colorize("&1&l[Warp]")) && getWarpLocation(sign.getLine(1)) != null) {
 				player.teleport(getWarpLocation(sign.getLine(1)));
-				player.sendMessage("Warping to " + sign.getLine(1));
+				player.sendMessage(plugin.getMessage("warp.warping", sign.getLine(1)));
 			}
 		}
 	}
@@ -140,19 +140,19 @@ public class Warp implements Listener, CommandExecutor {
         //Set new warp
         if(command.getName().equalsIgnoreCase("setwarp")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage("Only players can execute this command.");
+                sender.sendMessage(plugin.getMessage("messages.player_only"));
                 return false;
             }
             if(!sender.hasPermission("aio.setwarp")) {
-                sender.sendMessage("You don't have permission to execute this command.");
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
                 return false;
             }
             if(args.length < 1) {
-                sender.sendMessage("/setwarp <warp name>");
+                sender.sendMessage(plugin.getMessage("warp.setwarp_usage"));
                 return false;
             }
             if(getWarpLocation(args[0]) != null) {
-                sender.sendMessage("This warp already exists.");
+                sender.sendMessage(plugin.getMessage("warp.warp_exists"));
                 return false;
             }
             Player player = (Player)sender;
@@ -163,54 +163,54 @@ public class Warp implements Listener, CommandExecutor {
             getWarps().set("warps." + args[0] + ".yaw", player.getLocation().getYaw());
             getWarps().set("warps." + args[0] + ".pitch", player.getLocation().getPitch());
             saveWarps();
-            player.sendMessage("Warp " + args[0] + " set!");
+            player.sendMessage(plugin.getMessage("warp.warp_set", args[0]));
             return true;
         }
 
 	    //Delete warp
         if(command.getName().equalsIgnoreCase("delwarp")) {
             if(sender instanceof Player && !sender.hasPermission("aio.delwarp")) {
-                sender.sendMessage("You don't have permission to execute this command.");
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
                 return false;
             }
             if(args.length < 1) {
-                sender.sendMessage("/delwarp <warp name>");
+                sender.sendMessage(plugin.getMessage("warp.delwarp_usage"));
                 return false;
             }
             if(getWarpLocation(args[0]) == null) {
-                sender.sendMessage("Warp not found.");
+                sender.sendMessage(plugin.getMessage("warp.warp_not_exists"));
                 return false;
             }
             getWarps().set("warps." + args[0], null);
             saveWarps();
-            sender.sendMessage("Warp " + args[0] + " deleted.");
+            sender.sendMessage(plugin.getMessage("warp.warp_deleted", args[0]));
             return true;
         }
 
         //Warp
         if(command.getName().equalsIgnoreCase("warp")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage("Only players can execute this command.");
+                sender.sendMessage(plugin.getMessage("messages.player_only"));
                 return false;
             }
             if(!sender.hasPermission("aio.warp")) {
-                sender.sendMessage("You don't have permission to execute this command.");
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
                 return false;
             }
             Player player = (Player)sender;
             if(args.length < 1) {
-                player.sendMessage("/warp <warp name>");
+                player.sendMessage(plugin.getMessage("warp.warp_usage"));
                 return false;
             }
             if(getWarpLocation(args[0]) == null) {
-                player.sendMessage(" The warp " + args[0] + " doesn't exist.");
+                player.sendMessage(plugin.getMessage("warp.warp_not_found", args[0]));
                 return false;
             }
             if(getWarpLocation(args[0]).getWorld() == null) {
-                player.sendMessage("The world " + args[0] + " is set in doesn't exist.");
+                player.sendMessage(plugin.getMessage("warp.world_not_found", args[0]));
                 return false;
             }
-            player.sendMessage("Warping to " + args[0]);
+            player.sendMessage(plugin.getMessage("warp.warping", args[0]));
             player.teleport(getWarpLocation(args[0]));
             return true;
         }
@@ -218,34 +218,32 @@ public class Warp implements Listener, CommandExecutor {
         //Reload warp file
         if(command.getName().equalsIgnoreCase("warpreload")) {
             if(sender instanceof Player && !sender.hasPermission("aio.warpreload")) {
-                sender.sendMessage("You don't have permission to execute this command.");
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
                 return false;
             }
-            plugin.reloadConfig();
             reloadWarps();
-            plugin.saveConfig();
             saveWarps();
-            sender.sendMessage("Warp file reloaded.");
+            sender.sendMessage(plugin.getMessage("warp.reloaded"));
             return true;
         }
 
         //List all warps
         if(command.getName().equalsIgnoreCase("warplist")) {
             if(sender instanceof Player && !sender.hasPermission("aio.warplist")) {
-                sender.sendMessage("You don't have permission to execute this command.");
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
                 return false;
             }
             if(!getWarps().isConfigurationSection("warps")) {
-                sender.sendMessage("There are no warps yet.");
+                sender.sendMessage(plugin.getMessage("warp.list_empty"));
                 return false;
             }
             Set<String> warps = getWarps().getConfigurationSection("warps").getKeys(false);
             Iterator<String> itr = warps.iterator();
-            String list = "";
+            StringBuilder list = new StringBuilder();
             while(itr.hasNext()) {
-                list = list + itr.next() + ", ";
+                list.append(itr.next()).append(plugin.getMessage("warp.list_separator"));
             }
-            sender.sendMessage("Warps: " + list.substring(0, list.length() - 2) + ". There are a total of " + String.valueOf(warps.size()) + " warps.");
+            sender.sendMessage(plugin.getMessage("warp.list", String.valueOf(warps.size()), list.substring(0, list.length() - 6)));
             return true;
         }
 

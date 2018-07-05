@@ -1,0 +1,23 @@
+messages:
+  no_permission: "&cYou don't have permission to execute this command."
+  player_only: "&cOnly players can execute this command."
+  file_not_created: "&cUnable to create {file} file."
+antiswear:
+  prefix: "&7[&fAIO » &cAntiswear&7]&r "
+  usage_enabled: "{prefix}&aAntiswear enabled.\n{prefix}&c/antiswear <add | remove | list | disable>"
+  usage_disabled: "{prefix}&4Antiswear disabled.\n{prefix}&c/antiswear <add | remove | list | enable>"
+  add_usage: "{prefix}&c/antiswear add <swearword>"
+  cannot_add: "{prefix}&cThe word '&f{word}&c' is already on the antiswear list."
+  added: "{prefix}&aYou added the word '&f{word}&a' to the antiswear list."
+  remove_usage: "{prefix}&c/antiswear remove <swearword>"
+  cannot_remove: "{prefix}&cThe word '&f{word}&c' is not on the antiswear list."
+  removed: "{prefix}&aYou removed the word '&f{word}&a' from the antiswear list."
+  list_empty: "{prefix}&7There are no words in the antiswear list."
+  list: "{prefix}&7Antiswear list: &f{list}&7."
+  list_count: "{prefix}&7Total of &f{count}&7 words."
+  enabled: "{prefix}&aAntiswear enabled, the Minecraft Gods are watching!"
+  enabled_already: "{prefix}&cAntiswear is already enabled."
+  disabled: "{prefix}&4Antiswear disabled!"
+  disabled_already: "{prefix}&cAntiswear is already disabled."
+  no_swear: "{prefix}&cYou are not allowed to swear on this server."
+  
