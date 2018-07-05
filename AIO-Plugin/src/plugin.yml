@@ -104,6 +104,7 @@ commands:
     rename:
     lottery:
         aliases: [lot]
+    hologram:
     dropparty:
         aliases: [dp]
     invsee:
