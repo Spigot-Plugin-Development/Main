@@ -4,6 +4,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.*;
+import java.util.logging.Level;
 
 public class SQLConnector {
 	
@@ -23,7 +24,9 @@ public class SQLConnector {
 						Class.forName("com.mysql.jdbc.Driver");
 						connection = DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + database, username, password);
 					} catch (Exception e) {
-						e.printStackTrace();
+                        e.printStackTrace();
+                        plugin.getLogger().log(Level.SEVERE, "Unable to connect to database! Server is shutting down.");
+                        plugin.getServer().shutdown();
 					}
 				}
 			}.runTaskAsynchronously(plugin);
@@ -32,7 +35,9 @@ public class SQLConnector {
 				Class.forName("com.mysql.jdbc.Driver");
 				connection = DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + database, username, password);
 			} catch (Exception e) {
-				e.printStackTrace();
+                e.printStackTrace();
+                plugin.getLogger().log(Level.SEVERE, "Unable to connect to database! Server is shutting down.");
+                plugin.getServer().shutdown();
 			}
 		}
 	}

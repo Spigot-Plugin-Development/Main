@@ -63,6 +63,7 @@ public class aio extends JavaPlugin implements Listener {
 	Spawn spawn;
 	PrisonCells prisonCells;
 	AuctionManager auctionManager;
+	Holograms holograms;
 
 	PlayerMessage playerMessage;
 	FreezeManager freezeManager;
@@ -80,7 +81,7 @@ public class aio extends JavaPlugin implements Listener {
 
 		File messages = new File(getDataFolder(), "messages.yml");
 		if(!messages.exists()) {
-			getLogger().log(Level.SEVERE, "Unable to read messages file! Server shutdown initiated.");
+			getLogger().log(Level.SEVERE, "Unable to read messages file! Server is shutting down.");
 			getServer().shutdown();
 		}
 
@@ -119,6 +120,7 @@ public class aio extends JavaPlugin implements Listener {
 		spawn = new Spawn(this);
 		prisonCells = new PrisonCells(this);
 		auctionManager = new AuctionManager(this);
+		holograms = new Holograms(this);
 
 		Bukkit.getPluginManager().registerEvents(this, this);
 		setupChat();
@@ -133,7 +135,6 @@ public class aio extends JavaPlugin implements Listener {
 		getLogger().info("Stopping All-In-One Plugin");
 		advertisements.removeBar();
 		lottery.disable();
-		warp.saveWarps();
 		saveConfig();
 		for(Player player: getServer().getOnlinePlayers()) {
 			cacheManager.updatePlayer(player.getUniqueId());
@@ -142,18 +143,20 @@ public class aio extends JavaPlugin implements Listener {
 		sqlconnector.disconnect();
 	}
 
-    private FileConfiguration getMessagesFile() {
-        if(messageConfig == null) {
-            if(messageFile == null) {
-                messageFile = new File(getDataFolder(), "messages.yml");
-            }
-            messageConfig = YamlConfiguration.loadConfiguration(messageFile);
+    String getMessage(String path, String... strings) {
+		if(messageConfig == null) {
+			if(messageFile == null) { messageFile = new File(getDataFolder(), "messages.yml"); }
+			messageConfig = YamlConfiguration.loadConfiguration(messageFile);
+		}
+	    String message = messageConfig.getString(path);
+	    if(messageConfig.getString(path.split("\\.")[0] + ".prefix") != null && message.contains("{prefix}")) {
+            message = message.replace("{prefix}", messageConfig.getString(path.split("\\.")[0] + ".prefix"));
         }
-        return messageConfig;
-    }
-
-    String getMessage(String path) {
-        return aio.colorize(getMessagesFile().getString(path));
+        for(String newSubString : strings) {
+            String oldSubString = message.substring(message.indexOf("{"), message.indexOf("}")+1);
+            message = message.replace(oldSubString, newSubString);
+        }
+        return colorize(message);
     }
 
     private void setupWorldEdit() {
@@ -194,7 +197,7 @@ public class aio extends JavaPlugin implements Listener {
 	}
 
 	public static String colorize(String input) {
-		return ChatColor.translateAlternateColorCodes('&', input + "&r");
+		return ChatColor.translateAlternateColorCodes('&', input);
 	}
 
 	@EventHandler

@@ -17,30 +17,30 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 
 public class AntiSwear implements Listener, CommandExecutor {
 
     private aio plugin;
-    private String prefix;
     private File asfile;
     private FileConfiguration asconfig;
 
     AntiSwear(aio plugin) {
         this.plugin = plugin;
-        this.prefix = aio.colorize("&7[&fAIO » &cAntiswear&7]&r ");
         Bukkit.getServer().getPluginCommand("antiswear").setExecutor(this);
         Bukkit.getPluginManager().registerEvents(this, plugin);
         File antiswear = new File(plugin.getDataFolder(), "antiswear.yml");
         if(!antiswear.exists()) {
             try {
+                plugin.getLogger().warning(plugin.getMessage("messages.file_not_found", "antiswear.yml"));
                 antiswear.createNewFile();
                 PrintWriter pw = new PrintWriter(new FileWriter(antiswear));
                 pw.println("antiswear:");
                 pw.flush();
                 pw.close();
             } catch(IOException ex) {
-                plugin.getLogger().log(Level.SEVERE, "Unable to create antiswear file!");
+                plugin.getLogger().severe(plugin.getMessage("messages.file_not_created", "antiswear.yml"));
+                plugin.getConfig().set("antiswear-enabled", false);
+                plugin.getLogger().info(plugin.getMessage("antiswear.force_disabled"));
                 ex.printStackTrace();
             }
         }
@@ -83,96 +83,101 @@ public class AntiSwear implements Listener, CommandExecutor {
             //Check for permission
             if(sender instanceof Player) {
                 if(!sender.hasPermission("aio.antiswear")) {
-                    sender.sendMessage(aio.colorize("&cYou don't have permission to execute this command."));
-                    return false;
+                    sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                    return true;
                 }
             }
 
             //Print usage
             if(args.length == 0) {
                 if(enabled) {
-                    sender.sendMessage(aio.colorize(prefix + "&aAntiswear enabled.\n" + prefix + "&c/antiswear <add | remove | list | disable>"));
-                    return false;
+                    sender.sendMessage(plugin.getMessage("antiswear.usage_enabled"));
+                    return true;
                 }
-                sender.sendMessage(aio.colorize(prefix + "&4Antiswear disabled.\n" + prefix + "&c/antiswear <add | remove | list | enable>"));
-                return false;
+                sender.sendMessage(plugin.getMessage("antiswear.usage_disabled"));
+                return true;
             }
 
             //Add to list
             if(args[0].equalsIgnoreCase("add")) {
                 if(args.length != 2) {
-                    sender.sendMessage(aio.colorize(prefix + "&c/antiswear add <swearword>"));
-                    return false;
+                    sender.sendMessage(plugin.getMessage("antiswear.add_usage"));
+                    return true;
                 }
                 List<String> swearList = getAntiswear().getStringList("antiswear");
                 if(swearList.contains(args[1].toLowerCase())) {
-                    sender.sendMessage(aio.colorize(prefix + "&cThe word '&f" + args[1].toLowerCase() + "&c' is already on the antiswear list."));
-                    return false;
+                    sender.sendMessage(plugin.getMessage("antiswear.cannot_add", args[1].toLowerCase()));
+                    return true;
                 }
                 swearList.add(args[1].toLowerCase());
                 getAntiswear().set("antiswear", swearList);
                 saveAntiswear();
-                sender.sendMessage(aio.colorize(prefix + "&aYou added the word '&f" + args[1].toLowerCase() + "&a' to the antiswear list."));
-                return false;
+                sender.sendMessage(plugin.getMessage("antiswear.added", args[1].toLowerCase()));
+                return true;
             }
 
             //Remove from list
             if(args[0].equalsIgnoreCase("remove")) {
                 if(args.length != 2) {
-                    sender.sendMessage(aio.colorize(prefix + "&c/antiswear remove <swearword>"));
-                    return false;
+                    sender.sendMessage(plugin.getMessage("antiswear.remove_usage"));
+                    return true;
                 }
                 List<String> swearList = getAntiswear().getStringList("antiswear");
                 if(!swearList.contains(args[1].toLowerCase())) {
-                    sender.sendMessage(aio.colorize(prefix + "&cThe word '&f" + args[1].toLowerCase() + "&c' is not on the antiswear list."));
-                    return false;
+                    sender.sendMessage(plugin.getMessage("antiswear.cannot_remove", args[1].toLowerCase()));
+                    return true;
                 }
                 swearList.remove(args[1].toLowerCase());
                 getAntiswear().set("antiswear", swearList);
                 saveAntiswear();
-                sender.sendMessage(aio.colorize(prefix + "&aYou removed the word '&f" + args[1].toLowerCase() + "&a' from the antiswear list."));
-                return false;
+                sender.sendMessage(plugin.getMessage("antiswear.removed", args[1].toLowerCase()));
+                return true;
             }
 
             //Print list
             if(args[0].equalsIgnoreCase("list")) {
                 List<String> swearList = getAntiswear().getStringList("antiswear");
                 StringBuilder swearwords = new StringBuilder();
-                int count = 0;
-                for(String word : swearList) {
-                    swearwords.append(word).append("&7, &f");
-                    count += 1;
+                for(String word : swearList) { swearwords.append(word).append(plugin.getMessage("antiswear.list_separator")); }
+                if(swearList.isEmpty()) {
+                    sender.sendMessage(plugin.getMessage("antiswear.list_empty"));
+                    return true;
                 }
-                if(count == 0) {
-                    sender.sendMessage(aio.colorize(prefix + "&7There are no words in the antiswear list."));
-                    return false;
-                }
-                sender.sendMessage(aio.colorize(prefix + "&7Antiswear list: &f" + swearwords.substring(0, swearwords.length() - 6) + "&7."));
-                sender.sendMessage(aio.colorize(prefix + "&7Total of &f" + count + "&7 words."));
-                return false;
+                sender.sendMessage(plugin.getMessage("antiswear.list", String.valueOf(swearList.size()), swearwords.substring(0, swearwords.length() - 6)));
+                return true;
             }
 
             //Enable antiswear
             if(args[0].equalsIgnoreCase("enable")) {
                 if(enabled) {
-                    sender.sendMessage(aio.colorize(prefix + "&cAntiswear is already enabled."));
-                    return false;
+                    sender.sendMessage(plugin.getMessage("antiswear.enabled_already"));
+                    return true;
                 }
                 plugin.getConfig().set("antiswear-enabled", true);
                 plugin.saveConfig();
-                sender.sendMessage(aio.colorize(prefix + "&aAntiswear enabled, the Minecraft Gods are watching now!"));
-                return false;
+                sender.sendMessage(plugin.getMessage("antiswear.enabled"));
+                return true;
             }
 
             //Disable antiswear
             if(args[0].equalsIgnoreCase("disable")) {
                 if(!enabled) {
-                    sender.sendMessage(aio.colorize(prefix + "&cAntiswear is already disabled."));
-                    return false;
+                    sender.sendMessage(plugin.getMessage("antiswear.disabled_already"));
+                    return true;
                 }
                 plugin.getConfig().set("antiswear-enabled", false);
                 plugin.saveConfig();
-                sender.sendMessage(aio.colorize(prefix + "&4Antiswear disabled!"));
+                sender.sendMessage(plugin.getMessage("antiswear.disabled"));
+                return true;
+            }
+
+            //Print usage if args[0] is incorrect
+            if(enabled) {
+                sender.sendMessage(plugin.getMessage("antiswear.usage_enabled"));
+                return true;
+            } else {
+                sender.sendMessage(plugin.getMessage("antiswear.usage_disabled"));
+                return true;
             }
         }
 
@@ -181,7 +186,7 @@ public class AntiSwear implements Listener, CommandExecutor {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        if(event.getPlayer().hasPermission("aio.antiswear.bypass")) {
+        if(event.getPlayer().hasPermission("aio.antiswear.bypass") || !plugin.getConfig().getBoolean("antiswear-enabled")) {
             return;
         }
 
@@ -191,7 +196,7 @@ public class AntiSwear implements Listener, CommandExecutor {
         for(String swearword : swearList) {
             if(message.contains(swearword)) {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(aio.colorize(prefix + "&cYou are not allowed to swear on this server."));
+                event.getPlayer().sendMessage(plugin.getMessage("antiswear.no_swear"));
                 return;
             }
         }
