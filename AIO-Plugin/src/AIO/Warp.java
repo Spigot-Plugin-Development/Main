@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -22,7 +21,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.plugin.Plugin;
 
 public class Warp implements Listener, CommandExecutor {
 
@@ -41,13 +39,14 @@ public class Warp implements Listener, CommandExecutor {
         File warps = new File(plugin.getDataFolder(), "warps.yml");
 		if(!warps.exists()) {
 			try {
-				warps.createNewFile();
-				PrintWriter pw = new PrintWriter(new FileWriter(warps));
-				pw.println("warps:");
-				pw.flush();
-				pw.close();
+                plugin.getLogger().warning(plugin.getMessage("messages.file_not_found", "warps.yml"));
+                warps.createNewFile();
+                PrintWriter pw = new PrintWriter(new FileWriter(warps));
+                pw.println("warps: {}");
+                pw.flush();
+                pw.close();
 			} catch(IOException ex) {
-				plugin.getLogger().log(Level.SEVERE, plugin.getMessage("message.file_not_created", "warps"));
+				plugin.getLogger().log(Level.SEVERE, plugin.getMessage("message.file_not_created", "warps.yml"));
 				ex.printStackTrace();
 			}
 		}
@@ -70,7 +69,7 @@ public class Warp implements Listener, CommandExecutor {
 	}
 	
 	//Save warp file
-    public void saveWarps() {
+    private void saveWarps() {
 		if(warpconfig == null || warpfile == null) {
 			return;
 		}
@@ -95,65 +94,29 @@ public class Warp implements Listener, CommandExecutor {
 		return null;
 	}
 	
-	//Warp signs
-	@EventHandler
-	public void signChange(SignChangeEvent event) {
-		Player player = event.getPlayer();
-		Sign sign = (Sign)event.getBlock().getState();
-		if(event.getLine(0).equalsIgnoreCase("[warp]") && player.hasPermission("aio.sign.warp")) {
-			if(event.getLine(1) == null || getWarpLocation(event.getLine(1)) == null) {
-				event.setLine(0, aio.colorize("&4&l[Warp]"));
-				event.setLine(1, "warp name");
-				sign.update();
-				return;
-			}
-			event.setLine(0, aio.colorize("&1&l[Warp]"));
-			event.setLine(1, event.getLine(1));
-			sign.update();
-		}
-	}
-	@EventHandler
-	public void onInteract(PlayerInteractEvent event) {
-		Player player = event.getPlayer();
-		Block block = event.getClickedBlock();
-		if(event.getAction().equals(Action.LEFT_CLICK_BLOCK) && isSign(block)) {
-			Sign sign = (Sign)block.getState();
-			if(!player.hasPermission("aio.sign.warp") && sign.getLine(0).equals(aio.colorize("&1&l[Warp]"))) {
-				player.sendMessage(plugin.getMessage("message.no_permission_sign"));
-				event.setCancelled(true);
-			}
-		}
-		if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && isSign(block)) {
-			Sign sign = (Sign)block.getState();
-			if(player.hasPermission("aio.warp") && sign.getLine(0).equals(aio.colorize("&1&l[Warp]")) && getWarpLocation(sign.getLine(1)) != null) {
-				player.teleport(getWarpLocation(sign.getLine(1)));
-				player.sendMessage(plugin.getMessage("warp.warping", sign.getLine(1)));
-			}
-		}
-	}
-	
 	private boolean isSign(Block block) {
 	    return block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST;
 	}
 
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
         //Set new warp
         if(command.getName().equalsIgnoreCase("setwarp")) {
             if(!(sender instanceof Player)) {
                 sender.sendMessage(plugin.getMessage("messages.player_only"));
-                return false;
+                return true;
             }
             if(!sender.hasPermission("aio.setwarp")) {
                 sender.sendMessage(plugin.getMessage("messages.no_permission"));
-                return false;
+                return true;
             }
-            if(args.length < 1) {
+            if(args.length == 0) {
                 sender.sendMessage(plugin.getMessage("warp.setwarp_usage"));
-                return false;
+                return true;
             }
             if(getWarpLocation(args[0]) != null) {
                 sender.sendMessage(plugin.getMessage("warp.warp_exists"));
-                return false;
+                return true;
             }
             Player player = (Player)sender;
             getWarps().set("warps." + args[0] + ".world", player.getWorld().getName());
@@ -171,15 +134,15 @@ public class Warp implements Listener, CommandExecutor {
         if(command.getName().equalsIgnoreCase("delwarp")) {
             if(sender instanceof Player && !sender.hasPermission("aio.delwarp")) {
                 sender.sendMessage(plugin.getMessage("messages.no_permission"));
-                return false;
+                return true;
             }
-            if(args.length < 1) {
+            if(args.length == 0) {
                 sender.sendMessage(plugin.getMessage("warp.delwarp_usage"));
-                return false;
+                return true;
             }
             if(getWarpLocation(args[0]) == null) {
                 sender.sendMessage(plugin.getMessage("warp.warp_not_exists"));
-                return false;
+                return true;
             }
             getWarps().set("warps." + args[0], null);
             saveWarps();
@@ -191,24 +154,33 @@ public class Warp implements Listener, CommandExecutor {
         if(command.getName().equalsIgnoreCase("warp")) {
             if(!(sender instanceof Player)) {
                 sender.sendMessage(plugin.getMessage("messages.player_only"));
-                return false;
+                return true;
             }
             if(!sender.hasPermission("aio.warp")) {
                 sender.sendMessage(plugin.getMessage("messages.no_permission"));
-                return false;
+                return true;
             }
             Player player = (Player)sender;
-            if(args.length < 1) {
-                player.sendMessage(plugin.getMessage("warp.warp_usage"));
-                return false;
+            if(args.length == 0) {
+                Set<String> warps = getWarps().getConfigurationSection("warps").getKeys(false);
+                StringBuilder list = new StringBuilder();
+                for(String warp : warps) {
+                    list.append(warp).append(plugin.getMessage("warp.list_separator"));
+                }
+                if(list.length() == 0) {
+                    sender.sendMessage(plugin.getMessage("warp.list_empty"));
+                    return true;
+                }
+                sender.sendMessage(plugin.getMessage("warp.list", String.valueOf(warps.size()), list.substring(0, list.length() - 6)));
+                return true;
             }
             if(getWarpLocation(args[0]) == null) {
                 player.sendMessage(plugin.getMessage("warp.warp_not_found", args[0]));
-                return false;
+                return true;
             }
-            if(getWarpLocation(args[0]).getWorld() == null) {
+            if(getWarpLocation(args[0]) == null) {
                 player.sendMessage(plugin.getMessage("warp.world_not_found", args[0]));
-                return false;
+                return true;
             }
             player.sendMessage(plugin.getMessage("warp.warping", args[0]));
             player.teleport(getWarpLocation(args[0]));
@@ -219,7 +191,7 @@ public class Warp implements Listener, CommandExecutor {
         if(command.getName().equalsIgnoreCase("warpreload")) {
             if(sender instanceof Player && !sender.hasPermission("aio.warpreload")) {
                 sender.sendMessage(plugin.getMessage("messages.no_permission"));
-                return false;
+                return true;
             }
             reloadWarps();
             saveWarps();
@@ -231,23 +203,69 @@ public class Warp implements Listener, CommandExecutor {
         if(command.getName().equalsIgnoreCase("warplist")) {
             if(sender instanceof Player && !sender.hasPermission("aio.warplist")) {
                 sender.sendMessage(plugin.getMessage("messages.no_permission"));
-                return false;
-            }
-            if(!getWarps().isConfigurationSection("warps")) {
-                sender.sendMessage(plugin.getMessage("warp.list_empty"));
-                return false;
+                return true;
             }
             Set<String> warps = getWarps().getConfigurationSection("warps").getKeys(false);
-            Iterator<String> itr = warps.iterator();
             StringBuilder list = new StringBuilder();
-            while(itr.hasNext()) {
-                list.append(itr.next()).append(plugin.getMessage("warp.list_separator"));
+            for(String warp : warps) {
+                list.append(warp).append(plugin.getMessage("warp.list_separator"));
+            }
+            if(list.length() == 0) {
+                sender.sendMessage(plugin.getMessage("warp.list_empty"));
+                return true;
             }
             sender.sendMessage(plugin.getMessage("warp.list", String.valueOf(warps.size()), list.substring(0, list.length() - 6)));
             return true;
         }
 
 	    return false;
+    }
+
+    //Create warp sign
+    @EventHandler
+    public void signChange(SignChangeEvent event) {
+        Player player = event.getPlayer();
+        Sign sign = (Sign)event.getBlock().getState();
+        if(event.getLine(0).equalsIgnoreCase("[warp]") && player.hasPermission("aio.sign.warp")) {
+            if(event.getLine(1) == null || getWarpLocation(event.getLine(1)) == null) {
+                event.setLine(0, aio.colorize("&4&l[Warp]"));
+                event.setLine(1, "warp name");
+                sign.update();
+                return;
+            }
+            event.setLine(0, aio.colorize("&1&l[Warp]"));
+            event.setLine(1, event.getLine(1));
+            sign.update();
+        }
+    }
+
+    //Interact with warp sign
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        Block block = event.getClickedBlock();
+        if(event.getAction().equals(Action.LEFT_CLICK_BLOCK) && isSign(block)) {
+            Sign sign = (Sign)block.getState();
+            if(!player.hasPermission("aio.sign.warp") && sign.getLine(0).equals(aio.colorize("&1&l[Warp]"))) {
+                player.sendMessage(plugin.getMessage("messages.no_permission_sign"));
+                event.setCancelled(true);
+            }
+        }
+        if(event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && isSign(block)) {
+            Sign sign = (Sign)block.getState();
+            if(sign.getLine(0).equals(aio.colorize("&1&l[Warp]"))) {
+                if(!player.hasPermission("aio.warp")) {
+                    event.getPlayer().sendMessage(plugin.getMessage("messages.no_permission"));
+                    event.setCancelled(true);
+                } else if(getWarpLocation(sign.getLine(1)) == null) {
+                    event.getPlayer().sendMessage(plugin.getMessage("warp.warp_not_found", sign.getLine(1)));
+                    event.setCancelled(true);
+                } else {
+                    player.teleport(getWarpLocation(sign.getLine(1)));
+                    player.sendMessage(plugin.getMessage("warp.warping", sign.getLine(1)));
+                }
+            }
+        }
     }
 
 }
