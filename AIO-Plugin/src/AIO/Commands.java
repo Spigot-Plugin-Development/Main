@@ -206,34 +206,6 @@ public class Commands implements CommandExecutor {
             }
         }
 
-        //Tpa - send teleport request to player
-        if(cmd.getName().equalsIgnoreCase("tpa")) {
-            if(sender instanceof Player && args.length > 0 && plugin.getServer().getPlayer(args[0]) != null) {
-                plugin.teleporta.request((Player)sender, plugin.getServer().getPlayer(args[0]), false);
-            }
-        }
-
-        //Tpahere - send teleport-here request to player
-        if(cmd.getName().equalsIgnoreCase("tpahere")) {
-            if(sender instanceof Player && args.length > 0 && plugin.getServer().getPlayer(args[0]) != null) {
-                plugin.teleporta.request((Player)sender, plugin.getServer().getPlayer(args[0]), true);
-            }
-        }
-
-        //Tpaccept - accept tpa/tpahere request
-        if(cmd.getName().equalsIgnoreCase("tpaccept")) {
-            if(sender instanceof Player) {
-                plugin.teleporta.decide((Player)sender, true);
-            }
-        }
-
-        //Tpdeny - deny tpa/tpahere request
-        if(cmd.getName().equalsIgnoreCase("tpdeny")) {
-            if(sender instanceof Player) {
-                plugin.teleporta.decide((Player)sender, false);
-            }
-        }
-
         if (cmd.getName().equalsIgnoreCase("adminonly")) {
             if (sender instanceof Player) {
                 if (((Player)sender).hasPermission("aio.ao.send")) {
