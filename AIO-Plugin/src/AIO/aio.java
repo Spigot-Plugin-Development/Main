@@ -79,7 +79,7 @@ public class aio extends JavaPlugin implements Listener {
 
 		File messages = new File(getDataFolder(), "messages.yml");
 		if(!messages.exists()) {
-			getLogger().log(Level.SEVERE, "Unable to read messages file! Server shutdown initiated.");
+			getLogger().log(Level.SEVERE, "Unable to read messages file! Server is shutting down.");
 			getServer().shutdown();
 		}
 
@@ -153,7 +153,7 @@ public class aio extends JavaPlugin implements Listener {
             String oldSubString = message.substring(message.indexOf("{"), message.indexOf("}")+1);
             message = message.replace(oldSubString, newSubString);
         }
-        return aio.colorize(message);
+        return colorize(message);
     }
 
     private void setupWorldEdit() {
@@ -194,7 +194,7 @@ public class aio extends JavaPlugin implements Listener {
 	}
 
 	public static String colorize(String input) {
-		return ChatColor.translateAlternateColorCodes('&', input + "&r");
+		return ChatColor.translateAlternateColorCodes('&', input);
 	}
 
 	@EventHandler
