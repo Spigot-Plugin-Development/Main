@@ -32,13 +32,16 @@ public class AntiSwear implements Listener, CommandExecutor {
         File antiswear = new File(plugin.getDataFolder(), "antiswear.yml");
         if(!antiswear.exists()) {
             try {
+                plugin.getLogger().warning(plugin.getMessage("messages.file_not_found", "antiswear.yml"));
                 antiswear.createNewFile();
                 PrintWriter pw = new PrintWriter(new FileWriter(antiswear));
                 pw.println("antiswear:");
                 pw.flush();
                 pw.close();
             } catch(IOException ex) {
-                plugin.getLogger().log(Level.SEVERE, plugin.getMessage("messages.file_not_created", "antiswear"));
+                plugin.getLogger().severe(plugin.getMessage("messages.file_not_created", "antiswear.yml"));
+                plugin.getConfig().set("antiswear-enabled", false);
+                plugin.getLogger().info(plugin.getMessage("antiswear.force_disabled"));
                 ex.printStackTrace();
             }
         }
@@ -166,6 +169,16 @@ public class AntiSwear implements Listener, CommandExecutor {
                 plugin.getConfig().set("antiswear-enabled", false);
                 plugin.saveConfig();
                 sender.sendMessage(plugin.getMessage("antiswear.disabled"));
+                return false;
+            }
+
+            //Print usage if args[0] is incorrect
+            if(enabled) {
+                sender.sendMessage(plugin.getMessage("antiswear.usage_enabled"));
+                return false;
+            } else {
+                sender.sendMessage(plugin.getMessage("antiswear.usage_disabled"));
+                return false;
             }
         }
 
@@ -174,7 +187,7 @@ public class AntiSwear implements Listener, CommandExecutor {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        if(event.getPlayer().hasPermission("aio.antiswear.bypass")) {
+        if(event.getPlayer().hasPermission("aio.antiswear.bypass") || !plugin.getConfig().getBoolean("antiswear-enabled")) {
             return;
         }
 
