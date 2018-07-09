@@ -61,6 +61,7 @@ public class aio extends JavaPlugin implements Listener {
 	AntiSwear antiSwear;
 	Crates crates;
 	Spawn spawn;
+	PrisonCells prisonCells;
 	AuctionManager auctionManager;
 
 	PlayerMessage playerMessage;
@@ -116,6 +117,7 @@ public class aio extends JavaPlugin implements Listener {
 		chatGames = new ChatGames(this);
 		crates = new Crates(this);
 		spawn = new Spawn(this);
+		prisonCells = new PrisonCells(this);
 		auctionManager = new AuctionManager(this);
 
 		Bukkit.getPluginManager().registerEvents(this, this);

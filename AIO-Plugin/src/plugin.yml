@@ -114,7 +114,9 @@ commands:
         aliases: [crate]
     antiswear:
         aliases: [as]
+    cell:
     auction:
         aliases: [auc]
     bid:
+    key:
     
