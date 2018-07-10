@@ -21,7 +21,7 @@ public class Convert {
     }
 
     public static String LocationToString(Location location) {
-        return location.getWorld().getName() + ";" + location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + location.getPitch() + ";" + location.getYaw();
+        return location.getWorld().getName() + ";" + location.getX() + ";" + location.getY() + ";" + location.getZ() + ";" + location.getYaw() + ";" + location.getPitch();
     }
 
     public static Location StringToLocation(String string) {
