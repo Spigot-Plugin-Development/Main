@@ -15,9 +15,9 @@ public class AuctionManager implements CommandExecutor {
     aio plugin;
     ItemStack auctionedItem;
     Double time = 0.0d;
-    Double highestBid;
+    Double highestBid = 0.0d;
     UUID bidder;
-    Double increment;
+    Double increment = 0.0d;
 
     AuctionManager(aio plugin) {
         this.plugin = plugin;
@@ -32,7 +32,7 @@ public class AuctionManager implements CommandExecutor {
                         if (bidder == null) {
                             plugin.getServer().broadcastMessage("No one bid for the item.");
                         } else {
-                            plugin.getServer().broadcastMessage(plugin.getServer().getPlayer(bidder).getDisplayName() + "won the auction!");
+                            plugin.getServer().broadcastMessage(plugin.getServer().getPlayer(bidder).getDisplayName() + " won the auction!");
                             plugin.getServer().getPlayer(bidder).getInventory().addItem(auctionedItem);
                         }
                         auctionedItem = null;
@@ -89,11 +89,10 @@ public class AuctionManager implements CommandExecutor {
                         sender.sendMessage(auctionedItem.getAmount() + "x" + auctionedItem.getItemMeta().getDisplayName() + " (" + auctionedItem.getType().toString() + ")");
                         if (bidder == null) {
                             sender.sendMessage("No bids so far.");
-                            return false;
                         } else {
                             sender.sendMessage("Highest bid: $" + highestBid + " by " + plugin.getServer().getPlayer(bidder).getDisplayName());
-                            return false;
                         }
+                        sender.sendMessage("Time left: " + time);
                     } else {
                         sender.sendMessage("There is no auction running.");
                         return false;
