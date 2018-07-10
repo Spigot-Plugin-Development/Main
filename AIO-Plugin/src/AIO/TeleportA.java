@@ -1,112 +1,233 @@
 package AIO;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 public class TeleportA implements CommandExecutor {
 
-	private Plugin plugin;
-    private List<Player> teleporter = new ArrayList<Player>();
-    private List<Player> teleport = new ArrayList<Player>();
-    private List<Boolean> teleportType = new ArrayList<Boolean>();
-	
-	TeleportA(Plugin plugin) {
-	    this.plugin = plugin;
+    private aio plugin;
+
+    private HashMap<Player, Player> tpaList = new HashMap<>();
+    private HashMap<Player, Player> tpahereList = new HashMap<>();
+
+    TeleportA(aio plugin) {
+        this.plugin = plugin;
         Bukkit.getServer().getPluginCommand("tpa").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("tpahere").setExecutor(this);
         Bukkit.getServer().getPluginCommand("tpaccept").setExecutor(this);
         Bukkit.getServer().getPluginCommand("tpdeny").setExecutor(this);
-	}
-	
-	private void request(Player sender, Player target, boolean toSelf) {
-		if (teleporter.contains(sender)) {
-			int remove = teleporter.indexOf(sender);
-			teleporter.remove(remove);
-			teleport.remove(remove);
-			teleportType.remove(remove);
-		}
-		if (teleport.contains(target)) {
-			int remove = teleport.indexOf(target);
-			teleporter.remove(remove);
-			teleport.remove(remove);
-			teleportType.remove(remove);
-		}
-		
-		teleporter.add(sender);
-		teleport.add(target);
-		teleportType.add(toSelf);
-		
-		sender.sendMessage("Request sent to " + target.getName());
-		if (toSelf) {
-			target.sendMessage(sender.getName() + " wants to teleport you to them.");
-		} else {
-			target.sendMessage(sender.getName() + " wants to teleport to you.");
-		}
-	}
-	
-	private void decide(Player player, boolean decision) {
-		if (!teleport.contains(player)) {
-			player.sendMessage("You have no pending requests.");
-			return;
-		} 
-		int tp = teleport.indexOf(player);
-		if (!decision) {
-			teleporter.get(tp).sendMessage(player.getName() + " denied your request.");
-			return;
-		}
-		if (teleportType.get(tp)) {
-			teleporter.get(tp).sendMessage("Teleporting to " + player.getName());
-			player.sendMessage("Teleporting..");
-			teleporter.get(tp).teleport(player.getLocation());
-		} else {
-			player.sendMessage("Teleporting to " + player.getName());
-			teleporter.get(tp).sendMessage("Teleporting..");
-			player.teleport(teleporter.get(tp).getLocation());
-		}
-		teleporter.remove(tp);
-		teleport.remove(tp);
-		teleportType.remove(tp);
+        Bukkit.getServer().getPluginCommand("tpahere").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("tptoggle").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("tp").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("tphere").setExecutor(this);
+        Bukkit.getServer().getPluginCommand("tpall").setExecutor(this);
+    }
 
-	}
+    //Requesting teleport
+    private void request(Player sender, Player target, boolean toSelf) {
 
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        //Remove previous teleport requests
+        for(Player player : tpaList.keySet()) {
+            if(tpaList.get(player) == target || player == sender) {
+                tpaList.remove(player);
+            }
+        }
+        for(Player player : tpahereList.keySet()) {
+            if(tpahereList.get(player) == target || player == sender) {
+                tpahereList.remove(player);
+            }
+        }
 
-        //Tpa - send teleport request to player
+        //Add new teleport request
+        if(toSelf) {
+            tpahereList.put(sender, target);
+            target.sendMessage(plugin.getMessage("teleport.tpahere_request", aio.getPlayerName(sender)));
+        } else {
+            tpaList.put(sender, target);
+            target.sendMessage(plugin.getMessage("teleport.tpa_request", aio.getPlayerName(sender)));
+        }
+
+        sender.sendMessage(plugin.getMessage("teleport.requested", aio.getPlayerName(target)));
+    }
+
+    //Accepting or denying request
+    private void decide(Player player, boolean decision) {
+        if(!tpaList.containsValue(player) && !tpahereList.containsValue(player)) {
+            player.sendMessage(plugin.getMessage("teleport.no_request"));
+            return;
+        }
+        plugin.getLogger().severe("1");
+        Player requester;
+        Boolean toSelf;
+        if(tpaList.containsKey(player)) {
+            requester = tpaList.get(player);
+            toSelf = false;
+        } else {
+            requester = tpahereList.get(player);
+            toSelf = true;
+        }
+        plugin.getLogger().severe("2");
+        if(!decision) {
+            player.sendMessage(plugin.getMessage("teleport.denied1", aio.getPlayerName(requester)));
+            requester.sendMessage(plugin.getMessage("teleport.denied2", aio.getPlayerName(player)));
+        } else if(!toSelf) {
+            player.sendMessage(plugin.getMessage("teleport.accepted1", aio.getPlayerName(requester)));
+            requester.sendMessage(plugin.getMessage("teleport.accepted2", aio.getPlayerName(player)));
+            requester.teleport(player.getLocation());
+        } else {
+            player.sendMessage(plugin.getMessage("teleport.accepted1", aio.getPlayerName(requester)));
+            requester.sendMessage(plugin.getMessage("teleport.accepted2", aio.getPlayerName(player)));
+            player.teleport(requester.getLocation());
+        }
+        plugin.getLogger().severe("3");
+        if(toSelf) { tpahereList.remove(player); return; }
+        tpaList.remove(player);
+    }
+
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+        //Send teleport request
         if(command.getName().equalsIgnoreCase("tpa")) {
-            if(sender instanceof Player && args.length > 0 && plugin.getServer().getPlayer(args[0]) != null) {
-                request((Player)sender, plugin.getServer().getPlayer(args[0]), false);
+            if(!(sender instanceof Player)) {
+                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                return true;
             }
+            if(!sender.hasPermission("aio.teleport.tpa")) {
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                return true;
+            }
+            if(args.length == 0) {
+                sender.sendMessage(plugin.getMessage("teleport.tpa_usage"));
+                return true;
+            }
+            if(plugin.getServer().getPlayer(args[0]) == null) {
+                sender.sendMessage(plugin.getMessage("messages.player_not_found", args[0]));
+                return true;
+            }
+            if(plugin.getServer().getPlayer(args[0]) == sender) {
+                sender.sendMessage(plugin.getMessage("teleport.teleport_self"));
+                return true;
+            }
+            request((Player)sender, plugin.getServer().getPlayer(args[0]), false);
+            return true;
         }
 
-        //Tpahere - send teleport-here request to player
+        //Send teleport-here request
         if(command.getName().equalsIgnoreCase("tpahere")) {
-            if(sender instanceof Player && args.length > 0 && plugin.getServer().getPlayer(args[0]) != null) {
-                request((Player)sender, plugin.getServer().getPlayer(args[0]), true);
+            if(!(sender instanceof Player)) {
+                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                return true;
             }
+            if(!sender.hasPermission("aio.teleport.tpahere")) {
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                return true;
+            }
+            if(args.length == 0) {
+                sender.sendMessage(plugin.getMessage("teleport.tpahere_usage"));
+                return true;
+            }
+            if(plugin.getServer().getPlayer(args[0]) == null) {
+                sender.sendMessage(plugin.getMessage("messages.player_not_found", args[0]));
+                return true;
+            }
+            if(plugin.getServer().getPlayer(args[0]) == sender) {
+                sender.sendMessage(plugin.getMessage("teleport.teleport_self"));
+                return true;
+            }
+            request((Player)sender, plugin.getServer().getPlayer(args[0]), true);
+            return true;
         }
 
-        //Tpaccept - accept tpa/tpahere request
+        //Accept tpa/tpahere request
         if(command.getName().equalsIgnoreCase("tpaccept")) {
-            if(sender instanceof Player) {
-                decide((Player)sender, true);
+            if(!(sender instanceof Player)) {
+                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                return true;
             }
+            if(!sender.hasPermission("aio.teleport.tpa")) {
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                return true;
+            }
+            decide((Player)sender, true);
+            return true;
         }
 
-        //Tpdeny - deny tpa/tpahere request
+        //Deny tpa/tpahere request
         if(command.getName().equalsIgnoreCase("tpdeny")) {
-            if(sender instanceof Player) {
-                decide((Player)sender, false);
+            if(!(sender instanceof Player)) {
+                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                return true;
             }
+            if(!sender.hasPermission("aio.teleport.tpa")) {
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                return true;
+            }
+            decide((Player)sender, false);
+            return true;
         }
 
-	    return false;
+        //Allowing or denying requests to be sent to this player
+        if(command.getName().equalsIgnoreCase("tptoggle")) {
+            if(!(sender instanceof Player)) {
+                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                return true;
+            }
+            if(!sender.hasPermission("aio.teleport.tptoggle")) {
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                return true;
+            }
+            ///////////
+            return true;
+        }
+
+        //Teleport to player without request
+        if(command.getName().equalsIgnoreCase("tp")) {
+            if(!(sender instanceof Player)) {
+                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                return true;
+            }
+            if(!sender.hasPermission("aio.teleport.admin")) {
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                return true;
+            }
+            ///////////
+            return true;
+        }
+
+        //Teleport player to self without request
+        if(command.getName().equalsIgnoreCase("tphere")) {
+            if(!(sender instanceof Player)) {
+                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                return true;
+            }
+            if(!sender.hasPermission("aio.teleport.admin")) {
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                return true;
+            }
+            ///////////
+            return true;
+        }
+
+        //Teleport all players to self without request
+        if(command.getName().equalsIgnoreCase("tpall")) {
+            if(!(sender instanceof Player)) {
+                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                return true;
+            }
+            if(!sender.hasPermission("aio.teleport.admin")) {
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                return true;
+            }
+            ///////////
+            return true;
+        }
+
+        return false;
     }
 
 }
