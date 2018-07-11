@@ -14,7 +14,7 @@ public class EconomyManager implements CommandExecutor {
 	
 	private aio plugin;
 	
-	private final HashMap<UUID, Double> balance = new HashMap<>();
+	private HashMap<UUID, Double> balance = new HashMap<>();
 	
 	EconomyManager(aio plugin) {
 		this.plugin = plugin;
@@ -80,7 +80,7 @@ public class EconomyManager implements CommandExecutor {
 		}
 		if (command.getName().equalsIgnoreCase("pay")) {
 			if (sender instanceof Player) {
-				if (((Player)sender).hasPermission("aio.pay")) {
+				if (sender.hasPermission("aio.pay")) {
 					if (args.length < 2) {
 						sender.sendMessage("Not enough arguments");
 						return false;
@@ -111,7 +111,7 @@ public class EconomyManager implements CommandExecutor {
 		if (command.getName().equalsIgnoreCase("balance")) {
 			if (sender instanceof Player) {
 				if (args.length == 0) {
-					if (((Player) sender).hasPermission("aio.balance")) {
+					if (sender.hasPermission("aio.balance")) {
 						sender.sendMessage("Your current balance: $" + getBalance(((Player) sender).getUniqueId()));
 						return false;
 					} else {
@@ -119,6 +119,8 @@ public class EconomyManager implements CommandExecutor {
 						return false;
 					}
 				}
+			} else {
+				sender.sendMessage("Usage: /balance <player>");
 			}
 			if (args.length == 1) {
 				if (sender.hasPermission("aio.balance.others")) {
@@ -137,7 +139,7 @@ public class EconomyManager implements CommandExecutor {
 		}
 
 		if (command.getName().equalsIgnoreCase("economy")) {
-			if (!(sender instanceof Player) || sender.hasPermission("aio.economy")) {
+			if (sender.hasPermission("aio.economy")) {
 				if (args.length < 2) {
 					sender.sendMessage("Not enough arguments.");
 					return false;
