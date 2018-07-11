@@ -71,6 +71,7 @@ public class aio extends JavaPlugin implements Listener {
 	CacheManager cacheManager;
 	TreeFeller treeFeller;
 	Obsidiantolava obsidiantolava;
+	MotdManager motdManager;
 
 	private File messageFile;
 	private FileConfiguration messageConfig;
@@ -209,13 +210,6 @@ public class aio extends JavaPlugin implements Listener {
 			permission = permissionProvider.getProvider();
 		}
 		return (permission != null);
-	}
-
-	@EventHandler
-	public void ping(ServerListPingEvent event) {
-		event.setMaxPlayers(event.getNumPlayers() + 1);
-		String[] adj = {"amazing", "awesome", "lag-free", "brand new", "cool"};
-		event.setMotd(aio.colorize("Join our &5&l" + adj[new Random().nextInt(adj.length)] + "&r server!"));
 	}
 
 	@EventHandler
