@@ -15,23 +15,27 @@ import org.bukkit.plugin.Plugin;
 
 public class AntiItemlag implements Listener {
 	
-	List<Item> items = new ArrayList<Item>();
+	List<Item> items = new ArrayList<>();
 	Plugin plugin;
 	
 	AntiItemlag(Plugin plugin) {
 		this.plugin = plugin;
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
+
+	public void clearItems(int count) {
+		for (int i = 0; i < count; i++) {
+			items.get(0).remove();
+			items.remove(0);
+		}
+		plugin.getServer().broadcastMessage("Warning: " + count + " dropped items have been removed to prevent lag!");
+	}
 	
 	@EventHandler
 	private void itemDrop(ItemSpawnEvent event) {
 		items.add(event.getEntity());
 		if (items.size() >= 1000) {
-			for (int i= 0; i < 50; i++) {
-				items.get(0).remove();
-				items.remove(0);
-			}
-			plugin.getServer().broadcastMessage("Warning: 50 dropped items have been removed to prevent lag!");
+			clearItems(50);
 		}
 	}
 	
