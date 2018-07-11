@@ -11,8 +11,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.UUID;
 
 public class AuctionManager implements CommandExecutor {
+    private aio plugin;
 
-    aio plugin;
     ItemStack auctionedItem;
     Double time = 0.0d;
     Double highestBid = 0.0d;
@@ -125,6 +125,31 @@ public class AuctionManager implements CommandExecutor {
                     return false;
                 }
                 startAuction(Double.parseDouble(args[1]), Double.parseDouble(args[2]), ((Player)sender).getInventory().getItemInMainHand(), Double.parseDouble(args[3]));
+            }
+            if (args[0].equalsIgnoreCase("end")) {
+                if (!sender.hasPermission("aio.auction.end")) {
+                    sender.sendMessage("You don't have permission for that.");
+                    return false;
+                }
+                if (auctionedItem == null) {
+                    sender.sendMessage("No auction is currently running.");
+                    return false;
+                }
+                time = 0.0d;
+            }
+            if (args[0].equalsIgnoreCase("cancel")) {
+                if (!sender.hasPermission("aio.auction.cancel")) {
+                    sender.sendMessage("You don't have permission for that.");
+                    return false;
+                }
+                if (auctionedItem == null) {
+                    sender.sendMessage("No auction is currently running.");
+                    return false;
+                }
+                auctionedItem = null;
+                highestBid = 0.0d;
+                bidder = null;
+                increment = 0.0d;
             }
         }
 
