@@ -49,4 +49,18 @@ public class SQLCreator {
                 " PRIMARY KEY (`minecraft_lottery_uuid`)\n" +
                 ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
     }
+
+    public static String prisoncellCreate() {
+        return "CREATE TABLE `minecraft_prisoncell` (\n" +
+                " `minecraft_prisoncell_name` varchar(168) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                " `minecraft_prisoncell_owner_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                " `minecraft_prisoncell_owner_uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                " `minecraft_prisoncell_owned_until` datetime NOT NULL,\n" +
+                " `minecraft_prisoncell_coordinate1` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                " `minecraft_prisoncell_coordinate2` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,\n" +
+                " `minecraft_prisoncell_orientation` int(11) NOT NULL,\n" +
+                " `minecraft_prisoncell_size` int(11) NOT NULL,\n" +
+                " PRIMARY KEY (`minecraft_prisoncell_name`)\n" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+    }
 }
