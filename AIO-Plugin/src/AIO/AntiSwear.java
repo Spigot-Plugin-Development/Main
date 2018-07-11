@@ -19,8 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AntiSwear implements Listener, CommandExecutor {
-
     private aio plugin;
+
     private File asfile;
     private FileConfiguration asconfig;
 
@@ -29,7 +29,7 @@ public class AntiSwear implements Listener, CommandExecutor {
         Bukkit.getServer().getPluginCommand("antiswear").setExecutor(this);
         Bukkit.getPluginManager().registerEvents(this, plugin);
         File antiswear = new File(plugin.getDataFolder(), "antiswear.yml");
-        if(!antiswear.exists()) {
+        if (!antiswear.exists()) {
             try {
                 plugin.getLogger().warning(plugin.getMessage("messages.file_not_found", "antiswear.yml"));
                 antiswear.createNewFile();
@@ -37,7 +37,7 @@ public class AntiSwear implements Listener, CommandExecutor {
                 pw.println("antiswear:");
                 pw.flush();
                 pw.close();
-            } catch(IOException ex) {
+            } catch (IOException ex) {
                 plugin.getLogger().severe(plugin.getMessage("messages.file_not_created", "antiswear.yml"));
                 plugin.getConfig().set("antiswear-enabled", false);
                 plugin.getLogger().info(plugin.getMessage("antiswear.force_disabled"));
@@ -48,7 +48,7 @@ public class AntiSwear implements Listener, CommandExecutor {
 
     //Reload antiswear file
     private void reloadAntiswear() {
-        if(asfile == null) {
+        if (asfile == null) {
             asfile = new File(plugin.getDataFolder(), "antiswear.yml");
         }
         asconfig = YamlConfiguration.loadConfiguration(asfile);
@@ -56,7 +56,7 @@ public class AntiSwear implements Listener, CommandExecutor {
 
     //FileConfiguration of antiswear file
     private FileConfiguration getAntiswear() {
-        if(asconfig == null) {
+        if (asconfig == null) {
             reloadAntiswear();
         }
         return asconfig;
@@ -64,33 +64,30 @@ public class AntiSwear implements Listener, CommandExecutor {
 
     //Save antiswear file
     private void saveAntiswear() {
-        if(asconfig == null || asfile == null) {
+        if (asconfig == null || asfile == null) {
             return;
         }
         try {
             getAntiswear().save(asfile);
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
     //Antiswear command
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(command.getName().equalsIgnoreCase("antiswear")) {
+        if (command.getName().equalsIgnoreCase("antiswear")) {
 
             boolean enabled = plugin.getConfig().getBoolean("antiswear-enabled");
 
-            //Check for permission
-            if(sender instanceof Player) {
-                if(!sender.hasPermission("aio.antiswear")) {
-                    sender.sendMessage(plugin.getMessage("messages.no_permission"));
-                    return true;
-                }
+            if (!sender.hasPermission("aio.antiswear")) {
+                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                return true;
             }
 
             //Print usage
-            if(args.length == 0) {
-                if(enabled) {
+            if (args.length == 0) {
+                if (enabled) {
                     sender.sendMessage(plugin.getMessage("antiswear.usage_enabled"));
                     return true;
                 }
@@ -99,7 +96,7 @@ public class AntiSwear implements Listener, CommandExecutor {
             }
 
             //Add to list
-            if(args[0].equalsIgnoreCase("add")) {
+            if (args[0].equalsIgnoreCase("add")) {
                 if(args.length != 2) {
                     sender.sendMessage(plugin.getMessage("antiswear.add_usage"));
                     return true;
@@ -117,13 +114,13 @@ public class AntiSwear implements Listener, CommandExecutor {
             }
 
             //Remove from list
-            if(args[0].equalsIgnoreCase("remove")) {
+            if (args[0].equalsIgnoreCase("remove")) {
                 if(args.length != 2) {
                     sender.sendMessage(plugin.getMessage("antiswear.remove_usage"));
                     return true;
                 }
                 List<String> swearList = getAntiswear().getStringList("antiswear");
-                if(!swearList.contains(args[1].toLowerCase())) {
+                if (!swearList.contains(args[1].toLowerCase())) {
                     sender.sendMessage(plugin.getMessage("antiswear.cannot_remove", args[1].toLowerCase()));
                     return true;
                 }
@@ -135,11 +132,11 @@ public class AntiSwear implements Listener, CommandExecutor {
             }
 
             //Print list
-            if(args[0].equalsIgnoreCase("list")) {
+            if (args[0].equalsIgnoreCase("list")) {
                 List<String> swearList = getAntiswear().getStringList("antiswear");
                 StringBuilder swearwords = new StringBuilder();
-                for(String word : swearList) { swearwords.append(word).append(plugin.getMessage("antiswear.list_separator")); }
-                if(swearList.isEmpty()) {
+                for (String word : swearList) { swearwords.append(word).append(plugin.getMessage("antiswear.list_separator")); }
+                if (swearList.isEmpty()) {
                     sender.sendMessage(plugin.getMessage("antiswear.list_empty"));
                     return true;
                 }
@@ -148,7 +145,7 @@ public class AntiSwear implements Listener, CommandExecutor {
             }
 
             //Enable antiswear
-            if(args[0].equalsIgnoreCase("enable")) {
+            if (args[0].equalsIgnoreCase("enable")) {
                 if(enabled) {
                     sender.sendMessage(plugin.getMessage("antiswear.enabled_already"));
                     return true;
@@ -160,8 +157,8 @@ public class AntiSwear implements Listener, CommandExecutor {
             }
 
             //Disable antiswear
-            if(args[0].equalsIgnoreCase("disable")) {
-                if(!enabled) {
+            if (args[0].equalsIgnoreCase("disable")) {
+                if (!enabled) {
                     sender.sendMessage(plugin.getMessage("antiswear.disabled_already"));
                     return true;
                 }
@@ -172,7 +169,7 @@ public class AntiSwear implements Listener, CommandExecutor {
             }
 
             //Print usage if args[0] is incorrect
-            if(enabled) {
+            if (enabled) {
                 sender.sendMessage(plugin.getMessage("antiswear.usage_enabled"));
                 return true;
             } else {
@@ -186,15 +183,15 @@ public class AntiSwear implements Listener, CommandExecutor {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        if(event.getPlayer().hasPermission("aio.antiswear.bypass") || !plugin.getConfig().getBoolean("antiswear-enabled")) {
+        if (event.getPlayer().hasPermission("aio.antiswear.bypass") || !plugin.getConfig().getBoolean("antiswear-enabled")) {
             return;
         }
 
         List<String> message = Arrays.asList(event.getMessage().toLowerCase().split(" "));
         List<String> swearList = getAntiswear().getStringList("antiswear");
 
-        for(String swearword : swearList) {
-            if(message.contains(swearword)) {
+        for (String swearword : swearList) {
+            if (message.contains(swearword)) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(plugin.getMessage("antiswear.no_swear"));
                 return;
