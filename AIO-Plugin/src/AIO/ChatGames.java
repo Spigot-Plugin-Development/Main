@@ -12,8 +12,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 
 public class ChatGames implements Listener {
+    private aio plugin;
 
-    aio plugin;
     String goal = "";
     String[] words = {"glasses", "toothbrush", "bracelet", "cupcake", "apple", "key", "desk", "melody", "card", "flower", "pencil", "bucket", "industry"};
 
