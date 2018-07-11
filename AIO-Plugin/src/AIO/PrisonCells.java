@@ -2,7 +2,9 @@ package AIO;
 
 import com.sk89q.worldedit.bukkit.selections.Selection;
 import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import net.minecraft.server.v1_12_R1.NBTTagInt;
 import org.bukkit.Bukkit;
@@ -381,10 +383,13 @@ public class PrisonCells implements Listener, CommandExecutor {
                 }
                 if (cellAbandon.contains((Player)sender)) {
                     cellAbandon.remove((Player)sender);
-                    updateSign(getCellOf((Player)sender));
-                    getCellOf((Player)sender).setOwner("");
-                    getCellOf((Player)sender).setOwnedUntil(new Date());
-                    getCellOf((Player)sender).setUuid(UUID.randomUUID());
+                    PrisonCell cell = getCellOf((Player)sender);
+                    ProtectedRegion region = plugin.worldGuard.getRegionManager(cell.getCoordinate1().getWorld()).matchRegion(cell.getName());
+                    region.setOwners(new DefaultDomain());
+                    cell.setOwner("");
+                    cell.setOwnedUntil(new Date());
+                    cell.setUuid(UUID.randomUUID());
+                    updateSign(cell);
                 } else {
                     sender.sendMessage("Type /cell abandon in the next 10 seconds again to confirm!");
                     cellAbandon.add((Player) sender);
@@ -444,6 +449,9 @@ public class PrisonCells implements Listener, CommandExecutor {
                 updateSign(cell);
                 event.getPlayer().getInventory().getItemInMainHand().setAmount(0);
                 event.getPlayer().sendMessage("You have successfully claimed cell " + cell.getName());
+                DefaultDomain owner = new DefaultDomain();
+                owner.addPlayer(event.getPlayer().getUniqueId());
+                plugin.worldGuard.getRegionManager(cell.getCoordinate1().getWorld()).matchRegion(cell.getName()).setOwners(owner);
                 return;
             }
         }
