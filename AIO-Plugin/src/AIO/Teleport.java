@@ -16,6 +16,8 @@ public class Teleport implements CommandExecutor {
     private HashMap<Player, Player> tpaList = new HashMap<>();
     private HashMap<Player, Player> tpahereList = new HashMap<>();
 
+    private List<Player> toggleList = new ArrayList<>();
+
     Teleport(aio plugin) {
         this.plugin = plugin;
         Bukkit.getServer().getPluginCommand("tpa").setExecutor(this);
@@ -30,8 +32,11 @@ public class Teleport implements CommandExecutor {
 
     //Requesting teleport
     private void request(Player sender, Player target, boolean toSelf) {
+        if(toggleList.contains(target)) {
+            sender.sendMessage(plugin.getMessage("teleport.toggle"));
+            return;
+        }
 
-        //Remove previous teleport requests
         for(Player player : tpaList.keySet()) {
             if(tpaList.get(player) == target || player == sender) {
                 tpaList.remove(player);
@@ -43,7 +48,6 @@ public class Teleport implements CommandExecutor {
             }
         }
 
-        //Add new teleport request
         if(toSelf) {
             tpahereList.put(sender, target);
             target.sendMessage(plugin.getMessage("teleport.tpahere_request", aio.getPlayerName(sender)));
@@ -182,11 +186,18 @@ public class Teleport implements CommandExecutor {
                 sender.sendMessage(plugin.getMessage("messages.player_only"));
                 return true;
             }
-            if(!sender.hasPermission("aio.teleport.tptoggle")) {
-                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+            Player player = (Player)sender;
+            if(!player.hasPermission("aio.teleport.tptoggle")) {
+                player.sendMessage(plugin.getMessage("messages.no_permission"));
                 return true;
             }
-            ///////////
+            if(toggleList.contains(player)) {
+                toggleList.remove(player);
+                player.sendMessage(plugin.getMessage("teleport.toggle_off"));
+                return true;
+            }
+            toggleList.add(player);
+            player.sendMessage(plugin.getMessage("teleport.toggle_on"));
             return true;
         }
 
