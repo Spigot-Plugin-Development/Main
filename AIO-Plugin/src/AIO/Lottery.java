@@ -36,7 +36,7 @@ public class Lottery implements Listener,CommandExecutor {
                             prizes.put(UUID.fromString(result.getString("minecraft_lottery_uuid")), result.getInt("minecraft_lottery_prize"));
                         }
                         if (result.getInt("minecraft_lottery_tickets") > 0) {
-                            prizes.put(UUID.fromString(result.getString("minecraft_lottery_uuid")), result.getInt("minecraft_lottery_tickets"));
+                            tickets.put(UUID.fromString(result.getString("minecraft_lottery_uuid")), result.getInt("minecraft_lottery_tickets"));
                         }
                     }
                 } catch (Exception e) {
