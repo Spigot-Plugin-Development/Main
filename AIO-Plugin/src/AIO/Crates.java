@@ -1,7 +1,6 @@
 package AIO;
 
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.NBTTagString;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -38,7 +37,7 @@ public class Crates implements Listener, CommandExecutor {
         key.setItemMeta(keyMeta);
         net.minecraft.server.v1_12_R1.ItemStack nmsKey = CraftItemStack.asNMSCopy(key);
         NBTTagCompound tag = nmsKey.hasTag() ? nmsKey.getTag() : new NBTTagCompound();
-        tag.set("CrateType", new NBTTagString(crate));
+        tag.setString("CrateType", crate);
         key = CraftItemStack.asBukkitCopy(nmsKey);
         return key;
     }
