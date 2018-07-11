@@ -17,8 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class Crates implements Listener, CommandExecutor {
-
-    aio plugin;
+    private aio plugin;
 
     Crates(aio plugin) {
         this.plugin = plugin;
