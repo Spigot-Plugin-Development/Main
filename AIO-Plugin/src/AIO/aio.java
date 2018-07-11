@@ -70,6 +70,7 @@ public class aio extends JavaPlugin implements Listener {
 
 	CacheManager cacheManager;
 	TreeFeller treeFeller;
+	Obsidiantolava obsidiantolava;
 
 	private File messageFile;
 	private FileConfiguration messageConfig;
@@ -224,18 +225,4 @@ public class aio extends JavaPlugin implements Listener {
 		}
 	}
 	
-	@EventHandler
-	private void rightClickBlock(PlayerInteractEvent event) {
-		if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK) || event.getItem() == null || event.getItem().getType() != Material.BUCKET) {
-			return;
-		}
-		if (!event.getClickedBlock().getType().equals(Material.OBSIDIAN)) {
-			return;
-		}
-		event.getClickedBlock().setType(Material.AIR);
-		event.getItem().setAmount(event.getItem().getAmount() - 1);
-		event.getPlayer().getInventory().addItem(new ItemStack(Material.LAVA_BUCKET));
-		event.setCancelled(true);
-	}
-
 }
