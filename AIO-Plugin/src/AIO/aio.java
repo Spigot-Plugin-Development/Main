@@ -4,29 +4,18 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.player.*;
-import org.bukkit.event.server.ServerListPingEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.milkbowl.vault.permission.*;
-
 import java.io.File;
 import java.util.*;
-import java.util.logging.Level;
 
-public class aio extends JavaPlugin implements Listener {
-	
+public class aio extends JavaPlugin {
 	Chat chat;
 	Economy economy;
 	Permission permission;
@@ -64,10 +53,8 @@ public class aio extends JavaPlugin implements Listener {
 	PrisonCells prisonCells;
 	AuctionManager auctionManager;
 	Holograms holograms;
-
 	PlayerMessage playerMessage;
 	FreezeManager freezeManager;
-
 	CacheManager cacheManager;
 	TreeFeller treeFeller;
 	Obsidiantolava obsidiantolava;
@@ -83,9 +70,15 @@ public class aio extends JavaPlugin implements Listener {
 
         saveDefaultConfig();
 
+		setupChat();
+		setupEconomy();
+		setupPermissions();
+		setupWorldEdit();
+		setupWorldGuard();
+
 		File messages = new File(getDataFolder(), "messages.yml");
 		if(!messages.exists()) {
-			getLogger().log(Level.SEVERE, "Unable to read messages file! Server is shutting down.");
+			getLogger().severe("Unable to read messages file! server is shutting down.");
 			getServer().shutdown();
 		}
 
@@ -125,13 +118,6 @@ public class aio extends JavaPlugin implements Listener {
 		prisonCells = new PrisonCells(this);
 		auctionManager = new AuctionManager(this);
 		holograms = new Holograms(this);
-
-		Bukkit.getPluginManager().registerEvents(this, this);
-		setupChat();
-		setupEconomy();
-		setupPermissions();
-		setupWorldEdit();
-		setupWorldGuard();
 		treeFeller = new TreeFeller(this);
 		obsidiantolava = new Obsidiantolava(this);
 		customSigns = new CustomSigns(this);
@@ -141,6 +127,7 @@ public class aio extends JavaPlugin implements Listener {
 	@Override
 	public void onDisable() {
 		getLogger().info("Stopping All-In-One Plugin");
+
 		advertisements.removeBar();
 		lottery.disable();
 		prisonCells.save();
@@ -153,34 +140,35 @@ public class aio extends JavaPlugin implements Listener {
 	}
 
     String getMessage(String path, String... strings) {
-		if(messageConfig == null) {
-			if(messageFile == null) { messageFile = new File(getDataFolder(), "messages.yml"); }
+		if (messageConfig == null) {
+			if (messageFile == null) {
+				messageFile = new File(getDataFolder(), "messages.yml");
+			}
 			messageConfig = YamlConfiguration.loadConfiguration(messageFile);
 		}
 	    String message = messageConfig.getString(path);
-	    if(messageConfig.getString(path.split("\\.")[0] + ".prefix") != null && message.contains("{prefix}")) {
+	    if (messageConfig.getString(path.split("\\.")[0] + ".prefix") != null && message.contains("{prefix}")) {
             message = message.replace("{prefix}", messageConfig.getString(path.split("\\.")[0] + ".prefix"));
         }
-        for(String newSubString : strings) {
+        for (String newSubString : strings) {
             String oldSubString = message.substring(message.indexOf("{"), message.indexOf("}")+1);
             message = message.replace(oldSubString, newSubString);
         }
-        return colorize(message);
+        return aio.colorize(message);
     }
 
-    static String getPlayerName(Player player) {
-		System.out.println(player.getName() + " : " + player.getDisplayName());
-		if(Bukkit.getServer().getPlayer(player.getUniqueId()).getDisplayName().equalsIgnoreCase("")) {
+    public static String getPlayerName(Player player) {
+		if (Bukkit.getServer().getPlayer(player.getUniqueId()).getDisplayName().equalsIgnoreCase("")) {
 			return player.getName();
 		}
-		return colorize(player.getDisplayName());
+		return aio.colorize(player.getDisplayName());
 	}
 
-    static String[] allButFirst(String[] input) {
+    public static String[] allButFirst(String[] input) {
         return Arrays.copyOfRange(input, 1, input.length);
     }
 
-    static String colorize(String input) {
+    public static String colorize(String input) {
         return ChatColor.translateAlternateColorCodes('&', input);
     }
 
