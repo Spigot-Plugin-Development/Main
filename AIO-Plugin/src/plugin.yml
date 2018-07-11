@@ -25,8 +25,8 @@ commands:
         aliases: [sp, gmsp, gm3]
     reply:
         aliases: [r]
-    ad:
-        aliases: [advertise, advertisement]
+    advertisement:
+        aliases: [advertise, ad]
     dawn:
         aliases: [sunrise]
     morning:
@@ -93,6 +93,7 @@ commands:
     delwarp:
         description: Deletes an existing warp.
     warplist:
+        aliases: [warps]
         description: Displays the warplist.
     warpreload:
         description: Reloads the configuration.

@@ -49,11 +49,11 @@ public class Advertisements implements Listener, CommandExecutor {
 		this.plugin = plugin;
 
 		Bukkit.getPluginManager().registerEvents(this, plugin);
-		Bukkit.getPluginCommand("ad").setExecutor(this);
 		
 		serverAd.add(new Advertisement(null, "&aAdvertise your shop: &b/ad create", BarColor.WHITE, BarStyle.SOLID, 60.0));
 		serverAd.add(new Advertisement(null, "&aCheck out server news: &b/news", BarColor.WHITE, BarStyle.SOLID, 60.0));
 		serverAd.add(new Advertisement(null, "&aGet lava by right clicking &5Obsidian &bwith a &7bucket&b!", BarColor.WHITE, BarStyle.SOLID, 60.0));
+		Bukkit.getPluginCommand("advertisement").setExecutor(this);
 		
 		bossBar = Bukkit.createBossBar("Loading", BarColor.BLUE, BarStyle.SOLID);
 		bossBar.setProgress(1.0);
