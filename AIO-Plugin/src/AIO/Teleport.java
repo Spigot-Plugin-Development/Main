@@ -223,7 +223,7 @@ public class Teleport implements CommandExecutor {
                 return true;
             }
             ((Player) sender).teleport(plugin.getServer().getPlayer(args[0]).getLocation());
-            sender.sendMessage(plugin.getMessage("teleport.tp", args[0]));
+            sender.sendMessage(plugin.getMessage("teleport.tp", aio.getPlayerName(plugin.getServer().getPlayer(args[0]))));
             return true;
         }
 
@@ -250,7 +250,7 @@ public class Teleport implements CommandExecutor {
                 return true;
             }
             plugin.getServer().getPlayer(args[0]).teleport(((Player) sender).getLocation());
-            sender.sendMessage(plugin.getMessage("teleport.tphere", args[0]));
+            sender.sendMessage(plugin.getMessage("teleport.tphere", aio.getPlayerName(plugin.getServer().getPlayer(args[0]))));
             return true;
         }
 
