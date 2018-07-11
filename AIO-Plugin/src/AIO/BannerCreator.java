@@ -21,11 +21,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 
 public class BannerCreator implements Listener, CommandExecutor {
-	
 	private aio plugin;
 	
-	List<Player> creatingBanners = new ArrayList<Player>();
-	List<ItemStack> createdBanners = new ArrayList<ItemStack>();
+	List<Player> creatingBanners = new ArrayList<>();
+	List<ItemStack> createdBanners = new ArrayList<>();
 	
 	BannerCreator(aio plugin) {
 		this.plugin = plugin;
@@ -69,76 +68,6 @@ public class BannerCreator implements Listener, CommandExecutor {
 			inventory.setItem(i, bannerCopy);
 		}
 		player.openInventory(inventory);
-	}
-
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(command.getName().equalsIgnoreCase("banner")) {
-			if(sender instanceof Player) {
-				if(args.length == 0) {
-					createBanner((Player)sender);
-				} else if(args[0].equalsIgnoreCase("get")) {
-					if(BannerCreator.getByName(String.join(" ", aio.allButFirst(args))) != null) {
-						((Player)sender).getInventory().addItem(BannerCreator.getByName(String.join(" ", aio.allButFirst(args))));
-					}
-				} else if(args[0].equalsIgnoreCase("letter")) {
-					String[] borderWanted = {"yes", "y", "true", "border", "bordered"};
-					boolean bordered = false;
-					if(args.length > 4) {
-						for(String border: borderWanted) {
-							if(args[4].equals(border)) {
-								bordered = true;
-							}
-						}
-					}
-					if(BannerCreator.getCharacter(args[1], args[2], args[3], bordered) != null) {
-						((Player)sender).getInventory().addItem(BannerCreator.getCharacter(args[1], args[2], args[3], bordered));
-					}
-				}
-			}
-		}
-		return false;
-	}
-	
-	@EventHandler 
-	public void playerCloseInventory(InventoryCloseEvent event) {
-		/*if (creatingBanners.contains(event.getPlayer())) {
-			creatingBanners.remove(event.getPlayer());
-		}*/
-	}
-	
-	@EventHandler
-	public void playerClickInventory(InventoryClickEvent event) {
-		if (creatingBanners.contains(event.getWhoClicked())) {
-			switch (event.getCurrentItem().getType()) {
-			case WOOL:
-				ItemStack newBanner = new ItemStack(Material.BANNER, 1, Convert.WoolToDye(event.getCurrentItem().getData().getData()));
-				createdBanners.set(creatingBanners.indexOf(event.getWhoClicked()), newBanner);
-				openDyeColor((Player)event.getWhoClicked());
-				break;
-			case INK_SACK:
-				ItemStack banner = createdBanners.get(creatingBanners.indexOf(event.getWhoClicked()));
-				BannerMeta meta = (BannerMeta)banner.getItemMeta();
-				meta.addPattern(new Pattern(Convert.ByteToDye(event.getCurrentItem().getData().getData()), PatternType.BORDER));
-				banner.setItemMeta(meta);
-				createdBanners.set(creatingBanners.indexOf(event.getWhoClicked()), banner);
-				openPattern((Player)event.getWhoClicked(), Convert.ByteToDye(event.getCurrentItem().getData().getData()));
-				break;
-			case BANNER:
-				ItemStack progressBanner = createdBanners.get(creatingBanners.indexOf(event.getWhoClicked()));
-				BannerMeta progressMeta = (BannerMeta)progressBanner.getItemMeta();
-				ItemStack clickedBanner = event.getCurrentItem();
-				BannerMeta clickedMeta = (BannerMeta)clickedBanner.getItemMeta();
-				progressMeta.setPattern(progressMeta.getPatterns().size() - 1, new Pattern(progressMeta.getPattern(progressMeta.getPatterns().size() - 1).getColor(), clickedMeta.getPattern(clickedMeta.getPatterns().size() - 1).getPattern()));
-				progressBanner.setItemMeta(progressMeta);
-				createdBanners.set(creatingBanners.indexOf(event.getWhoClicked()), progressBanner);
-				event.getWhoClicked().getInventory().addItem(progressBanner);
-				openDyeColor((Player)event.getWhoClicked());
-				break;
-			default:
-				break;
-			}
-			event.setCancelled(true);
-		}
 	}
 	
 	public static ItemStack getByName(String string) {
@@ -572,6 +501,77 @@ public class BannerCreator implements Listener, CommandExecutor {
 			bannerMeta.setPatterns(patterns);
 			banner.setItemMeta(bannerMeta);
 			return banner;
+		}
+	}
+
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if (command.getName().equalsIgnoreCase("banner")) {
+			if (sender instanceof Player) {
+				if (args.length == 0) {
+					createBanner((Player)sender);
+				} else if (args[0].equalsIgnoreCase("get")) {
+					if (BannerCreator.getByName(String.join(" ", aio.allButFirst(args))) != null) {
+						((Player)sender).getInventory().addItem(BannerCreator.getByName(String.join(" ", aio.allButFirst(args))));
+					}
+				} else if (args[0].equalsIgnoreCase("letter")) {
+					String[] borderWanted = {"yes", "y", "true", "border", "bordered"};
+					boolean bordered = false;
+					if (args.length > 4) {
+						for (String border: borderWanted) {
+							if (args[4].equals(border)) {
+								bordered = true;
+							}
+						}
+					}
+					if (BannerCreator.getCharacter(args[1], args[2], args[3], bordered) != null) {
+						((Player)sender).getInventory().addItem(BannerCreator.getCharacter(args[1], args[2], args[3], bordered));
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	@EventHandler
+	public void playerCloseInventory(InventoryCloseEvent event) {
+		if (creatingBanners.contains((Player)event.getPlayer())) {
+			createdBanners.remove(creatingBanners.indexOf((Player)event.getPlayer()));
+			creatingBanners.remove((Player)event.getPlayer());
+		}
+	}
+
+	@EventHandler
+	public void playerClickInventory(InventoryClickEvent event) {
+		if (creatingBanners.contains(event.getWhoClicked())) {
+			switch (event.getCurrentItem().getType()) {
+				case WOOL:
+					ItemStack newBanner = new ItemStack(Material.BANNER, 1, Convert.WoolToDye(event.getCurrentItem().getData().getData()));
+					createdBanners.set(creatingBanners.indexOf(event.getWhoClicked()), newBanner);
+					openDyeColor((Player)event.getWhoClicked());
+					break;
+				case INK_SACK:
+					ItemStack banner = createdBanners.get(creatingBanners.indexOf(event.getWhoClicked()));
+					BannerMeta meta = (BannerMeta)banner.getItemMeta();
+					meta.addPattern(new Pattern(Convert.ByteToDye(event.getCurrentItem().getData().getData()), PatternType.BORDER));
+					banner.setItemMeta(meta);
+					createdBanners.set(creatingBanners.indexOf(event.getWhoClicked()), banner);
+					openPattern((Player)event.getWhoClicked(), Convert.ByteToDye(event.getCurrentItem().getData().getData()));
+					break;
+				case BANNER:
+					ItemStack progressBanner = createdBanners.get(creatingBanners.indexOf(event.getWhoClicked()));
+					BannerMeta progressMeta = (BannerMeta)progressBanner.getItemMeta();
+					ItemStack clickedBanner = event.getCurrentItem();
+					BannerMeta clickedMeta = (BannerMeta)clickedBanner.getItemMeta();
+					progressMeta.setPattern(progressMeta.getPatterns().size() - 1, new Pattern(progressMeta.getPattern(progressMeta.getPatterns().size() - 1).getColor(), clickedMeta.getPattern(clickedMeta.getPatterns().size() - 1).getPattern()));
+					progressBanner.setItemMeta(progressMeta);
+					createdBanners.set(creatingBanners.indexOf(event.getWhoClicked()), progressBanner);
+					event.getWhoClicked().getInventory().addItem(progressBanner);
+					openDyeColor((Player)event.getWhoClicked());
+					break;
+				default:
+					break;
+			}
+			event.setCancelled(true);
 		}
 	}
 }
