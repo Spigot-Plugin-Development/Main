@@ -161,7 +161,6 @@ public class aio extends JavaPlugin implements Listener {
     }
 
     static String getPlayerName(Player player) {
-		System.out.println(player.getName() + " : " + player.getDisplayName());
 		if(Bukkit.getServer().getPlayer(player.getUniqueId()).getDisplayName().equalsIgnoreCase("")) {
 			return player.getName();
 		}
