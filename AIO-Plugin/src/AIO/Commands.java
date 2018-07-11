@@ -13,23 +13,38 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Commands implements CommandExecutor {
-
     private aio plugin;
 
     Commands(aio plugin) {
         this.plugin = plugin;
-        Bukkit.getServer().getPluginCommand("flyspeed").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("giveself").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("spawner").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("nick").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("ping").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("adminonly").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("unsafeenchant").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("nightvision").setExecutor(this);
+        plugin.getCommand("adminonly").setExecutor(this);
+        plugin.getCommand("craftbench").setExecutor(this);
+        plugin.getCommand("enchanttable").setExecutor(this);
+        plugin.getCommand("enderchest").setExecutor(this);
+        plugin.getCommand("feed").setExecutor(this);
+        plugin.getCommand("flyspeed").setExecutor(this);
+        plugin.getCommand("giveself").setExecutor(this);
+        plugin.getCommand("heal").setExecutor(this);
+        plugin.getCommand("kittycannon").setExecutor(this);
+        plugin.getCommand("lightning").setExecutor(this);
+        plugin.getCommand("more").setExecutor(this);
+        plugin.getCommand("motd").setExecutor(this);
+        plugin.getCommand("nearby").setExecutor(this);
+        plugin.getCommand("news").setExecutor(this);
+        plugin.getCommand("nick").setExecutor(this);
+        plugin.getCommand("nightvision").setExecutor(this);
+        plugin.getCommand("ping").setExecutor(this);
+        plugin.getCommand("repair").setExecutor(this);
+        plugin.getCommand("rules").setExecutor(this);
+        plugin.getCommand("skull").setExecutor(this);
+        plugin.getCommand("spawner").setExecutor(this);
+        plugin.getCommand("tntcannon").setExecutor(this);
+        plugin.getCommand("unsafeenchant").setExecutor(this);
+        plugin.getCommand("whois").setExecutor(this);
+        plugin.getCommand("worlds").setExecutor(this);
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-
         if (cmd.getName().equalsIgnoreCase("nightvision")) {
             if (sender instanceof Player) {
                 if (sender.hasPermission("aio.nightvision")) {
@@ -363,5 +378,4 @@ public class Commands implements CommandExecutor {
 
         return false;
     }
-
 }
