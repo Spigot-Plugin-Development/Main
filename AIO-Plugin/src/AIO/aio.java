@@ -135,6 +135,7 @@ public class aio extends JavaPlugin implements Listener {
 		getLogger().info("Stopping All-In-One Plugin");
 		advertisements.removeBar();
 		lottery.disable();
+		prisonCells.save();
 		saveConfig();
 		for(Player player: getServer().getOnlinePlayers()) {
 			cacheManager.updatePlayer(player.getUniqueId());

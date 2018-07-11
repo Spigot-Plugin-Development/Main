@@ -1,9 +1,7 @@
 package AIO;
 
-import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import com.sk89q.worldedit.BlockVector;
+import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 
@@ -11,6 +9,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Convert {
+
+    public static BlockVector LocationToBlockVector(Location location) {
+        return new BlockVector(location.getX(), location.getY(), location.getZ());
+    }
+
+    public static Location BlockVectorToLocation(World world, BlockVector vector) {
+        return new Location(world, vector.getBlockX(), vector.getBlockY(), vector.getBlockZ());
+    }
 
     public static String LocationToStringNoPY(Location location) {
         return location.getWorld().getName() + ";" + location.getX() + ";" + location.getY() + ";" + location.getZ();
