@@ -12,26 +12,29 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
 
 public class AntiSpambot implements Listener {
+	private aio plugin;
 	
-	private List<Player> potentialSpambots = new ArrayList<Player>();
-	private Plugin plugin;
+	private List<Player> potentialSpambots = new ArrayList<>();
 	
-	AntiSpambot(Plugin plugin) {
+	AntiSpambot(aio plugin) {
 		this.plugin = plugin;
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	private void playerJoinSpambot(PlayerJoinEvent event) {
-		potentialSpambots.add(event.getPlayer());
+		if (!event.getPlayer().hasPermission("aio.spambot.bypass")) {
+			potentialSpambots.add(event.getPlayer());
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	private void playerMoveSpambot(PlayerMoveEvent event) {
-		potentialSpambots.remove(event.getPlayer());
+		if (potentialSpambots.contains(event.getPlayer())) {
+			potentialSpambots.remove(event.getPlayer());
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
