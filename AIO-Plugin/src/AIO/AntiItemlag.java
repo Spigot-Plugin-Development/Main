@@ -16,7 +16,7 @@ import org.bukkit.event.entity.ItemMergeEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 
 public class AntiItemlag implements Listener, CommandExecutor {
-	aio plugin;
+	private aio plugin;
 	
 	List<Item> items = new ArrayList<>();
 	
