@@ -38,7 +38,7 @@ public class aio extends JavaPlugin implements Listener {
 	AntiItemlag antiItemlag;
 	PrivateMessage privateMessage;
 	Advertisements advertisements;
-	TeleportA teleporta;
+	Teleport teleport;
 	BannerCreator bannerCreator;
 	AntiSpambot antiSpambot;
 	Warp warp;
@@ -99,7 +99,7 @@ public class aio extends JavaPlugin implements Listener {
 		economyManager = new EconomyManager(this);
 		godManager = new GodManager(this);
 		flyManager = new FlyManager(this);
-		teleporta = new TeleportA(this);
+		teleport = new Teleport(this);
 		privateMessage = new PrivateMessage(this);
 		antiSpambot = new AntiSpambot(this);
 		playerMessage = new PlayerMessage(this);
@@ -160,6 +160,7 @@ public class aio extends JavaPlugin implements Listener {
     }
 
     static String getPlayerName(Player player) {
+		System.out.println(player.getName() + " : " + player.getDisplayName());
 		if(Bukkit.getServer().getPlayer(player.getUniqueId()).getDisplayName().equalsIgnoreCase("")) {
 			return player.getName();
 		}

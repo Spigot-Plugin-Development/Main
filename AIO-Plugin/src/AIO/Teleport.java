@@ -9,14 +9,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class TeleportA implements CommandExecutor {
+public class Teleport implements CommandExecutor {
 
     private aio plugin;
 
     private HashMap<Player, Player> tpaList = new HashMap<>();
     private HashMap<Player, Player> tpahereList = new HashMap<>();
 
-    TeleportA(aio plugin) {
+    Teleport(aio plugin) {
         this.plugin = plugin;
         Bukkit.getServer().getPluginCommand("tpa").setExecutor(this);
         Bukkit.getServer().getPluginCommand("tpaccept").setExecutor(this);
@@ -61,32 +61,37 @@ public class TeleportA implements CommandExecutor {
             player.sendMessage(plugin.getMessage("teleport.no_request"));
             return;
         }
-        plugin.getLogger().severe("1");
-        Player requester;
-        Boolean toSelf;
-        if(tpaList.containsKey(player)) {
-            requester = tpaList.get(player);
-            toSelf = false;
-        } else {
-            requester = tpahereList.get(player);
-            toSelf = true;
+        Player requester = null;
+        Boolean toSelf = false;
+        for(Player tpaPlayer : tpaList.keySet()) {
+            if(tpaList.get(tpaPlayer) == player) {
+                requester = tpaPlayer;
+                toSelf = false;
+            }
         }
-        plugin.getLogger().severe("2");
-        if(!decision) {
-            player.sendMessage(plugin.getMessage("teleport.denied1", aio.getPlayerName(requester)));
+        for(Player tpaherePlayer : tpahereList.keySet()) {
+            if(tpahereList.get(tpaherePlayer) == player) {
+                requester = tpaherePlayer;
+                toSelf = true;
+            }
+        }
+        assert requester != null;
+        if(decision) {
+            if(toSelf) {
+                requester.sendMessage(plugin.getMessage("teleport.accepted2", aio.getPlayerName(player)));
+                player.sendMessage(plugin.getMessage("teleport.accepted1", aio.getPlayerName(requester)));
+                player.teleport(requester.getLocation());
+            } else {
+                requester.sendMessage(plugin.getMessage("teleport.accepted2", aio.getPlayerName(player)));
+                player.sendMessage(plugin.getMessage("teleport.accepted1", aio.getPlayerName(requester)));
+                requester.teleport(player.getLocation());
+            }
+        } else {
             requester.sendMessage(plugin.getMessage("teleport.denied2", aio.getPlayerName(player)));
-        } else if(!toSelf) {
-            player.sendMessage(plugin.getMessage("teleport.accepted1", aio.getPlayerName(requester)));
-            requester.sendMessage(plugin.getMessage("teleport.accepted2", aio.getPlayerName(player)));
-            requester.teleport(player.getLocation());
-        } else {
-            player.sendMessage(plugin.getMessage("teleport.accepted1", aio.getPlayerName(requester)));
-            requester.sendMessage(plugin.getMessage("teleport.accepted2", aio.getPlayerName(player)));
-            player.teleport(requester.getLocation());
+            player.sendMessage(plugin.getMessage("teleport.denied1", aio.getPlayerName(requester)));
         }
-        plugin.getLogger().severe("3");
-        if(toSelf) { tpahereList.remove(player); return; }
-        tpaList.remove(player);
+        if(toSelf) { tpahereList.remove(requester); return; }
+        tpaList.remove(requester);
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
