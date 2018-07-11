@@ -124,3 +124,5 @@ commands:
         aliases: [auc]
     bid:
     key:
+    balancetop:
+        aliases: [baltop]

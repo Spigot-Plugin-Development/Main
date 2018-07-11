@@ -1,11 +1,12 @@
 package AIO;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -17,9 +18,10 @@ public class EconomyManager implements CommandExecutor {
 	
 	EconomyManager(aio plugin) {
 		this.plugin = plugin;
-		Bukkit.getPluginCommand("pay").setExecutor(this);
-		Bukkit.getPluginCommand("balance").setExecutor(this);
-		Bukkit.getPluginCommand("economy").setExecutor(this);
+		plugin.getCommand("pay").setExecutor(this);
+		plugin.getCommand("balance").setExecutor(this);
+		plugin.getCommand("economy").setExecutor(this);
+		plugin.getCommand("balancetop").setExecutor(this);
 	}
 
 	public double getBalance(UUID uuid) {
@@ -57,6 +59,25 @@ public class EconomyManager implements CommandExecutor {
 	}
 
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if (command.getName().equalsIgnoreCase("balancetop")) {
+			if (sender.hasPermission("aio.balancetop")) {
+				sender.sendMessage("Getting the names of the richest players...");
+				plugin.sqlconnector.query("SELECT minecraft_player_balance, minecraft_player_name FROM minecraft_player ORDER BY minecraft_player_balance DESC LIMIT 10;", new SQLCallback() {
+					@Override
+					public void callback(ResultSet result) {
+						try {
+							int i = 1;
+							while (result.next()) {
+								sender.sendMessage("#" + i + ": " + result.getString("minecraft_player_name") + " with $" + result.getDouble("minecraft_player_balance"));
+								i++;
+							}
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}
 		if (command.getName().equalsIgnoreCase("pay")) {
 			if (sender instanceof Player) {
 				if (((Player)sender).hasPermission("aio.pay")) {
