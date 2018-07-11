@@ -1,7 +1,6 @@
 package AIO;
 
 import java.util.*;
-import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -33,7 +32,7 @@ public class Teleport implements CommandExecutor {
     //Requesting teleport
     private void request(Player sender, Player target, boolean toSelf) {
         if(toggleList.contains(target)) {
-            sender.sendMessage(plugin.getMessage("teleport.toggle"));
+            sender.sendMessage(plugin.getMessage("teleport.toggle", aio.getPlayerName(target)));
             return;
         }
 
@@ -211,7 +210,20 @@ public class Teleport implements CommandExecutor {
                 sender.sendMessage(plugin.getMessage("messages.no_permission"));
                 return true;
             }
-            ///////////
+            if(args.length == 0) {
+                sender.sendMessage(plugin.getMessage("teleport.tp_usage"));
+                return true;
+            }
+            if(plugin.getServer().getPlayer(args[0]) == null) {
+                sender.sendMessage(plugin.getMessage("messages.player_not_found", args[0]));
+                return true;
+            }
+            if(plugin.getServer().getPlayer(args[0]) == sender) {
+                sender.sendMessage(plugin.getMessage("teleport.teleport_self"));
+                return true;
+            }
+            ((Player) sender).teleport(plugin.getServer().getPlayer(args[0]).getLocation());
+            sender.sendMessage(plugin.getMessage("teleport.tp", args[0]));
             return true;
         }
 
@@ -225,7 +237,20 @@ public class Teleport implements CommandExecutor {
                 sender.sendMessage(plugin.getMessage("messages.no_permission"));
                 return true;
             }
-            ///////////
+            if(args.length == 0) {
+                sender.sendMessage(plugin.getMessage("teleport.tphere_usage"));
+                return true;
+            }
+            if(plugin.getServer().getPlayer(args[0]) == null) {
+                sender.sendMessage(plugin.getMessage("messages.player_not_found", args[0]));
+                return true;
+            }
+            if(plugin.getServer().getPlayer(args[0]) == sender) {
+                sender.sendMessage(plugin.getMessage("teleport.teleport_self"));
+                return true;
+            }
+            plugin.getServer().getPlayer(args[0]).teleport(((Player) sender).getLocation());
+            sender.sendMessage(plugin.getMessage("teleport.tphere", args[0]));
             return true;
         }
 
@@ -239,7 +264,14 @@ public class Teleport implements CommandExecutor {
                 sender.sendMessage(plugin.getMessage("messages.no_permission"));
                 return true;
             }
-            ///////////
+            if(plugin.getServer().getOnlinePlayers().size() == 0) {
+                sender.sendMessage(plugin.getMessage("messages.no_online_player"));
+                return true;
+            }
+            for(Player player : plugin.getServer().getOnlinePlayers()) {
+                player.teleport(((Player) sender).getLocation());
+            }
+            sender.sendMessage(plugin.getMessage("teleport.tpall"));
             return true;
         }
 
