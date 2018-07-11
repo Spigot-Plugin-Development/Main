@@ -50,15 +50,10 @@ public class FlyManager implements Listener, CommandExecutor {
         }
     }
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        event.getPlayer().setAllowFlight(true);
-    }
-
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("fly")) {
             if (sender instanceof Player) {
-                if (!((Player)sender).hasPermission("aio.fly")) {
+                if (!sender.hasPermission("aio.fly")) {
                     sender.sendMessage("You don't have permission to execute that command.");
                     return false;
                 }
@@ -81,7 +76,7 @@ public class FlyManager implements Listener, CommandExecutor {
                     }
                 }
 
-                if (!((Player)sender).hasPermission("aio.fly.others")) {
+                if (!sender.hasPermission("aio.fly.others")) {
                     sender.sendMessage("You don't have permission to change fly for other players.");
                     return false;
                 }
@@ -180,6 +175,10 @@ public class FlyManager implements Listener, CommandExecutor {
         return false;
     }
 
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        event.getPlayer().setAllowFlight(true);
+    }
 
     @EventHandler
     public void playerToggleFlight(PlayerToggleFlightEvent event) {
