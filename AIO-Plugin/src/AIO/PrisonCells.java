@@ -353,13 +353,31 @@ public class PrisonCells implements Listener, CommandExecutor {
                 sender.sendMessage("The given player doesn't have a prison cell.");
                 return false;
             }
+            if (args[0].equalsIgnoreCase("remove")) {
+                if (!sender.hasPermission("remove")) {
+                    sender.sendMessage("You don't have permission for that.");
+                    return false;
+                }
+                if (getCellOf((Player)sender) == null) {
+                    sender.sendMessage("You don't have a prison cell.");
+                    return false;
+                }
+                if (args.length != 2) {
+                    sender.sendMessage("Usage: /cell remove <player>");
+                    return false;
+                }
+                PrisonCell cell = getCellOf((Player)sender);
+                DefaultDomain members = plugin.worldGuard.getRegionManager(cell.getCoordinate1().getWorld()).matchRegion(cell.getName()).getMembers();
+                members.removePlayer(args[1]);
+                plugin.worldGuard.getRegionManager(cell.getCoordinate1().getWorld()).matchRegion(cell.getName()).setMembers(members);
+            }
             if (args[0].equalsIgnoreCase("add")) {
                 if (!sender.hasPermission("aio.cell.add")) {
                     sender.sendMessage("You don't have permission for that.");
                     return false;
                 }
                 if (getCellOf((Player)sender) == null) {
-                    sender.sendMessage("You don't have a prison cell");
+                    sender.sendMessage("You don't have a prison cell.");
                     return false;
                 }
                 if (args.length != 2) {
@@ -370,7 +388,28 @@ public class PrisonCells implements Listener, CommandExecutor {
                     sender.sendMessage("Player not found.");
                 }
                 PrisonCell cell = getCellOf((Player)sender);
-                plugin.worldGuard.getRegionManager(cell.getCoordinate1().getWorld()).matchRegion(cell.getName()).isMember((LocalPlayer)plugin.getServer().getPlayer(args[1]));
+                DefaultDomain members = plugin.worldGuard.getRegionManager(cell.getCoordinate1().getWorld()).matchRegion(cell.getName()).getMembers();
+                members.addPlayer(args[1]);
+                plugin.worldGuard.getRegionManager(cell.getCoordinate1().getWorld()).matchRegion(cell.getName()).setMembers(members);
+            }
+            if (args[0].equalsIgnoreCase("delete")) {
+                if (!sender.hasPermission("aio.cell.delete")) {
+                    sender.sendMessage("You don't have permission for that.");
+                    return false;
+                }
+                if (args.length != 2) {
+                    sender.sendMessage("Usage: /cell delete <name>");
+                    return false;
+                }
+                for (PrisonCell cell: cells) {
+                    if (cell.getName().equals(args[1])) {
+                        plugin.sqlconnector.update("DELETE FROM minecraft_prisoncell WHERE minecraft_prisoncell_name = '" + cell.getName() + "';", new SQLCallback());
+                        cells.remove(cell);
+                        return false;
+                    }
+                }
+                sender.sendMessage("No cell was found with this name.");
+                return false;
             }
             if (args[0].equalsIgnoreCase("abandon")) {
                 if (!sender.hasPermission("aio.cell.abandon")) {
