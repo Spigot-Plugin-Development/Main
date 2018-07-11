@@ -2,10 +2,9 @@ package AIO;
 
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
-import org.bukkit.entity.Player;
 
 public class Advertisement {
-	private Player player;
+	private String player;
 	private String text;
 	private BarColor color;
 	private BarStyle style;
@@ -13,7 +12,7 @@ public class Advertisement {
 	private double maxTime;
 	
 	Advertisement() {
-		this.player = null;
+		this.player = "";
 		this.text = "";
 		this.color = BarColor.WHITE;
 		this.style = BarStyle.SEGMENTED_20;
@@ -21,16 +20,16 @@ public class Advertisement {
 		this.maxTime = 30d;
 	}
 	
-	Advertisement(Player player, String text, BarColor color, BarStyle style, double time) {
+	Advertisement(String player, String text, BarColor color, BarStyle style, double time, double maxTime) {
 		this.player = player;
 		this.text = text;
 		this.color = color;
 		this.style = style;
 		this.time = time;
-		this.maxTime = time;
+		this.maxTime = maxTime;
 	}
 	
-	public Player getPlayer() {
+	public String getPlayer() {
 		return player;
 	}
 	
@@ -54,7 +53,7 @@ public class Advertisement {
 		return maxTime;
 	}
 	
-	public void setPlayer(Player player) {
+	public void setPlayer(String player) {
 		this.player = player;
 	}
 	

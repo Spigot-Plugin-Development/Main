@@ -3,7 +3,6 @@ package AIO;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,38 +22,34 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Advertisements implements Listener, CommandExecutor {
-
 	private aio plugin;
 	
 	BossBar bossBar;
 	
-	List<Player> creatingAds = new ArrayList<Player>();
-	List<Player> namingAds = new ArrayList<Player>();
-	List<Advertisement> createdAds = new ArrayList<Advertisement>();
+	List<Player> creatingAds = new ArrayList<>();
+	List<Player> namingAds = new ArrayList<>();
+	List<Advertisement> createdAds = new ArrayList<>();
 	
-	List<Advertisement> playerAd = new ArrayList<Advertisement>();
-	List<Advertisement> serverAd = new ArrayList<Advertisement>();
+	List<Advertisement> playerAd = new ArrayList<>();
+	List<Advertisement> serverAd = new ArrayList<>();
 
 	List<Advertisement> reportedAds = new ArrayList<>();
 	
 	Advertisements(aio plugin) {
 		this.plugin = plugin;
-
 		Bukkit.getPluginManager().registerEvents(this, plugin);
-		
-		serverAd.add(new Advertisement(null, "&aAdvertise your shop: &b/ad create", BarColor.WHITE, BarStyle.SOLID, 60.0));
-		serverAd.add(new Advertisement(null, "&aCheck out server news: &b/news", BarColor.WHITE, BarStyle.SOLID, 60.0));
-		serverAd.add(new Advertisement(null, "&aGet lava by right clicking &5Obsidian &bwith a &7bucket&b!", BarColor.WHITE, BarStyle.SOLID, 60.0));
 		Bukkit.getPluginCommand("advertisement").setExecutor(this);
 		
+		serverAd.add(new Advertisement(null, "&aAdvertise your shop: &b/ad create", BarColor.WHITE, BarStyle.SOLID, 60.0d, 60.0d));
+
 		bossBar = Bukkit.createBossBar("Loading", BarColor.BLUE, BarStyle.SOLID);
 		bossBar.setProgress(1.0);
 		bossBar.setVisible(true);
@@ -96,12 +91,15 @@ public class Advertisements implements Listener, CommandExecutor {
 			public void callback(ResultSet result) {
 				try {
 					while (result.next()) {
-						Advertisement ad = new Advertisement(plugin.getServer().getPlayer(result.getString("minecraft_ad_player")), result.getString("minecraft_ad_text"), Convert.StringToColor(result.getString("minecraft_ad_color")), Convert.StringToStyle(result.getString("minecraft_ad_style")), result.getDouble("minecraft_ad_time"));
-						ad.setMaxTime(result.getDouble("minecraft_ad_maxtime"));
+						Advertisement ad = new Advertisement(result.getString("minecraft_ad_player"), result.getString("minecraft_ad_text"), Convert.StringToColor(result.getString("minecraft_ad_color")), Convert.StringToStyle(result.getString("minecraft_ad_style")), result.getDouble("minecraft_ad_time"), result.getDouble("minecraft_ad_maxtime"));
 						if (result.getBoolean("minecraft_ad_reported")) {
 							reportedAds.add(ad);
 						} else {
-							playerAd.add(ad);
+							if (ad.getPlayer().equals("")) {
+								serverAd.add(ad);
+							} else {
+								playerAd.add(ad);
+							}
 						}
 					}
 				} catch (Exception e) {
@@ -109,24 +107,6 @@ public class Advertisements implements Listener, CommandExecutor {
 				}
 			}
 		});
-	}
-
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(command.getName().equalsIgnoreCase("ad")) {
-			if (sender.hasPermission("aio.ad")) {
-				if (sender instanceof Player) {
-					adCommand((Player) sender, args);
-				}
-			} else {
-				sender.sendMessage("You don't have permission to execute that command.");
-			}
-		}
-		return false;
-	}
-	
-	@EventHandler
-	private void joinEvent(PlayerJoinEvent event) {
-		bossBar.addPlayer(event.getPlayer());
 	}
 	
 	private void cycleServerCommands() {
@@ -170,150 +150,13 @@ public class Advertisements implements Listener, CommandExecutor {
 	
 	private double getQueueLengthUntil(Player player) {
 		double length = 0d;
-		for (Advertisement ad: playerAd) {
+		for (Advertisement ad : playerAd) {
 			if (ad.getPlayer().equals(player)) {
 				return length;
 			}
 			length += ad.getTime();
 		}
 		return length;
-	}
-	
-	public void adCommand(Player sender, String[] command) {
-		if (command.length == 0) {
-			showHelp(sender);
-			return;
-		}
-		if (command[0].equalsIgnoreCase("help")) {
-			showHelp(sender);
-			return;
-		}
-		if (command[0].equalsIgnoreCase("create")) {
-			if (!sender.hasPermission("aio.ad.create")) {
-				sender.sendMessage("You don't have permission for that.");
-				return;
-			}
-			if (getQueueLength() > 600d) {
-				sender.sendMessage(aio.colorize("&c&lError: &bThe queue is too long, please try again later."));
-				return;
-			}
-			if (!playerAd.isEmpty() && playerAd.get(0).getPlayer().equals(sender)) {
-				sender.sendMessage(aio.colorize("&c&lError: &bYour advertisement is currently running."));
-				return;
-			}
-			for (Advertisement ad: playerAd) {
-				if (ad.getPlayer().equals(sender)) {
-					sender.sendMessage(aio.colorize("&c&lError: &bYou already have an advertisement in the queue."));
-					return;
-				}
-			}
-			creatingAds.add(sender);
-			createdAds.add(new Advertisement());
-			createdAds.get(createdAds.size() - 1).setPlayer(sender);
-			showInventory(sender);
-			return;
-		}
-		if (command[0].equalsIgnoreCase("cancel")) {
-			if (command.length == 1) {
-				if (!sender.hasPermission("aio.ad.cancel")) {
-					sender.sendMessage("You don't have permission for that.");
-					return;
-				}
-				for (Advertisement ad : playerAd) {
-					if (ad.getPlayer().equals(sender)) {
-						sender.sendMessage(aio.colorize("&bYou have successfully cancelled your advertisement."));
-						playerAd.remove(ad);
-						return;
-					}
-				}
-				sender.sendMessage(aio.colorize("&c&lError: &bYou don't have an advertisement in the queue."));
-				return;
-			} else {
-				if (!sender.hasPermission("aio.ad.cancel.others")) {
-					sender.sendMessage("You don't have permission for that.");
-					return;
-				}
-				for (Advertisement ad : playerAd) {
-					if (ad.getPlayer().equals(plugin.getServer().getPlayer(command[1]))) {
-						sender.sendMessage(aio.colorize("&bYou have successfully cancelled " + ad.getPlayer() + "'s advertisement."));
-						playerAd.remove(ad);
-						return;
-					}
-				}
-				sender.sendMessage(aio.colorize("&c&lError: &b " + plugin.getServer().getPlayer(command[1]).getDisplayName() + " doesn't have an advertisement in the queue."));
-				return;
-			}
-		}
-		if (command[0].equalsIgnoreCase("time")) {
-			if (!sender.hasPermission("aio.ad.time")) {
-				sender.sendMessage("You don't have permission for that.");
-				return;
-			}
-			if (!playerAd.isEmpty() && playerAd.get(0).getPlayer().equals(sender)) {
-				sender.sendMessage(aio.colorize("&bYour advertisement is currently running."));
-				return;
-			}
-			if (getQueueLength() == getQueueLengthUntil(sender)) {
-				sender.sendMessage(aio.colorize("&c&lError: &bYou don't have an advertisement in the queue."));
-			} else {
-				sender.sendMessage(aio.colorize("&bThere are approximately " + (int)getQueueLengthUntil(sender) + " seconds until your advertisement appears."));
-			}
-			return;
-		}
-		if (command[0].equalsIgnoreCase("report")) {
-			if (!sender.hasPermission("aio.ad.report")) {
-				sender.sendMessage("You don't have permission for that.");
-				return;
-			}
-			if (playerAd.isEmpty()) {
-				sender.sendMessage("You can't report server ads.");
-				return;
-			}
-			if (reportedAds.contains(playerAd.get(0))) {
-				sender.sendMessage("This ad has already been reported.");
-				return;
-			} else {
-				reportedAds.add(playerAd.get(0));
-				plugin.sqlconnector.update("INSERT INTO minecraft_ad (minecraft_ad_player, minecraft_ad_color, minecraft_ad_style, minecraft_ad_text, minecraft_ad_time, minecraft_ad_maxtime, minecraft_ad_reported) VALUES (" +
-						"'" + playerAd.get(0).getPlayer().getName() + "', " +
-						"'" + Convert.ColorToString(playerAd.get(0).getColor()) + "', " +
-						"'" + Convert.StyleToString(playerAd.get(0).getStyle()) + "', " +
-						"'" + playerAd.get(0).getText() + "', " +
-						"'" + playerAd.get(0).getTime() + "', " +
-						"'" + playerAd.get(0).getMaxTime() + "', " +
-						"'1'" +
-						");", new SQLCallback());
-				sender.sendMessage("You have successfully reported this advertisement.");
-				return;
-			}
-		}
-		if (command[0].equalsIgnoreCase("reports")) {
-			if (!sender.hasPermission("aio.ad.reports")) {
-				sender.sendMessage("You don't have permission for that.");
-				return;
-			}
-			if (reportedAds.isEmpty()) {
-				sender.sendMessage("There are no reported advertisements.");
-				return;
-			}
-			if (command.length > 2) {
-				if (command[1].equalsIgnoreCase("clear")) {
-					if (reportedAds.size() > Integer.parseInt(command[2])) {
-						plugin.sqlconnector.update("DELETE FROM minecraft_ad WHERE minecraft_ad_reported = '1' AND minecraft_ad_player ='" + reportedAds.get(Integer.parseInt(command[2])).getPlayer().getName() + "' AND minecraft_ad_text ='" + reportedAds.get(Integer.parseInt(command[2])).getText() + "';", new SQLCallback());
-						reportedAds.remove(Integer.parseInt(command[2]));
-						return;
-					}
-				}
-			}
-			for (int i = 0; i < reportedAds.size(); i++) {
-				sender.sendMessage("Reported ad #" + i + ": <" + reportedAds.get(i).getPlayer().getName() + "> :" + reportedAds.get(i).getText());
-			}
-			return;
-		}
-		/*
-		 * edit
-		 */
-		showHelp(sender);
 	}
 	
 	public void removeBar() {
@@ -523,13 +366,172 @@ public class Advertisements implements Listener, CommandExecutor {
 			inventory.setItem(51, sec);
 		}
 	}
+
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if(command.getName().equalsIgnoreCase("ad")) {
+			if (!sender.hasPermission("aio.ad")) {
+				sender.sendMessage("You don't have permission to execute that command.");
+				return false;
+			}
+			if (!(sender instanceof Player)) {
+				sender.sendMessage("Only players can execute this command.");
+				return false;
+			}
+			if (args.length == 0) {
+				showHelp((Player)sender);
+				return false;
+			}
+			if (args[0].equalsIgnoreCase("help")) {
+				showHelp((Player)sender);
+				return false;
+			}
+			if (args[0].equalsIgnoreCase("create")) {
+				if (!sender.hasPermission("aio.ad.create")) {
+					sender.sendMessage("You don't have permission for that.");
+					return false;
+				}
+				if (getQueueLength() > 600d) {
+					sender.sendMessage(aio.colorize("&c&lError: &bThe queue is too long, please try again later."));
+					return false;
+				}
+				if (!playerAd.isEmpty() && playerAd.get(0).getPlayer().equals(sender)) {
+					sender.sendMessage(aio.colorize("&c&lError: &bYour advertisement is currently running."));
+					return false;
+				}
+				for (Advertisement ad: playerAd) {
+					if (ad.getPlayer().equals(sender)) {
+						sender.sendMessage(aio.colorize("&c&lError: &bYou already have an advertisement in the queue."));
+						return false;
+					}
+				}
+				creatingAds.add((Player)sender);
+				createdAds.add(new Advertisement());
+				createdAds.get(createdAds.size() - 1).setPlayer(((Player)sender).getName());
+				showInventory((Player)sender);
+				return false;
+			}
+			if (args[0].equalsIgnoreCase("cancel")) {
+				if (args.length == 1) {
+					if (!sender.hasPermission("aio.ad.cancel")) {
+						sender.sendMessage("You don't have permission for that.");
+						return false;
+					}
+					for (Advertisement ad : playerAd) {
+						if (ad.getPlayer().equals(sender)) {
+							sender.sendMessage(aio.colorize("&bYou have successfully cancelled your advertisement."));
+							playerAd.remove(ad);
+							return false;
+						}
+					}
+					sender.sendMessage(aio.colorize("&c&lError: &bYou don't have an advertisement in the queue."));
+					return false;
+				} else {
+					if (!sender.hasPermission("aio.ad.cancel.others")) {
+						sender.sendMessage("You don't have permission for that.");
+						return false;
+					}
+					for (Advertisement ad : playerAd) {
+						if (ad.getPlayer().equals(plugin.getServer().getPlayer(args[1]))) {
+							sender.sendMessage(aio.colorize("&bYou have successfully cancelled " + ad.getPlayer() + "'s advertisement."));
+							playerAd.remove(ad);
+							return false;
+						}
+					}
+					sender.sendMessage(aio.colorize("&c&lError: &b " + plugin.getServer().getPlayer(args[1]).getDisplayName() + " doesn't have an advertisement in the queue."));
+					return false;
+				}
+			}
+			if (args[0].equalsIgnoreCase("time")) {
+				if (!sender.hasPermission("aio.ad.time")) {
+					sender.sendMessage("You don't have permission for that.");
+					return false;
+				}
+				if (!playerAd.isEmpty() && playerAd.get(0).getPlayer().equals(sender)) {
+					sender.sendMessage(aio.colorize("&bYour advertisement is currently running."));
+					return false;
+				}
+				if (getQueueLength() == getQueueLengthUntil((Player)sender)) {
+					sender.sendMessage(aio.colorize("&c&lError: &bYou don't have an advertisement in the queue."));
+				} else {
+					sender.sendMessage(aio.colorize("&bThere are approximately " + (int)getQueueLengthUntil((Player)sender) + " seconds until your advertisement appears."));
+				}
+				return false;
+			}
+			if (args[0].equalsIgnoreCase("report")) {
+				if (!sender.hasPermission("aio.ad.report")) {
+					sender.sendMessage("You don't have permission for that.");
+					return false;
+				}
+				if (playerAd.isEmpty()) {
+					sender.sendMessage("You can't report server ads.");
+					return false;
+				}
+				if (reportedAds.contains(playerAd.get(0))) {
+					sender.sendMessage("This ad has already been reported.");
+					return false;
+				} else {
+					reportedAds.add(playerAd.get(0));
+					plugin.sqlconnector.update("INSERT INTO minecraft_ad (minecraft_ad_player, minecraft_ad_color, minecraft_ad_style, minecraft_ad_text, minecraft_ad_time, minecraft_ad_maxtime, minecraft_ad_reported) VALUES (" +
+							"'" + playerAd.get(0).getPlayer() + "', " +
+							"'" + Convert.ColorToString(playerAd.get(0).getColor()) + "', " +
+							"'" + Convert.StyleToString(playerAd.get(0).getStyle()) + "', " +
+							"'" + playerAd.get(0).getText() + "', " +
+							"'" + playerAd.get(0).getTime() + "', " +
+							"'" + playerAd.get(0).getMaxTime() + "', " +
+							"'1'" +
+							");", new SQLCallback());
+					sender.sendMessage("You have successfully reported this advertisement.");
+					return false;
+				}
+			}
+			if (args[0].equalsIgnoreCase("reports")) {
+				if (!sender.hasPermission("aio.ad.reports")) {
+					sender.sendMessage("You don't have permission for that.");
+					return false;
+				}
+				if (reportedAds.isEmpty()) {
+					sender.sendMessage("There are no reported advertisements.");
+					return false;
+				}
+				if (args.length > 2) {
+					if (args[1].equalsIgnoreCase("clear")) {
+						if (reportedAds.size() > Integer.parseInt(args[2])) {
+							plugin.sqlconnector.update("DELETE FROM minecraft_ad WHERE minecraft_ad_reported = '1' AND minecraft_ad_player ='" + reportedAds.get(Integer.parseInt(args[2])).getPlayer() + "' AND minecraft_ad_text ='" + reportedAds.get(Integer.parseInt(args[2])).getText() + "';", new SQLCallback());
+							reportedAds.remove(Integer.parseInt(args[2]));
+							return false;
+						}
+					}
+				}
+				for (int i = 0; i < reportedAds.size(); i++) {
+					sender.sendMessage("Reported ad #" + i + ": <" + reportedAds.get(i).getPlayer() + "> :" + reportedAds.get(i).getText());
+				}
+				return false;
+			}
+			showHelp((Player)sender);
+		}
+		return false;
+	}
+
+	@EventHandler
+	private void joinEvent(PlayerJoinEvent event) {
+		bossBar.addPlayer(event.getPlayer());
+	}
+
+	@EventHandler
+	private void leaveEvent(PlayerQuitEvent event) {
+		bossBar.removePlayer(event.getPlayer());
+		if (creatingAds.contains(event.getPlayer())) {
+			createdAds.remove(creatingAds.indexOf(event.getPlayer()));
+			creatingAds.remove(event.getPlayer());
+		}
+	}
 	
 	@EventHandler(priority=EventPriority.HIGH)
 	public void playerTabEvent(TabCompleteEvent event) {
 		if (event.getSender() instanceof Player) {
 			if (namingAds.contains((Player)event.getSender())) {
 				if (!createdAds.get(creatingAds.indexOf((Player)event.getSender())).getText().equals("")) {
-					List<String> completions = new ArrayList<String>();
+					List<String> completions = new ArrayList<>();
 					completions.add(createdAds.get(creatingAds.indexOf((Player)event.getSender())).getText());
 					event.setCompletions(completions);
 				}
