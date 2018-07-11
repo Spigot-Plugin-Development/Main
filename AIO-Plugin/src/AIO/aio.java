@@ -71,6 +71,7 @@ public class aio extends JavaPlugin implements Listener {
 	CacheManager cacheManager;
 	TreeFeller treeFeller;
 	Obsidiantolava obsidiantolava;
+	CustomSigns customSigns;
 	MotdManager motdManager;
 
 	private File messageFile;
@@ -131,6 +132,10 @@ public class aio extends JavaPlugin implements Listener {
 		setupPermissions();
 		setupWorldEdit();
 		setupWorldGuard();
+		treeFeller = new TreeFeller(this);
+		obsidiantolava = new Obsidiantolava(this);
+		customSigns = new CustomSigns(this);
+		motdManager = new MotdManager(this);
 	}
 	
 	@Override
@@ -211,12 +216,4 @@ public class aio extends JavaPlugin implements Listener {
 		}
 		return (permission != null);
 	}
-
-	@EventHandler
-	private void signColor(SignChangeEvent event) {
-		for (int i = 0; i < 4; i++) {
-			event.setLine(i, aio.colorize(event.getLine(i)));
-		}
-	}
-	
 }
