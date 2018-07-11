@@ -59,20 +59,6 @@ public class PrisonCell {
         return name;
     }
 
-    public Location getEntranceCorner() {
-        switch (getOrientation()) {
-            case 0: return new Location(getCoordinate1().getWorld(), getCoordinate1().getX(), getCoordinate2().getY(), getCoordinate2().getZ());
-            case 1: return new Location(getCoordinate1().getWorld(), getCoordinate1().getX(), getCoordinate2().getY(), getCoordinate1().getZ());
-            case 2: return new Location(getCoordinate1().getWorld(), getCoordinate2().getX(), getCoordinate2().getY(), getCoordinate1().getZ());
-            case 3: return new Location(getCoordinate1().getWorld(), getCoordinate2().getX(), getCoordinate2().getY(), getCoordinate2().getZ());
-            case 4: return new Location(getCoordinate1().getWorld(), getCoordinate1().getX(), getCoordinate2().getY(), getCoordinate1().getZ());
-            case 5: return new Location(getCoordinate1().getWorld(), getCoordinate2().getX(), getCoordinate2().getY(), getCoordinate1().getZ());
-            case 6: return new Location(getCoordinate1().getWorld(), getCoordinate2().getX(), getCoordinate2().getY(), getCoordinate2().getZ());
-            case 7: return new Location(getCoordinate1().getWorld(), getCoordinate1().getX(), getCoordinate2().getY(), getCoordinate2().getZ());
-        }
-        return null;
-    }
-
     public void setOwner(String owner) {
         this.owner = owner;
     }

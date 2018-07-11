@@ -111,6 +111,28 @@ public class PrisonCells implements Listener, CommandExecutor {
         return key;
     }
 
+    public Location getEntranceCorner(PrisonCell cell) {
+        switch (cell.getOrientation()) {
+            case 0:
+                return new Location(cell.getCoordinate1().getWorld(), cell.getCoordinate1().getX(), cell.getCoordinate2().getY(), cell.getCoordinate2().getZ());
+            case 1:
+                return new Location(cell.getCoordinate1().getWorld(), cell.getCoordinate1().getX(), cell.getCoordinate2().getY(), cell.getCoordinate1().getZ());
+            case 2:
+                return new Location(cell.getCoordinate1().getWorld(), cell.getCoordinate2().getX(), cell.getCoordinate2().getY(), cell.getCoordinate1().getZ());
+            case 3:
+                return new Location(cell.getCoordinate1().getWorld(), cell.getCoordinate2().getX(), cell.getCoordinate2().getY(), cell.getCoordinate2().getZ());
+            case 4:
+                return new Location(cell.getCoordinate1().getWorld(), cell.getCoordinate1().getX(), cell.getCoordinate2().getY(), cell.getCoordinate1().getZ());
+            case 5:
+                return new Location(cell.getCoordinate1().getWorld(), cell.getCoordinate2().getX(), cell.getCoordinate2().getY(), cell.getCoordinate1().getZ());
+            case 6:
+                return new Location(cell.getCoordinate1().getWorld(), cell.getCoordinate2().getX(), cell.getCoordinate2().getY(), cell.getCoordinate2().getZ());
+            case 7:
+                return new Location(cell.getCoordinate1().getWorld(), cell.getCoordinate1().getX(), cell.getCoordinate2().getY(), cell.getCoordinate2().getZ());
+        }
+        return null;
+    }
+
     public PrisonCell getCellOf(Player player) {
         for (PrisonCell cell: cells) {
             if (cell.getUuid().equals(player.getUniqueId())) {
@@ -123,35 +145,43 @@ public class PrisonCells implements Listener, CommandExecutor {
     public Location getSign(PrisonCell cell) {
         switch (cell.getOrientation()) {
             case 0:
-                return cell.getEntranceCorner().add(2, 1, 1);
+                return getEntranceCorner(cell).add(2, 1, 1);
             case 1:
-                return cell.getEntranceCorner().add(-1, 1, 2);
+                return getEntranceCorner(cell).add(-1, 1, 2);
             case 2:
-                return cell.getEntranceCorner().add(-2, 1, -1);
+                return getEntranceCorner(cell).add(-2, 1, -1);
             case 3:
-                return cell.getEntranceCorner().add(1, 1, -2);
+                return getEntranceCorner(cell).add(1, 1, -2);
             case 4:
-                return cell.getEntranceCorner().add(2, 1, -1);
+                return getEntranceCorner(cell).add(2, 1, -1);
             case 5:
-                return cell.getEntranceCorner().add(1, 1, 2);
+                return getEntranceCorner(cell).add(1, 1, 2);
             case 6:
-                return cell.getEntranceCorner().add(-2, 1, 1);
+                return getEntranceCorner(cell).add(-2, 1, 1);
             case 7:
-                return cell.getEntranceCorner().add(-1, 1, -2);
+                return getEntranceCorner(cell).add(-1, 1, -2);
         }
         return null;
     }
 
     public BlockFace SignData(PrisonCell cell) {
         switch (cell.getOrientation()) {
-            case 0: return BlockFace.EAST;
-            case 1: return BlockFace.SOUTH;
-            case 2: return BlockFace.WEST;
-            case 3: return BlockFace.NORTH;
-            case 4: return BlockFace.EAST;
-            case 5: return BlockFace.SOUTH;
-            case 6: return BlockFace.WEST;
-            case 7: return BlockFace.NORTH;
+            case 0:
+                return BlockFace.EAST;
+            case 1:
+                return BlockFace.SOUTH;
+            case 2:
+                return BlockFace.WEST;
+            case 3:
+                return BlockFace.NORTH;
+            case 4:
+                return BlockFace.EAST;
+            case 5:
+                return BlockFace.SOUTH;
+            case 6:
+                return BlockFace.WEST;
+            case 7:
+                return BlockFace.NORTH;
         }
         return BlockFace.WEST;
     }
@@ -159,21 +189,21 @@ public class PrisonCells implements Listener, CommandExecutor {
     public Location getDoor(PrisonCell cell) {
         switch (cell.getOrientation()) {
             case 0:
-                return cell.getEntranceCorner().add(1, 0, 0);
+                return getEntranceCorner(cell).add(1, 0, 0);
             case 1:
-                return cell.getEntranceCorner().add(0, 0, 1);
+                return getEntranceCorner(cell).add(0, 0, 1);
             case 2:
-                return cell.getEntranceCorner().add(-1, 0, 0);
+                return getEntranceCorner(cell).add(-1, 0, 0);
             case 3:
-                return cell.getEntranceCorner().add(1, 0, -1);
+                return getEntranceCorner(cell).add(1, 0, -1);
             case 4:
-                return cell.getEntranceCorner().add(1, 0, 0);
+                return getEntranceCorner(cell).add(1, 0, 0);
             case 5:
-                return cell.getEntranceCorner().add(0, 0, 1);
+                return getEntranceCorner(cell).add(0, 0, 1);
             case 6:
-                return cell.getEntranceCorner().add(-1, 0, 0);
+                return getEntranceCorner(cell).add(-1, 0, 0);
             case 7:
-                return cell.getEntranceCorner().add(0, 0, -1);
+                return getEntranceCorner(cell).add(0, 0, -1);
         }
         return null;
     }
@@ -203,14 +233,22 @@ public class PrisonCells implements Listener, CommandExecutor {
     public Location getTP(PrisonCell cell) {
         Location x = cell.getCoordinate1();
         switch (cell.getOrientation()) {
-            case 0: x = cell.getEntranceCorner().add(2.5, 0, 0.5); break;
-            case 1: x = cell.getEntranceCorner().add(0.5, 0, 2.5); break;
-            case 2: x = cell.getEntranceCorner().add(-2.5, 0, 0.5); break;
-            case 3: x = cell.getEntranceCorner().add(0.5, 0, -2.5); break;
-            case 4: x = cell.getEntranceCorner().add(2.5, 0, 0.5); break;
-            case 5: x = cell.getEntranceCorner().add(0.5, 0, 2.5); break;
-            case 6: x = cell.getEntranceCorner().add(-2.5, 0, 0.5); break;
-            case 7: x = cell.getEntranceCorner().add(0.5, 0, -2.5); break;
+            case 0:
+                x = getEntranceCorner(cell).add(2.5, 0, 0.5); break;
+            case 1:
+                x = getEntranceCorner(cell).add(0.5, 0, 2.5); break;
+            case 2:
+                x = getEntranceCorner(cell).add(-2.5, 0, 0.5); break;
+            case 3:
+                x = getEntranceCorner(cell).add(0.5, 0, -2.5); break;
+            case 4:
+                x = getEntranceCorner(cell).add(2.5, 0, 0.5); break;
+            case 5:
+                x = getEntranceCorner(cell).add(0.5, 0, 2.5); break;
+            case 6:
+                x = getEntranceCorner(cell).add(-2.5, 0, 0.5); break;
+            case 7:
+                x = getEntranceCorner(cell).add(0.5, 0, -2.5); break;
         }
         x.setYaw((cell.getOrientation() % 4 - 2) * 90);
         x.setPitch(0.0f);
@@ -353,7 +391,7 @@ public class PrisonCells implements Listener, CommandExecutor {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            cellAbandon.remove((Player) sender);
+                            cellAbandon.remove((Player)sender);
                         }
                     }.runTaskLater(plugin, 200);
                 }
