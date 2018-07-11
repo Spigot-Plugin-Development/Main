@@ -118,5 +118,4 @@ public class WeatherManager implements CommandExecutor {
 
         return false;
     }
-
 }

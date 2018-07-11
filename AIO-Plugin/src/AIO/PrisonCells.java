@@ -1,7 +1,6 @@
 package AIO;
 
 import com.sk89q.worldedit.bukkit.selections.Selection;
-import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;

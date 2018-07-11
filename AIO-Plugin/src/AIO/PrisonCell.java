@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.UUID;
 
 public class PrisonCell {
-
     private String owner;
     private UUID uuid;
     private Date ownedUntil;

@@ -31,25 +31,25 @@ public class SpecialChests implements Listener {
         if (event.getInventory().getType() == InventoryType.CHEST) {
             Block chest = event.getInventory().getLocation().getBlock();
             if (chest.getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN) {
-                Block sign = (Block)chest.getRelative(BlockFace.EAST);
+                Block sign = chest.getRelative(BlockFace.EAST);
                 if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)5) {
                     event.getInventory().clear();
                 }
             }
             if (chest.getRelative(BlockFace.WEST).getType() == Material.WALL_SIGN) {
-                Block sign = (Block)chest.getRelative(BlockFace.WEST);
+                Block sign = chest.getRelative(BlockFace.WEST);
                 if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)4) {
                     event.getInventory().clear();
                 }
             }
             if (chest.getRelative(BlockFace.NORTH).getType() == Material.WALL_SIGN) {
-                Block sign = (Block)chest.getRelative(BlockFace.NORTH);
+                Block sign = chest.getRelative(BlockFace.NORTH);
                 if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)2) {
                     event.getInventory().clear();
                 }
             }
             if (chest.getRelative(BlockFace.SOUTH).getType() == Material.WALL_SIGN) {
-                Block sign = (Block)chest.getRelative(BlockFace.SOUTH);
+                Block sign = chest.getRelative(BlockFace.SOUTH);
                 if (((Sign)sign.getState()).getLines()[1].equals("[Trash]") && sign.getData() == (byte)3) {
                     event.getInventory().clear();
                 }
@@ -68,7 +68,7 @@ public class SpecialChests implements Listener {
         if (event.getInventory().getType() == InventoryType.CHEST) {
             Block chest = event.getInventory().getLocation().getBlock();
             if (chest.getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN) {
-                Block sign = (Block)chest.getRelative(BlockFace.EAST);
+                Block sign = chest.getRelative(BlockFace.EAST);
                 if (((Sign)sign.getState()).getLines()[1].equals("[Free]") && sign.getData() == (byte)5) {
                     Material material = Material.matchMaterial(((Sign)sign.getState()).getLines()[2]);
                     for (int i = 0; i < 27; i++) {
@@ -77,7 +77,7 @@ public class SpecialChests implements Listener {
                 }
             }
             if (chest.getRelative(BlockFace.WEST).getType() == Material.WALL_SIGN) {
-                Block sign = (Block)chest.getRelative(BlockFace.WEST);
+                Block sign = chest.getRelative(BlockFace.WEST);
                 if (((Sign)sign.getState()).getLines()[1].equals("[Free]") && sign.getData() == (byte)4) {
                     Material material = Material.matchMaterial(((Sign)sign.getState()).getLines()[2]);
                     for (int i = 0; i < 27; i++) {
@@ -86,7 +86,7 @@ public class SpecialChests implements Listener {
                 }
             }
             if (chest.getRelative(BlockFace.NORTH).getType() == Material.WALL_SIGN) {
-                Block sign = (Block)chest.getRelative(BlockFace.NORTH);
+                Block sign = chest.getRelative(BlockFace.NORTH);
                 if (((Sign)sign.getState()).getLines()[1].equals("[Free]") && sign.getData() == (byte)2) {
                     Material material = Material.matchMaterial(((Sign)sign.getState()).getLines()[2]);
                     for (int i = 0; i < 27; i++) {
@@ -95,7 +95,7 @@ public class SpecialChests implements Listener {
                 }
             }
             if (chest.getRelative(BlockFace.SOUTH).getType() == Material.WALL_SIGN) {
-                Block sign = (Block)chest.getRelative(BlockFace.SOUTH);
+                Block sign = chest.getRelative(BlockFace.SOUTH);
                 if (((Sign)sign.getState()).getLines()[1].equals("[Free]") && sign.getData() == (byte)3) {
                     Material material = Material.matchMaterial(((Sign)sign.getState()).getLines()[2]);
                     for (int i = 0; i < 27; i++) {

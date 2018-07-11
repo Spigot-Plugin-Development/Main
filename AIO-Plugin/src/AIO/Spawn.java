@@ -23,11 +23,6 @@ public class Spawn implements Listener, CommandExecutor {
         spawnLocation = Convert.StringToLocation(plugin.getConfig().getString("spawn"));
     }
 
-    @EventHandler
-    private void playerDeath(PlayerRespawnEvent event) {
-        event.setRespawnLocation(spawnLocation);
-    }
-
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("spawn")) {
             if (sender instanceof Player) {
@@ -64,5 +59,10 @@ public class Spawn implements Listener, CommandExecutor {
             }
         }
         return false;
+    }
+
+    @EventHandler
+    private void playerDeath(PlayerRespawnEvent event) {
+        event.setRespawnLocation(spawnLocation);
     }
 }

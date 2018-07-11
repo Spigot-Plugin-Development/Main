@@ -15,7 +15,7 @@ import java.util.List;
 public class GodManager implements Listener, CommandExecutor {
     private aio plugin;
 
-    List<Player> godPlayers = new ArrayList<Player>();
+    List<Player> godPlayers = new ArrayList<>();
 
     GodManager(aio plugin) {
         this.plugin = plugin;
@@ -55,20 +55,10 @@ public class GodManager implements Listener, CommandExecutor {
         player.setFireTicks(0);
     }
 
-    @EventHandler
-    private void playerHarm(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player) {
-            if (isGod((Player)event.getEntity())) {
-                event.setCancelled(true);
-                maxPlayer((Player)event.getEntity());
-            }
-        }
-    }
-
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("god")) {
             if (sender instanceof Player) {
-                if (!((Player)sender).hasPermission("aio.god")) {
+                if (!sender.hasPermission("aio.god")) {
                     sender.sendMessage("You don't have permission to execute that command.");
                     return false;
                 }
@@ -91,7 +81,7 @@ public class GodManager implements Listener, CommandExecutor {
                     }
                 }
 
-                if (!((Player)sender).hasPermission("aio.god.others")) {
+                if (!sender.hasPermission("aio.god.others")) {
                     sender.sendMessage("You don't have permission to change god mode for other players.");
                     return false;
                 }
@@ -188,5 +178,17 @@ public class GodManager implements Listener, CommandExecutor {
             }
         }
         return false;
+    }
+
+    @EventHandler
+    private void playerHarm(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+        if (!isGod((Player)event.getEntity())) {
+            return;
+        }
+        event.setCancelled(true);
+        maxPlayer((Player)event.getEntity());
     }
 }

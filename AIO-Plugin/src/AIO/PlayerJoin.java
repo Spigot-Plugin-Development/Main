@@ -1,7 +1,6 @@
 package AIO;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -16,8 +15,8 @@ public class PlayerJoin implements Listener {
 	private aio plugin;
 	
 	PlayerJoin(aio plugin) {
+		this.plugin = plugin;
         Bukkit.getPluginManager().registerEvents(this, plugin);
-	    this.plugin = plugin;
 	}
 	
 	@EventHandler

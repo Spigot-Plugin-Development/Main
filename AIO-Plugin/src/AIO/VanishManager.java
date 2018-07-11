@@ -14,7 +14,7 @@ import java.util.List;
 public class VanishManager implements Listener, CommandExecutor {
     private aio plugin;
 
-    List<Player> a = new ArrayList<Player>();
+    List<Player> a = new ArrayList<>();
 
     VanishManager(aio plugin) {
         this.plugin = plugin;

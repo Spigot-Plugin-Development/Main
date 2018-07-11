@@ -9,7 +9,7 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.map.MinecraftFont;
 
-public class Map implements Listener{
+public class Map implements Listener {
 
 	@EventHandler
 	public void onInitMap(MapInitializeEvent event) {

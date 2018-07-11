@@ -93,10 +93,27 @@ public class Lottery implements Listener,CommandExecutor {
         });
     }
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        if (prizes.containsKey(event.getPlayer().getUniqueId())) {
-            event.getPlayer().sendMessage("You have unclaimed rewards from lottery! /lot claim");
+    public void buyTicket(Player player, int amount) {
+        if (tickets.containsKey(player.getUniqueId())) {
+            tickets.replace(player.getUniqueId(), ticketCount(player.getUniqueId()) + amount);
+        } else {
+            tickets.put(player.getUniqueId(), amount);
+        }
+    }
+
+    public int totalTickets() {
+        count = 0;
+        tickets.forEach((uuid, ticketCount) -> {
+            count += ticketCount;
+        });
+        return count;
+    }
+
+    public int ticketCount(UUID uuid) {
+        if (tickets.containsKey(uuid)) {
+            return tickets.get(uuid);
+        } else {
+            return 0;
         }
     }
 
@@ -170,27 +187,10 @@ public class Lottery implements Listener,CommandExecutor {
         return false;
     }
 
-    public void buyTicket(Player player, int amount) {
-        if (tickets.containsKey(player.getUniqueId())) {
-            tickets.replace(player.getUniqueId(), ticketCount(player.getUniqueId()) + amount);
-        } else {
-            tickets.put(player.getUniqueId(), amount);
-        }
-    }
-
-    public int totalTickets() {
-        count = 0;
-        tickets.forEach((uuid, ticketCount) -> {
-            count += ticketCount;
-        });
-        return count;
-    }
-
-    public int ticketCount(UUID uuid) {
-        if (tickets.containsKey(uuid)) {
-            return tickets.get(uuid);
-        } else {
-            return 0;
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        if (prizes.containsKey(event.getPlayer().getUniqueId())) {
+            event.getPlayer().sendMessage("You have unclaimed rewards from lottery! /lot claim");
         }
     }
 }

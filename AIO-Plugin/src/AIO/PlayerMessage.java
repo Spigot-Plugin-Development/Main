@@ -14,17 +14,17 @@ public class PlayerMessage implements Listener {
 
 	private List<Player> mutedPlayers = new ArrayList<>();
 
+    PlayerMessage(aio plugin) {
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+        this.plugin = plugin;
+    }
+
 	public void mutePlayer(Player player) {
 		mutedPlayers.add(player);
 	}
 
 	public void unmutePlayer(Player player) {
 		mutedPlayers.remove(player);
-	}
-	
-	PlayerMessage(aio plugin) {
-		Bukkit.getPluginManager().registerEvents(this, plugin);
-		this.plugin = plugin;
 	}
 	
 	@EventHandler

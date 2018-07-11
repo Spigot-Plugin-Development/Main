@@ -9,12 +9,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.Date;
 
 public class PlayerLeave implements Listener {
-	
 	private aio plugin;
 	
 	PlayerLeave(aio plugin) {
-		Bukkit.getPluginManager().registerEvents(this, plugin);
 		this.plugin = plugin;
+		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 
 	@EventHandler

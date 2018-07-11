@@ -162,5 +162,4 @@ public class GamemodeManager implements CommandExecutor {
 
         return false;
     }
-
 }

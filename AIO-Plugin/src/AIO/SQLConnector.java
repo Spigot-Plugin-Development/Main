@@ -1,6 +1,5 @@
 package AIO;
 
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.*;

@@ -11,12 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
 
 public class PrivateMessage implements Listener, CommandExecutor {
     private aio plugin;
 
-	private Map<String, String> replyList = new HashMap<String, String>();
+    private Map<String, String> replyList = new HashMap<>();
 	
 	PrivateMessage(aio plugin) {
 		this.plugin = plugin;
@@ -25,15 +24,8 @@ public class PrivateMessage implements Listener, CommandExecutor {
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
 
-	@EventHandler
-	public void onLeave(PlayerQuitEvent event) {
-		if(replyList.containsKey(event.getPlayer().getName())) {
-			replyList.remove(event.getPlayer().getName());
-		}
-	}
-
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(cmd.getName().equalsIgnoreCase("msg")) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if(command.getName().equalsIgnoreCase("msg")) {
             if(sender instanceof Player) {
                 Player player = (Player)sender;
                 if(!player.hasPermission("aio.msg")) {
@@ -69,7 +61,7 @@ public class PrivateMessage implements Listener, CommandExecutor {
             }
         }
 
-        if(cmd.getName().equalsIgnoreCase("reply")) {
+        if(command.getName().equalsIgnoreCase("reply")) {
             if(sender instanceof Player) {
                 Player player = (Player)sender;
                 if(!player.hasPermission("aio.reply")) {
@@ -97,5 +89,11 @@ public class PrivateMessage implements Listener, CommandExecutor {
 
         return false;
     }
-	
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent event) {
+        if(replyList.containsKey(event.getPlayer().getName())) {
+            replyList.remove(event.getPlayer().getName());
+        }
+    }
 }
