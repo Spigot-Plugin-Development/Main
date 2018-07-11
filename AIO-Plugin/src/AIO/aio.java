@@ -60,6 +60,7 @@ public class aio extends JavaPlugin {
 	Obsidiantolava obsidiantolava;
 	CustomSigns customSigns;
 	MotdManager motdManager;
+	BanManager banManager;
 
 	private File messageFile;
 	private FileConfiguration messageConfig;
@@ -122,6 +123,7 @@ public class aio extends JavaPlugin {
 		obsidiantolava = new Obsidiantolava(this);
 		customSigns = new CustomSigns(this);
 		motdManager = new MotdManager(this);
+		banManager = new BanManager(this);
 	}
 	
 	@Override
