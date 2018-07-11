@@ -8,8 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class CacheManager {
-
-    aio plugin;
+    private aio plugin;
 
     Map<UUID, PlayerInfo> cachedPlayers = new HashMap<>();
 
@@ -28,7 +27,6 @@ public class CacheManager {
 
     public void addPlayer(PlayerInfo info) {
         cachedPlayers.put(info.uuid, info);
-        System.out.println(info.uuid.toString());
     }
 
     public boolean containsPlayer(UUID uuid) {
@@ -76,6 +74,6 @@ public class CacheManager {
                 "minecraft_player_nick = '" + info.nick + "'," +
                 "minecraft_player_balance = '" + info.balance + "'," +
                 "minecraft_player_warnings = '" + info.warnings + "'" +
-                " WHERE minecraft_player_UUID = '" + info.uuid.toString() + "';", new SQLCallback() {});
+                " WHERE minecraft_player_UUID = '" + info.uuid.toString() + "';", new SQLCallback());
     }
 }
