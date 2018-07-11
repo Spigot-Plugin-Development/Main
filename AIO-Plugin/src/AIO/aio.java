@@ -69,6 +69,7 @@ public class aio extends JavaPlugin implements Listener {
 	FreezeManager freezeManager;
 
 	CacheManager cacheManager;
+	TreeFeller treeFeller;
 
 	private File messageFile;
 	private FileConfiguration messageConfig;
@@ -220,26 +221,6 @@ public class aio extends JavaPlugin implements Listener {
 	private void signColor(SignChangeEvent event) {
 		for (int i = 0; i < 4; i++) {
 			event.setLine(i, aio.colorize(event.getLine(i)));
-		}
-	}
-	
-	@EventHandler
-	private void treeFeller(BlockBreakEvent event) {
-		if (event.getPlayer().getInventory().getItem(event.getPlayer().getInventory().getHeldItemSlot()) == null) {
-			return;
-		}
-		if (event.getPlayer().getInventory().getItem(event.getPlayer().getInventory().getHeldItemSlot()).getType() != Material.DIAMOND_AXE) {
-			return;
-		}
-		if (event.getBlock().getType() != Material.LOG && event.getBlock().getType() != Material.LOG_2) {
-			return;
-		}
-		int i = 0;
-		while (event.getBlock().getRelative(0, i, 0).getType() == event.getBlock().getType() && i < 32) {
-			i++;
-		}
-		for (int j = 0; j < i; j++) {
-			event.getBlock().getRelative(0, j, 0).breakNaturally(event.getPlayer().getInventory().getItem(event.getPlayer().getInventory().getHeldItemSlot()));
 		}
 	}
 	

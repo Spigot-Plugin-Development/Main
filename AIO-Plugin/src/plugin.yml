@@ -126,3 +126,4 @@ commands:
     key:
     balancetop:
         aliases: [baltop]
+    axe:
