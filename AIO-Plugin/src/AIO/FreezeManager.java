@@ -18,7 +18,7 @@ import java.util.List;
 public class FreezeManager implements Listener, CommandExecutor {
     private aio plugin;
 
-    List<Player> frozenPlayers = new ArrayList<Player>();
+    List<Player> frozenPlayers = new ArrayList<>();
     List<Player> unfrozenPlayers = new ArrayList<>();
 
     FreezeManager(aio plugin) {
@@ -61,34 +61,10 @@ public class FreezeManager implements Listener, CommandExecutor {
         }
     }
 
-    @EventHandler
-    private void playerMove(PlayerMoveEvent event) {
-        if (frozenPlayers.contains(event.getPlayer())) {
-            event.setCancelled(true);
-            event.setTo(event.getFrom());
-            event.getPlayer().sendMessage("You are frozen and can not move.");
-        }
-    }
-
-    @EventHandler
-    private void playerTeleport(PlayerTeleportEvent event) {
-        if (frozenPlayers.contains(event.getPlayer())) {
-            event.setCancelled(true);
-            event.getPlayer().sendMessage("You are frozen and can not teleport.");
-        }
-    }
-
-    @EventHandler
-    private void playerKick(PlayerKickEvent event) {
-        if ((unfrozenPlayers.contains(event.getPlayer()) || frozenPlayers.contains(event.getPlayer())) && event.getReason().equals("Flying is not enabled on this server")) {
-            event.setCancelled(true);
-        }
-    }
-
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("freeze")) {
             if (sender instanceof Player) {
-                if (((Player) sender).hasPermission("aio.freeze")) {
+                if (sender.hasPermission("aio.freeze")) {
                     if (args.length < 1) {
                         sender.sendMessage("Player not given");
                         return false;
@@ -127,5 +103,29 @@ public class FreezeManager implements Listener, CommandExecutor {
             }
         }
         return false;
+    }
+
+    @EventHandler
+    private void playerMove(PlayerMoveEvent event) {
+        if (frozenPlayers.contains(event.getPlayer())) {
+            event.setCancelled(true);
+            event.setTo(event.getFrom());
+            event.getPlayer().sendMessage("You are frozen and can not move.");
+        }
+    }
+
+    @EventHandler
+    private void playerTeleport(PlayerTeleportEvent event) {
+        if (frozenPlayers.contains(event.getPlayer())) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage("You are frozen and can not teleport.");
+        }
+    }
+
+    @EventHandler
+    private void playerKick(PlayerKickEvent event) {
+        if ((unfrozenPlayers.contains(event.getPlayer()) || frozenPlayers.contains(event.getPlayer())) && event.getReason().equals("Flying is not enabled on this server")) {
+            event.setCancelled(true);
+        }
     }
 }
