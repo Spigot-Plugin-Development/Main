@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GodManager implements Listener, CommandExecutor {
-    aio plugin;
+    private aio plugin;
 
     List<Player> godPlayers = new ArrayList<Player>();
 

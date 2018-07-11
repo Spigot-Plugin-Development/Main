@@ -16,7 +16,8 @@ import java.util.*;
 import java.util.Map;
 
 public class Lottery implements Listener,CommandExecutor {
-    aio plugin;
+    private aio plugin;
+
     double untilDraw;
     int count;
     Map<UUID, Integer> tickets = new HashMap<>();

@@ -13,8 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InventoryCheck implements Listener, CommandExecutor {
-
-    aio plugin;
+    private aio plugin;
 
     Map<Player, Player> inventories = new HashMap<>();
     Map<Player, Player> enderchests = new HashMap<>();

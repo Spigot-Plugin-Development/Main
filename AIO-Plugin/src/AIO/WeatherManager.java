@@ -7,8 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class WeatherManager implements CommandExecutor {
-
-    aio plugin;
+    private aio plugin;
 
     WeatherManager(aio plugin) {
         this.plugin = plugin;

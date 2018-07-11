@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Teleport implements CommandExecutor {
-
     private aio plugin;
 
     private HashMap<Player, Player> tpaList = new HashMap<>();

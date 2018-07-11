@@ -10,8 +10,8 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class Holograms implements CommandExecutor {
+    private aio plugin;
 
-    aio plugin;
     Holograms(aio plugin) {
         this.plugin = plugin;
         plugin.getCommand("hologram").setExecutor(this);

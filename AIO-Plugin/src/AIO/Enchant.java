@@ -8,14 +8,12 @@ import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.plugin.Plugin;
 
 public class Enchant implements Listener {
+	private aio plugin;
 	
-	Plugin plugin;
-	
-	Enchant(Plugin plugin) {
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+	Enchant(aio plugin) {
 		this.plugin = plugin;
-		Bukkit.getPluginManager().registerEvents(this, plugin);
 	}
+	
 	public static Enchantment Translate(String str) {
 		if (Enchantment.getByName(str) != null) {
 			return Enchantment.getByName(str);

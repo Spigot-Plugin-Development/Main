@@ -11,8 +11,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 public class Spawn implements Listener, CommandExecutor {
+    private aio plugin;
 
-    aio plugin;
     static Location spawnLocation;
 
     Spawn(aio plugin) {

@@ -23,8 +23,8 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class Warp implements Listener, CommandExecutor {
+    private aio plugin;
 
-	private aio plugin;
 	private File warpfile;
 	private FileConfiguration warpconfig;
 

@@ -14,8 +14,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 public class PrivateMessage implements Listener, CommandExecutor {
+    private aio plugin;
 
-	private aio plugin;
 	private Map<String, String> replyList = new HashMap<String, String>();
 	
 	PrivateMessage(aio plugin) {

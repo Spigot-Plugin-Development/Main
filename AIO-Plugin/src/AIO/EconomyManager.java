@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class EconomyManager implements CommandExecutor {
-	
 	private aio plugin;
 	
 	private HashMap<UUID, Double> balance = new HashMap<>();

@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class PrisonCells implements Listener, CommandExecutor {
-    aio plugin;
+    private aio plugin;
 
     List<PrisonCell> cells = new ArrayList<>();
     List<Player> cellAbandon = new ArrayList<>();

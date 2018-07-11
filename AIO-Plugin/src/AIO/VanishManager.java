@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VanishManager implements Listener, CommandExecutor {
-    aio plugin;
+    private aio plugin;
 
     List<Player> a = new ArrayList<Player>();
 

@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerMessage implements Listener {
-	
-	private aio plugin;
+    private aio plugin;
 
 	private List<Player> mutedPlayers = new ArrayList<>();
 

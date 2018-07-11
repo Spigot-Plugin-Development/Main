@@ -14,7 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EntityRename implements Listener, CommandExecutor {
-    aio plugin;
+    private aio plugin;
+
     Map<Player, String> renaming = new HashMap<>();
 
     EntityRename(aio plugin) {

@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.logging.Level;
 
 public class SQLConnector {
+	private aio plugin;
 	
 	Connection connection;
-	Plugin plugin;
 
-	SQLConnector(Plugin plugin) {
+	SQLConnector(aio plugin) {
 		this.plugin = plugin;
 	}
 	

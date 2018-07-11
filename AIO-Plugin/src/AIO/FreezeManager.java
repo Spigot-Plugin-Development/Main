@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FreezeManager implements Listener, CommandExecutor {
-    aio plugin;
+    private aio plugin;
 
     List<Player> frozenPlayers = new ArrayList<Player>();
     List<Player> unfrozenPlayers = new ArrayList<>();

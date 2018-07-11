@@ -10,8 +10,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 public class GamemodeManager implements CommandExecutor {
-
-    aio plugin;
+    private aio plugin;
 
     GamemodeManager(aio plugin) {
         this.plugin = plugin;

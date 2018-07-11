@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FlyManager implements Listener, CommandExecutor {
-
-    aio plugin;
+    private aio plugin;
 
     List<Player> flyingPlayers = new ArrayList<>();
 

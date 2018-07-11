@@ -13,7 +13,6 @@ import java.util.Date;
 import java.util.UUID;
 
 public class PlayerJoin implements Listener {
-	
 	private aio plugin;
 	
 	PlayerJoin(aio plugin) {

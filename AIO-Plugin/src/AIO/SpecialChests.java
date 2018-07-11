@@ -13,7 +13,6 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 public class SpecialChests implements Listener {
-
     private aio plugin;
 
     SpecialChests(aio plugin) {
