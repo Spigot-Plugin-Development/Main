@@ -59,6 +59,10 @@ commands:
         aliases: [tpyes]
     tpdeny:
         aliases: [tpno]
+    tptoggle:
+    tp:
+    tphere:
+    tpall:
     spawn:
     setspawn:
     test:

@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class Spawn implements Listener, CommandExecutor {
 
     aio plugin;
-    Location spawnLocation;
+    static Location spawnLocation;
 
     Spawn(aio plugin) {
         this.plugin = plugin;

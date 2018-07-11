@@ -38,7 +38,7 @@ public class aio extends JavaPlugin implements Listener {
 	AntiItemlag antiItemlag;
 	PrivateMessage privateMessage;
 	Advertisements advertisements;
-	TeleportA teleporta;
+	Teleport teleport;
 	BannerCreator bannerCreator;
 	AntiSpambot antiSpambot;
 	Warp warp;
@@ -99,7 +99,7 @@ public class aio extends JavaPlugin implements Listener {
 		economyManager = new EconomyManager(this);
 		godManager = new GodManager(this);
 		flyManager = new FlyManager(this);
-		teleporta = new TeleportA(this);
+		teleport = new Teleport(this);
 		privateMessage = new PrivateMessage(this);
 		antiSpambot = new AntiSpambot(this);
 		playerMessage = new PlayerMessage(this);
@@ -160,6 +160,22 @@ public class aio extends JavaPlugin implements Listener {
         return colorize(message);
     }
 
+    static String getPlayerName(Player player) {
+		System.out.println(player.getName() + " : " + player.getDisplayName());
+		if(Bukkit.getServer().getPlayer(player.getUniqueId()).getDisplayName().equalsIgnoreCase("")) {
+			return player.getName();
+		}
+		return colorize(player.getDisplayName());
+	}
+
+    static String[] allButFirst(String[] input) {
+        return Arrays.copyOfRange(input, 1, input.length);
+    }
+
+    static String colorize(String input) {
+        return ChatColor.translateAlternateColorCodes('&', input);
+    }
+
     private void setupWorldEdit() {
 		worldEdit = (WorldEditPlugin)getServer().getPluginManager().getPlugin("WorldEdit");
 	}
@@ -191,14 +207,6 @@ public class aio extends JavaPlugin implements Listener {
 			permission = permissionProvider.getProvider();
 		}
 		return (permission != null);
-	}
-
-	public static String[] allButFirst(String[] input) {
-		return Arrays.copyOfRange(input, 1, input.length);
-	}
-
-	public static String colorize(String input) {
-		return ChatColor.translateAlternateColorCodes('&', input);
 	}
 
 	@EventHandler
