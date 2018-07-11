@@ -17,13 +17,11 @@ import java.util.List;
 import java.util.Random;
 
 public class DropParty implements Listener, CommandExecutor {
-    aio plugin;
+    private aio plugin;
 
     List<ItemStack> items = new ArrayList<>();
     List<Player> dropping = new ArrayList<>();
     boolean paused;
-
-    BukkitRunnable dropTask;
 
     DropParty(aio plugin) {
         this.plugin = plugin;
@@ -78,6 +76,14 @@ public class DropParty implements Listener, CommandExecutor {
                     if (args[0].equalsIgnoreCase("pause")) {
                         if (sender.hasPermission("aio.dropparty.pause")) {
                             paused = true;
+                        } else {
+                            sender.sendMessage("You don't have permission for that.");
+                        }
+                    }
+
+                    if (args[0].equalsIgnoreCase("continue") || args[0].equalsIgnoreCase("resume")) {
+                        if (sender.hasPermission("aio.dropparty.resume")) {
+                            paused = false;
                         }
                     }
                 } else {
