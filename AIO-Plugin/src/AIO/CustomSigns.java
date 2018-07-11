@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
 public class CustomSigns implements Listener {
-    aio plugin;
+    private aio plugin;
 
     CustomSigns(aio plugin) {
         this.plugin = plugin;
