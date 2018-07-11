@@ -73,7 +73,7 @@ public class AuctionManager implements CommandExecutor {
 
     public void startAuction(Double time, Double startBid, ItemStack item, Double increment) {
         auctionedItem = item;
-        highestBid = startBid - increment;
+        highestBid = startBid;
         this.time = time;
         plugin.getServer().broadcastMessage("A new auction is starting!");
         plugin.getServer().broadcastMessage(item.getAmount() + "x " + item.getType().toString());
@@ -93,6 +93,7 @@ public class AuctionManager implements CommandExecutor {
                             sender.sendMessage("Highest bid: $" + highestBid + " by " + plugin.getServer().getPlayer(bidder).getDisplayName());
                         }
                         sender.sendMessage("Time left: " + time);
+                        return false;
                     } else {
                         sender.sendMessage("There is no auction running.");
                         return false;
