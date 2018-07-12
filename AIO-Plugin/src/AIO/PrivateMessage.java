@@ -96,11 +96,9 @@ public class PrivateMessage implements Listener, CommandExecutor {
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
 	    if(replyList.containsKey(event.getPlayer().getName())) {
-	        plugin.getLogger().info("Containts key: " + event.getPlayer().getName());
 	        replyList.remove(event.getPlayer().getName());
         }
         if(replyList.containsValue(event.getPlayer().getName())) {
-            plugin.getLogger().info("Containts value: " + event.getPlayer().getName());
             for(String player : replyList.keySet()) {
                 if(replyList.get(player).equals(event.getPlayer().getName())) {
                     replyList.remove(player);
