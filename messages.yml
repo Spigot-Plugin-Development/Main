@@ -82,3 +82,8 @@ privatemsg:
   usage_reply: "&cUsage: /reply <message>"
   format: "&7[&f{player}&7] &f: &7[&f{target}&7] » &f{message}"
   cant_reply: "&cThere is no one you can reply to."
+gamemode:
+  set: "&aYour gamemode was set to &f{gamemode}&a."
+  set_player: "&aGamemode was set to &f{gamemode}&a for &f{player}&a."
+  usage: "&cUsage: /{gamemode} <playername>"
+  player_not_found: "&cPlayer &f{player}&c was not found."

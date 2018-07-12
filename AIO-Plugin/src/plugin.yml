@@ -14,7 +14,6 @@ commands:
     sun:
     rain:
     storm:
-    gm:
     survival:
         aliases: [s, gms, gm0]
     creative:
@@ -22,7 +21,7 @@ commands:
     adventure:
         aliases: [a, gma, gm2]
     spectator:
-        aliases: [sp, gmsp, gm3]
+        aliases: [gmsp, gm3]
     reply:
         aliases: [r]
     advertisement:
