@@ -61,6 +61,7 @@ public class aio extends JavaPlugin {
 	CustomSigns customSigns;
 	MotdManager motdManager;
 	BanManager banManager;
+	Visit visit;
 
 	private File messageFile;
 	private FileConfiguration messageConfig;
@@ -124,6 +125,7 @@ public class aio extends JavaPlugin {
 		customSigns = new CustomSigns(this);
 		motdManager = new MotdManager(this);
 		banManager = new BanManager(this);
+		visit = new Visit(this);
 	}
 	
 	@Override
