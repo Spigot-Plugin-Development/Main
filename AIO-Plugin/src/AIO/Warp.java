@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Set;
-import java.util.logging.Level;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -46,7 +45,7 @@ public class Warp implements Listener, CommandExecutor {
                 pw.flush();
                 pw.close();
 			} catch(IOException ex) {
-				plugin.getLogger().log(Level.SEVERE, plugin.getMessage("message.file_not_created", "warps.yml"));
+			    plugin.getLogger().severe(plugin.getMessage("message.file_not_created", "warps.yml"));
 				ex.printStackTrace();
 			}
 		}

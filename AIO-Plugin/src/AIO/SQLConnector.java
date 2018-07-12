@@ -3,7 +3,6 @@ package AIO;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.*;
-import java.util.logging.Level;
 
 public class SQLConnector {
 	private aio plugin;
@@ -24,7 +23,7 @@ public class SQLConnector {
 						connection = DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + database, username, password);
 					} catch (Exception e) {
                         e.printStackTrace();
-                        plugin.getLogger().log(Level.SEVERE, "Unable to connect to database! Server is shutting down.");
+                        plugin.getLogger().severe("Unable to connect to database! Server is shutting down.");
                         plugin.getServer().shutdown();
 					}
 				}
@@ -35,7 +34,7 @@ public class SQLConnector {
 				connection = DriverManager.getConnection("jdbc:mysql://" + ipaddress + "/" + database, username, password);
 			} catch (Exception e) {
                 e.printStackTrace();
-                plugin.getLogger().log(Level.SEVERE, "Unable to connect to database! Server is shutting down.");
+                plugin.getLogger().severe("Unable to connect to database! Server is shutting down.");
                 plugin.getServer().shutdown();
 			}
 		}
