@@ -6,7 +6,7 @@ messages:
   no_permission_sign: "&cYou don't have permission to remove this sign."
   player_not_found: "&cPlayer '&f{player}&c' was not found."
   player_only: "Only players can execute this command."
-  file_not_found: "File {file} not found, creating a  new one."
+  file_not_found: "File {file} not found, creating a new one."
   file_not_created: "Unable to create file {file}."
 antiswear:
   prefix: "&7[&fAIO » &cAntiswear&7]&r "
@@ -70,3 +70,9 @@ time:
   time_set_world: "{prefix}&aTime set to {time} in &f{world}&a."
   time_usage: "{prefix}&cUsage: /{time} <world>"
   world_not_found: "{prefix}&cWorld &f{world}&c was not found."
+weather:
+  prefix: "&7[&fAIO » &cWeather&7]&r "
+  set1: "{prefix}&aWeather set to &f{weather}&a!"
+  set2: "{prefix}&aWeather set to &f{weather}&a in &f{world}&a!"
+  world_not_found: "{prefix}&cWorld &f{world}&c was not found."
+  usage: "{prefix}&c Usage: /{weather} <world>"
