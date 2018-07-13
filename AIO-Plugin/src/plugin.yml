@@ -132,3 +132,5 @@ commands:
         aliases: [clag, lag, antilag]
     visit:
         aliases: [pwarp]
+    banknote:
+    withdrawxp:
