@@ -101,19 +101,19 @@ public class Teleport implements CommandExecutor {
         //Send teleport request
         if(command.getName().equalsIgnoreCase("tpa")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                sender.sendMessage(plugin.getMessage("aio.player_only"));
                 return true;
             }
             if(!sender.hasPermission("aio.teleport.tpa")) {
-                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
                 return true;
             }
             if(args.length == 0) {
-                sender.sendMessage(plugin.getMessage("teleport.tpa_usage"));
+                sender.sendMessage(plugin.getMessage("teleport.usage_tpa"));
                 return true;
             }
             if(plugin.getServer().getPlayer(args[0]) == null) {
-                sender.sendMessage(plugin.getMessage("messages.player_not_found", args[0]));
+                sender.sendMessage(plugin.getMessage("aio.player_not_found_1", args[0]));
                 return true;
             }
             if(plugin.getServer().getPlayer(args[0]) == sender) {
@@ -127,19 +127,19 @@ public class Teleport implements CommandExecutor {
         //Send teleport-here request
         if(command.getName().equalsIgnoreCase("tpahere")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                sender.sendMessage(plugin.getMessage("aio.player_only"));
                 return true;
             }
             if(!sender.hasPermission("aio.teleport.tpahere")) {
-                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
                 return true;
             }
             if(args.length == 0) {
-                sender.sendMessage(plugin.getMessage("teleport.tpahere_usage"));
+                sender.sendMessage(plugin.getMessage("teleport.usage_tpahere"));
                 return true;
             }
             if(plugin.getServer().getPlayer(args[0]) == null) {
-                sender.sendMessage(plugin.getMessage("messages.player_not_found", args[0]));
+                sender.sendMessage(plugin.getMessage("aio.player_not_found_1", args[0]));
                 return true;
             }
             if(plugin.getServer().getPlayer(args[0]) == sender) {
@@ -153,11 +153,11 @@ public class Teleport implements CommandExecutor {
         //Accept tpa/tpahere request
         if(command.getName().equalsIgnoreCase("tpaccept")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                sender.sendMessage(plugin.getMessage("aio.player_only"));
                 return true;
             }
             if(!sender.hasPermission("aio.teleport.tpa")) {
-                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
                 return true;
             }
             decide((Player)sender, true);
@@ -167,11 +167,11 @@ public class Teleport implements CommandExecutor {
         //Deny tpa/tpahere request
         if(command.getName().equalsIgnoreCase("tpdeny")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                sender.sendMessage(plugin.getMessage("aio.player_only"));
                 return true;
             }
             if(!sender.hasPermission("aio.teleport.tpa")) {
-                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
                 return true;
             }
             decide((Player)sender, false);
@@ -181,40 +181,40 @@ public class Teleport implements CommandExecutor {
         //Allowing or denying requests to be sent to this player
         if(command.getName().equalsIgnoreCase("tptoggle")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                sender.sendMessage(plugin.getMessage("aio.player_only"));
                 return true;
             }
             Player player = (Player)sender;
             if(!player.hasPermission("aio.teleport.tptoggle")) {
-                player.sendMessage(plugin.getMessage("messages.no_permission"));
+                player.sendMessage(plugin.getMessage("aio.no_permission"));
                 return true;
             }
             if(toggleList.contains(player)) {
                 toggleList.remove(player);
-                player.sendMessage(plugin.getMessage("teleport.toggle_off"));
+                player.sendMessage(plugin.getMessage("teleport.disabled"));
                 return true;
             }
             toggleList.add(player);
-            player.sendMessage(plugin.getMessage("teleport.toggle_on"));
+            player.sendMessage(plugin.getMessage("teleport.enabled"));
             return true;
         }
 
         //Teleport to player without request
         if(command.getName().equalsIgnoreCase("tp")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                sender.sendMessage(plugin.getMessage("aio.player_only"));
                 return true;
             }
             if(!sender.hasPermission("aio.teleport.admin")) {
-                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
                 return true;
             }
             if(args.length == 0) {
-                sender.sendMessage(plugin.getMessage("teleport.tp_usage"));
+                sender.sendMessage(plugin.getMessage("teleport.usage_t"));
                 return true;
             }
             if(plugin.getServer().getPlayer(args[0]) == null) {
-                sender.sendMessage(plugin.getMessage("messages.player_not_found", args[0]));
+                sender.sendMessage(plugin.getMessage("aio.player_not_found_1", args[0]));
                 return true;
             }
             if(plugin.getServer().getPlayer(args[0]) == sender) {
@@ -229,19 +229,19 @@ public class Teleport implements CommandExecutor {
         //Teleport player to self without request
         if(command.getName().equalsIgnoreCase("tphere")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                sender.sendMessage(plugin.getMessage("aio.player_only"));
                 return true;
             }
             if(!sender.hasPermission("aio.teleport.admin")) {
-                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
                 return true;
             }
             if(args.length == 0) {
-                sender.sendMessage(plugin.getMessage("teleport.tphere_usage"));
+                sender.sendMessage(plugin.getMessage("teleport.usage_tphere"));
                 return true;
             }
             if(plugin.getServer().getPlayer(args[0]) == null) {
-                sender.sendMessage(plugin.getMessage("messages.player_not_found", args[0]));
+                sender.sendMessage(plugin.getMessage("aio.player_not_found_1", args[0]));
                 return true;
             }
             if(plugin.getServer().getPlayer(args[0]) == sender) {
@@ -256,15 +256,15 @@ public class Teleport implements CommandExecutor {
         //Teleport all players to self without request
         if(command.getName().equalsIgnoreCase("tpall")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                sender.sendMessage(plugin.getMessage("aio.player_only"));
                 return true;
             }
             if(!sender.hasPermission("aio.teleport.admin")) {
-                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
                 return true;
             }
-            if(plugin.getServer().getOnlinePlayers().size() == 0) {
-                sender.sendMessage(plugin.getMessage("messages.no_online_player"));
+            if(plugin.getServer().getOnlinePlayers().size() == 1) {
+                sender.sendMessage(plugin.getMessage("aio.no_online_player"));
                 return true;
             }
             for(Player player : plugin.getServer().getOnlinePlayers()) {

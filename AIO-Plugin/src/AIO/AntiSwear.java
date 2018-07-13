@@ -31,14 +31,14 @@ public class AntiSwear implements Listener, CommandExecutor {
         File antiswear = new File(plugin.getDataFolder(), "antiswear.yml");
         if (!antiswear.exists()) {
             try {
-                plugin.getLogger().warning(plugin.getMessage("messages.file_not_found", "antiswear.yml"));
+                plugin.getLogger().warning(plugin.getMessage("aio.file_not_found", "antiswear.yml"));
                 antiswear.createNewFile();
                 PrintWriter pw = new PrintWriter(new FileWriter(antiswear));
                 pw.println("antiswear:");
                 pw.flush();
                 pw.close();
             } catch (IOException ex) {
-                plugin.getLogger().severe(plugin.getMessage("messages.file_not_created", "antiswear.yml"));
+                plugin.getLogger().severe(plugin.getMessage("aio.file_not_created", "antiswear.yml"));
                 plugin.getConfig().set("antiswear-enabled", false);
                 plugin.getLogger().info(plugin.getMessage("antiswear.force_disabled"));
                 ex.printStackTrace();
@@ -81,7 +81,7 @@ public class AntiSwear implements Listener, CommandExecutor {
             boolean enabled = plugin.getConfig().getBoolean("antiswear-enabled");
 
             if (!sender.hasPermission("aio.antiswear")) {
-                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
                 return true;
             }
 
