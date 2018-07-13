@@ -97,3 +97,9 @@ godmanager:
   usage_admin_1: "&cUsage: /god <playername>"
   usage_admin_2: "&cUsage: /god <playername> [on | off]"
   usage_admin_3: "&cUsage: /god [on | off] <playername>"
+freezemanager:
+  set: "&a{status} &f{player}&a."
+  usage: "&cUsage: /freeze <playername>"
+  move: "&cYou are frozen and can not move."
+  teleport: "&cYou are frozen and can not teleport."
+  kick_reason: "Flying is not enabled on this server"

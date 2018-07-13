@@ -18,8 +18,8 @@ import java.util.List;
 public class FreezeManager implements Listener, CommandExecutor {
     private aio plugin;
 
-    List<Player> frozenPlayers = new ArrayList<>();
-    List<Player> unfrozenPlayers = new ArrayList<>();
+    private List<Player> frozenPlayers = new ArrayList<>();
+    private List<Player> unfrozenPlayers = new ArrayList<>();
 
     FreezeManager(aio plugin) {
         this.plugin = plugin;
@@ -27,9 +27,7 @@ public class FreezeManager implements Listener, CommandExecutor {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    public boolean isFrozen(Player player) {
-        return frozenPlayers.contains(player);
-    }
+    public boolean isFrozen(Player player) { return frozenPlayers.contains(player); }
 
     public void changeFrozen(Player player) {
         if (isFrozen(player)) {
@@ -40,9 +38,7 @@ public class FreezeManager implements Listener, CommandExecutor {
     }
 
     public void addFrozen(Player player) {
-        if (!isFrozen(player)) {
-            frozenPlayers.add(player);
-        }
+        if (!isFrozen(player)) { frozenPlayers.add(player); }
     }
 
     public void removeFrozen(Player player) {
@@ -63,45 +59,24 @@ public class FreezeManager implements Listener, CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("freeze")) {
-            if (sender instanceof Player) {
-                if (sender.hasPermission("aio.freeze")) {
-                    if (args.length < 1) {
-                        sender.sendMessage("Player not given");
-                        return false;
-                    } else if (args.length > 1) {
-                        sender.sendMessage("Too many arguments.");
-                        return false;
-                    }
-                    if (plugin.getServer().getPlayer(args[0]) != null) {
-                        changeFrozen(plugin.getServer().getPlayer(args[0]));
-                        sender.sendMessage((isFrozen(plugin.getServer().getPlayer(args[0])) ?  "Frozen " : "Unfrozen ") + plugin.getServer().getPlayer(args[0]).getDisplayName());
-                        return false;
-                    } else {
-                        sender.sendMessage("Player not found.");
-                        return false;
-                    }
-                } else {
-                    sender.sendMessage("You don't have permission to execute that command.");
-                    return false;
-                }
-            } else {
-                if (args.length < 1) {
-                    sender.sendMessage("Player not given");
-                    return false;
-                } else if (args.length > 1) {
-                    sender.sendMessage("Too many arguments.");
-                    return false;
-                }
-                if (plugin.getServer().getPlayer(args[0]) != null) {
-                    changeFrozen(plugin.getServer().getPlayer(args[0]));
-                    sender.sendMessage((isFrozen(plugin.getServer().getPlayer(args[0])) ? "Frozen " : "Unfrozen ") + plugin.getServer().getPlayer(args[0]).getDisplayName());
-                    return false;
-                } else {
-                    sender.sendMessage("Player not found.");
-                    return false;
-                }
+            if(sender instanceof Player && !sender.hasPermission("aio.freeze")) {
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
+                return true;
             }
+            if(args.length != 1) {
+                sender.sendMessage(plugin.getMessage("freezemanager.usage"));
+                return true;
+            }
+            if (plugin.getServer().getPlayer(args[0]) == null) {
+                sender.sendMessage(plugin.getMessage("aio.player_not_found_1", args[0]));
+                return true;
+            }
+            changeFrozen(plugin.getServer().getPlayer(args[0]));
+            String status = (isFrozen(plugin.getServer().getPlayer(args[0])) ?  "Frozen" : "Unfrozen");
+            sender.sendMessage(plugin.getMessage("freezemanager.set", status , aio.getPlayerName(plugin.getServer().getPlayer(args[0]))));
+            return true;
         }
+
         return false;
     }
 
@@ -110,7 +85,7 @@ public class FreezeManager implements Listener, CommandExecutor {
         if (frozenPlayers.contains(event.getPlayer())) {
             event.setCancelled(true);
             event.setTo(event.getFrom());
-            event.getPlayer().sendMessage("You are frozen and can not move.");
+            event.getPlayer().sendMessage(plugin.getMessage("freezemanager.move"));
         }
     }
 
@@ -118,13 +93,13 @@ public class FreezeManager implements Listener, CommandExecutor {
     private void playerTeleport(PlayerTeleportEvent event) {
         if (frozenPlayers.contains(event.getPlayer())) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage("You are frozen and can not teleport.");
+            event.getPlayer().sendMessage(plugin.getMessage("freezemanager.teleport"));
         }
     }
 
     @EventHandler
     private void playerKick(PlayerKickEvent event) {
-        if ((unfrozenPlayers.contains(event.getPlayer()) || frozenPlayers.contains(event.getPlayer())) && event.getReason().equals("Flying is not enabled on this server")) {
+        if ((unfrozenPlayers.contains(event.getPlayer()) || frozenPlayers.contains(event.getPlayer())) && event.getReason().equals(plugin.getMessage("freezemanager.kick_reason"))) {
             event.setCancelled(true);
         }
     }
