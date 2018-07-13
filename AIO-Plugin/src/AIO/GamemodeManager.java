@@ -7,10 +7,13 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GamemodeManager implements CommandExecutor {
     private aio plugin;
+
+    private Map<String, GameMode> gamemodeList = new HashMap<>();
 
     GamemodeManager(aio plugin) {
         this.plugin = plugin;
@@ -19,145 +22,38 @@ public class GamemodeManager implements CommandExecutor {
         Bukkit.getServer().getPluginCommand("adventure").setExecutor(this);
         Bukkit.getServer().getPluginCommand("spectator").setExecutor(this);
         Bukkit.getServer().getPluginCommand("gm").setExecutor(this);
+
+        gamemodeList.put("survival", GameMode.SURVIVAL);
+        gamemodeList.put("creative", GameMode.CREATIVE);
+        gamemodeList.put("adventure", GameMode.ADVENTURE);
+        gamemodeList.put("spectator", GameMode.SPECTATOR);
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        //Survival
-        if(command.getName().equalsIgnoreCase("survival")) {
+        if(gamemodeList.containsKey(command.getName())) {
             if(sender instanceof Player) {
-                Player player = (Player)sender;
-                if(!player.hasPermission("aio.gamemode")) {
-                    player.sendMessage("You don't have permission to execute this command.");
-                    return false;
+                if(!sender.hasPermission("aio.gamemode." + command.getName())) {
+                    sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                    return true;
                 }
-                player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage("Gamemode set to survival!");
-                return false;
-            } else {
-                sender.sendMessage("Only players can execute this command.");
-                return false;
-            }
-        }
-
-        //Creative
-        if(command.getName().equalsIgnoreCase("creative")) {
-            if(sender instanceof Player) {
-                Player player = (Player)sender;
-                if(!player.hasPermission("aio.gamemode")) {
-                    player.sendMessage("You don't have permission to execute this command.");
-                    return false;
-                }
-                player.setGameMode(GameMode.CREATIVE);
-                player.sendMessage("Gamemode set to creative!");
-                return false;
-            } else {
-                sender.sendMessage("Only players can execute this command.");
-                return false;
-            }
-        }
-
-        //Adventure
-        if(command.getName().equalsIgnoreCase("adventure")) {
-            if(sender instanceof Player) {
-                Player player = (Player)sender;
-                if(!player.hasPermission("aio.gamemode")) {
-                    player.sendMessage("You don't have permission to execute this command.");
-                    return false;
-                }
-                player.setGameMode(GameMode.ADVENTURE);
-                player.sendMessage("Gamemode set to adventure!");
-                return false;
-            } else {
-                sender.sendMessage("Only players can execute this command.");
-                return false;
-            }
-        }
-
-        //Spectator
-        if(command.getName().equalsIgnoreCase("spectator")) {
-            if(sender instanceof Player) {
-                Player player = (Player)sender;
-                if(!player.hasPermission("aio.gamemode")) {
-                    player.sendMessage("You don't have permission to execute this command.");
-                    return false;
-                }
-                player.setGameMode(GameMode.SPECTATOR);
-                player.sendMessage("Gamemode set to spectator!");
-                return false;
-            } else {
-                sender.sendMessage("Only players can execute this command.");
-                return false;
-            }
-        }
-
-        //Gamemode
-        if(command.getName().equalsIgnoreCase("gm")) {
-            String[] gms = {"survival", "s", "0"};
-            String[] gmc = {"creative", "c", "1"};
-            String[] gma = {"adventure", "a", "2"};
-            String[] gmsp = {"spectator", "sp", "3"};
-
-            if(sender instanceof Player) {
-                Player player = (Player)sender;
-                if(!player.hasPermission("aio.gamemode")) {
-                    player.sendMessage("You don't have permission to execute this command.");
-                    return false;
-                }
-                if(args.length == 1) {
-                    if(Arrays.asList(gms).contains(args[0])) {
-                        player.setGameMode(GameMode.SURVIVAL);
-                        player.sendMessage("Gamemode set to survival!");
-                        return false;
-                    } else if(Arrays.asList(gmc).contains(args[0])) {
-                        player.setGameMode(GameMode.CREATIVE);
-                        player.sendMessage("Gamemode set to creative!");
-                        return false;
-                    } else if(Arrays.asList(gma).contains(args[0])) {
-                        player.setGameMode(GameMode.ADVENTURE);
-                        player.sendMessage("Gamemode set to adventure!");
-                        return false;
-                    } else if(Arrays.asList(gmsp).contains(args[0])) {
-                        player.setGameMode(GameMode.SPECTATOR);
-                        player.sendMessage("Gamemode set to spectator!");
-                        return false;
-                    } else {
-                        sender.sendMessage("Invalid gamemode.");
-                        return false;
-                    }
-                }
-            } else {
-                if(args.length == 2) {
-                    if(Arrays.asList(gms).contains(args[0]) && plugin.getServer().getPlayer(args[1]) != null) {
-                        plugin.getServer().getPlayer(args[1]).setGameMode(GameMode.SURVIVAL);
-                        sender.sendMessage("Gamemode set to survival for " + args[1] + ".");
-                        return false;
-                    } else if(Arrays.asList(gmc).contains(args[0]) && plugin.getServer().getPlayer(args[1]) != null) {
-                        plugin.getServer().getPlayer(args[1]).setGameMode(GameMode.CREATIVE);
-                        sender.sendMessage("Gamemode set to creative for " + args[1] + ".");
-                        return false;
-                    } else if(Arrays.asList(gma).contains(args[0]) && plugin.getServer().getPlayer(args[1]) != null) {
-                        plugin.getServer().getPlayer(args[1]).setGameMode(GameMode.ADVENTURE);
-                        sender.sendMessage("Gamemode set to adventure for " + args[1] + ".");
-                        return false;
-                    } else if(Arrays.asList(gmsp).contains(args[0]) && plugin.getServer().getPlayer(args[1]) != null) {
-                        plugin.getServer().getPlayer(args[1]).setGameMode(GameMode.SPECTATOR);
-                        sender.sendMessage("Gamemode set to spectator for " + args[1] + ".");
-                        return false;
-                    } else if(plugin.getServer().getPlayer(args[1]) == null) {
-                        sender.sendMessage("Player not found.");
-                        return false;
-                    } else {
-                        sender.sendMessage("Invalid gamemode.");
-                        return false;
-                    }
-                } else if(args.length > 2) {
-                    sender.sendMessage("Too many arguments.");
-                    return false;
-                } else {
-                    sender.sendMessage("Not enough arguments");
-                    return false;
+                if(args.length == 0 || !sender.hasPermission("aio.gamemode.admin")) {
+                    ((Player) sender).setGameMode(gamemodeList.get(command.getName()));
+                    sender.sendMessage(plugin.getMessage("gamemode.set", command.getName()));
+                    return true;
                 }
             }
+            if(args.length == 0) {
+                sender.sendMessage(plugin.getMessage("gamemode.usage", command.getName()));
+                return true;
+            }
+            if(plugin.getServer().getPlayer(args[0]) == null) {
+                sender.sendMessage(plugin.getMessage("gamemode.player_not_found", args[0]));
+                return true;
+            }
+            plugin.getServer().getPlayer(args[0]).setGameMode(gamemodeList.get(command.getName()));
+            plugin.getServer().getPlayer(args[0]).sendMessage(plugin.getMessage("gamemode.set", command.getName()));
+            sender.sendMessage(plugin.getMessage("gamemode.set_player", command.getName(), args[0]));
+            return true;
         }
 
         return false;
