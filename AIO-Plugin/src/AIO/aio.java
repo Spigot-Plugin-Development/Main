@@ -61,6 +61,8 @@ public class aio extends JavaPlugin {
 	CustomSigns customSigns;
 	MotdManager motdManager;
 	BanManager banManager;
+	Visit visit;
+	SpecialPapers specialPapers;
 
 	private File messageFile;
 	private FileConfiguration messageConfig;
@@ -124,6 +126,8 @@ public class aio extends JavaPlugin {
 		customSigns = new CustomSigns(this);
 		motdManager = new MotdManager(this);
 		banManager = new BanManager(this);
+		visit = new Visit(this);
+		specialPapers = new SpecialPapers(this);
 	}
 	
 	@Override
