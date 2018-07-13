@@ -21,7 +21,6 @@ public class GamemodeManager implements CommandExecutor {
         Bukkit.getServer().getPluginCommand("creative").setExecutor(this);
         Bukkit.getServer().getPluginCommand("adventure").setExecutor(this);
         Bukkit.getServer().getPluginCommand("spectator").setExecutor(this);
-        Bukkit.getServer().getPluginCommand("gm").setExecutor(this);
 
         gamemodeList.put("survival", GameMode.SURVIVAL);
         gamemodeList.put("creative", GameMode.CREATIVE);
@@ -33,26 +32,26 @@ public class GamemodeManager implements CommandExecutor {
         if(gamemodeList.containsKey(command.getName())) {
             if(sender instanceof Player) {
                 if(!sender.hasPermission("aio.gamemode." + command.getName())) {
-                    sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                    sender.sendMessage(plugin.getMessage("aio.no_permission"));
                     return true;
                 }
                 if(args.length == 0 || !sender.hasPermission("aio.gamemode.admin")) {
                     ((Player) sender).setGameMode(gamemodeList.get(command.getName()));
-                    sender.sendMessage(plugin.getMessage("gamemode.set", command.getName()));
+                    sender.sendMessage(plugin.getMessage("gamemodemanager.set_self", command.getName()));
                     return true;
                 }
             }
             if(args.length == 0) {
-                sender.sendMessage(plugin.getMessage("gamemode.usage", command.getName()));
+                sender.sendMessage(plugin.getMessage("gamemodemanager.usage", command.getName()));
                 return true;
             }
             if(plugin.getServer().getPlayer(args[0]) == null) {
-                sender.sendMessage(plugin.getMessage("gamemode.player_not_found", args[0]));
+                sender.sendMessage(plugin.getMessage("aio.player_not_found_1", args[0]));
                 return true;
             }
             plugin.getServer().getPlayer(args[0]).setGameMode(gamemodeList.get(command.getName()));
-            plugin.getServer().getPlayer(args[0]).sendMessage(plugin.getMessage("gamemode.set", command.getName()));
-            sender.sendMessage(plugin.getMessage("gamemode.set_player", command.getName(), args[0]));
+            plugin.getServer().getPlayer(args[0]).sendMessage(plugin.getMessage("gamemodemanager.set_self", command.getName()));
+            sender.sendMessage(plugin.getMessage("gamemodemanager.set_player", command.getName(), args[0]));
             return true;
         }
 

@@ -39,25 +39,25 @@ public class TimeManager implements CommandExecutor {
         if(timeCommands.containsKey(command.getName())) {
             if(sender instanceof Player) {
                 if(!sender.hasPermission("aio.time")) {
-                    sender.sendMessage(plugin.getMessage("messages.no_permissions"));
+                    sender.sendMessage(plugin.getMessage("aio.no_permission"));
                     return true;
                 }
                 if(args.length == 0) {
                     ((Player) sender).getLocation().getWorld().setTime(timeCommands.get(command.getName()));
-                    sender.sendMessage(plugin.getMessage("time.time_set", command.getName()));
+                    sender.sendMessage(plugin.getMessage("timemanager.set_self", command.getName()));
                     return true;
                 }
             }
             if(args.length == 0) {
-                sender.sendMessage(plugin.getMessage("time.time_usage", command.getName()));
+                sender.sendMessage(plugin.getMessage("timemanager.usage", command.getName()));
                 return true;
             }
             if(plugin.getServer().getWorld(args[0]) == null) {
-                sender.sendMessage(plugin.getMessage("time.world_not_found", args[0]));
+                sender.sendMessage(plugin.getMessage("aio.world_not_found", args[0]));
                 return true;
             } else {
                 plugin.getServer().getWorld(args[0]).setTime(timeCommands.get(command.getName()));
-                sender.sendMessage(plugin.getMessage("time.time_set_world", command.getName(), args[0]));
+                sender.sendMessage(plugin.getMessage("timemanager.set_world", command.getName(), args[0]));
                 return true;
             }
         }

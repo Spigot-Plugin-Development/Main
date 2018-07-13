@@ -29,25 +29,25 @@ public class PrivateMessage implements Listener, CommandExecutor {
 	    //Send private message
         if(command.getName().equalsIgnoreCase("msg")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                sender.sendMessage(plugin.getMessage("aio.player_only"));
                 return true;
             }
             if(!sender.hasPermission("aio.msg")) {
-                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
                 return true;
             }
             if(args.length < 2) {
-                sender.sendMessage(plugin.getMessage("privatemsg.usage_msg"));
+                sender.sendMessage(plugin.getMessage("privatemessage.usage_msg"));
                 return true;
             }
             if(plugin.getServer().getPlayer(args[0]) == null) {
-                sender.sendMessage(plugin.getMessage("messages.player_not_found", args[0]));
+                sender.sendMessage(plugin.getMessage("aio.player_not_found_1", args[0]));
                 return true;
             }
             Player player = (Player)sender;
             Player target = plugin.getServer().getPlayer(args[0]);
             String message = String.join(" ", aio.allButFirst(args));
-            String msg = plugin.getMessage("privatemsg.format", aio.getPlayerName(player), aio.getPlayerName(target), message);
+            String msg = plugin.getMessage("privatemessage.format", aio.getPlayerName(player), aio.getPlayerName(target), message);
             player.sendMessage(msg);
             target.sendMessage(msg);
             if(replyList.containsKey(target.getName())) {
@@ -66,25 +66,25 @@ public class PrivateMessage implements Listener, CommandExecutor {
         //Reply to private message
         if(command.getName().equalsIgnoreCase("reply")) {
             if(!(sender instanceof Player)) {
-                sender.sendMessage(plugin.getMessage("messages.player_only"));
+                sender.sendMessage(plugin.getMessage("aio.player_only"));
                 return true;
             }
             if(!sender.hasPermission("aio.reply")) {
-                sender.sendMessage(plugin.getMessage("messages.no_permission"));
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
                 return true;
             }
             if(!replyList.containsKey(sender.getName()) || plugin.getServer().getPlayer(replyList.get(sender.getName())) == null) {
-                sender.sendMessage(plugin.getMessage("privatemsg.cant_reply"));
+                sender.sendMessage(plugin.getMessage("privatemessage.no_message"));
                 return true;
             }
             if(args.length == 0) {
-                sender.sendMessage(plugin.getMessage("privatemsg.usage_reply"));
+                sender.sendMessage(plugin.getMessage("privatemessage.usage_reply"));
                 return true;
             }
             Player player = (Player)sender;
             Player target = plugin.getServer().getPlayer(replyList.get(player.getName()));
             String message = String.join(" ", args);
-            String msg = plugin.getMessage("privatemsg.format", aio.getPlayerName(player), aio.getPlayerName(target), message);
+            String msg = plugin.getMessage("privatemessage.format", aio.getPlayerName(player), aio.getPlayerName(target), message);
             target.sendMessage(msg);
             player.sendMessage(msg);
             return true;
