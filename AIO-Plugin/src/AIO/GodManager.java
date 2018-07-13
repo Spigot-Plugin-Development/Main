@@ -15,7 +15,7 @@ import java.util.List;
 public class GodManager implements Listener, CommandExecutor {
     private aio plugin;
 
-    List<Player> godPlayers = new ArrayList<>();
+    private List<Player> godPlayers = new ArrayList<>();
 
     GodManager(aio plugin) {
         this.plugin = plugin;
@@ -23,9 +23,7 @@ public class GodManager implements Listener, CommandExecutor {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
-    public boolean isGod(Player player) {
-        return godPlayers.contains(player);
-    }
+    public boolean isGod(Player player) { return godPlayers.contains(player); }
 
     public void changeGod(Player player) {
         if (isGod(player)) {
@@ -43,9 +41,7 @@ public class GodManager implements Listener, CommandExecutor {
     }
 
     public void removeGod(Player player) {
-        if (isGod(player)) {
-            godPlayers.remove(player);
-        }
+        if (isGod(player)) { godPlayers.remove(player); }
     }
 
     private void maxPlayer(Player player) {
@@ -57,137 +53,91 @@ public class GodManager implements Listener, CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("god")) {
-            if (sender instanceof Player) {
-                if (!sender.hasPermission("aio.god")) {
-                    sender.sendMessage("You don't have permission to execute that command.");
-                    return false;
+            if (!sender.hasPermission("aio.god")) {
+                sender.sendMessage(plugin.getMessage("aio.no_permission"));
+                return true;
+            }
+            if (args.length == 0) {
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage(plugin.getMessage("godmanager.usage_admin_1"));
+                    return true;
                 }
-                if (args.length == 0) {
-                    changeGod((Player)sender);
-                    sender.sendMessage("God mode " + (isGod((Player)sender) ? "enabled" : "disabled") + ".");
-                    return false;
+                changeGod((Player)sender);
+                sender.sendMessage(plugin.getMessage("godmanager.set_self", (isGod((Player)sender) ? "enabled" : "disabled")));
+                return true;
+            }
+            if (args.length == 1 && sender instanceof Player) {
+                if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("yes") || args[0].equalsIgnoreCase("y") || args[0].equalsIgnoreCase("true")) {
+                    addGod((Player)sender);
+                    sender.sendMessage(plugin.getMessage("godmanager.set_self", "enabled"));
+                    return true;
                 }
-                if (args.length == 1) {
+                if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("no") || args[0].equalsIgnoreCase("n") || args[0].equalsIgnoreCase("false")) {
+                    removeGod((Player)sender);
+                    sender.sendMessage(plugin.getMessage("godmanager.set_self", "disabled"));
+                    return true;
+                }
+            }
+            if (!sender.hasPermission("aio.god.admin")) {
+                sender.sendMessage(plugin.getMessage("godmanager.usage_player"));
+                return true;
+            }
+            if (args.length == 1) {
+                if (plugin.getServer().getPlayer(args[0]) == null) {
+                    sender.sendMessage(plugin.getMessage("aio.player_not_found_1", args[0]));
+                    return true;
+                }
+                changeGod(plugin.getServer().getPlayer(args[0]));
+                String status = (isGod(plugin.getServer().getPlayer(args[0])) ? "enabled" : "disabled");
+                sender.sendMessage(plugin.getMessage("godmanager.set_player", status, aio.getPlayerName(plugin.getServer().getPlayer(args[0]))));
+                plugin.getServer().getPlayer(args[0]).sendMessage(plugin.getMessage("godmanager.set_self", status));
+                return true;
+            }
+            if (args.length == 2) {
+                if (plugin.getServer().getPlayer(args[0]) != null) {
+                    if (args[1].equalsIgnoreCase("on") || args[1].equalsIgnoreCase("yes") || args[1].equalsIgnoreCase("y") || args[1].equalsIgnoreCase("true")) {
+                        addGod(plugin.getServer().getPlayer(args[0]));
+                        sender.sendMessage(plugin.getMessage("godmanager.set_player", "enabled", aio.getPlayerName(plugin.getServer().getPlayer(args[0]))));
+                        plugin.getServer().getPlayer(args[0]).sendMessage(plugin.getMessage("godmanager.set_self", "enabled"));
+                        return true;
+                    }
+                    if (args[1].equalsIgnoreCase("off") || args[1].equalsIgnoreCase("no") || args[1].equalsIgnoreCase("n") || args[1].equalsIgnoreCase("false")) {
+                        removeGod(plugin.getServer().getPlayer(args[0]));
+                        sender.sendMessage(plugin.getMessage("godmanager.set_player", "disabled", aio.getPlayerName(plugin.getServer().getPlayer(args[0]))));
+                        plugin.getServer().getPlayer(args[0]).sendMessage(plugin.getMessage("godmanager.set_self", "disabled"));
+                        return true;
+                    }
+                    sender.sendMessage(plugin.getMessage("godmanager.usage_admin_2"));
+                    return true;
+                } else if (plugin.getServer().getPlayer(args[1]) != null) {
                     if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("yes") || args[0].equalsIgnoreCase("y") || args[0].equalsIgnoreCase("true")) {
-                        addGod((Player)sender);
-                        sender.sendMessage("God mode enabled.");
-                        return false;
+                        addGod(plugin.getServer().getPlayer(args[1]));
+                        sender.sendMessage(plugin.getMessage("godmanager.set_player", "enabled", aio.getPlayerName(plugin.getServer().getPlayer(args[1]))));
+                        plugin.getServer().getPlayer(args[1]).sendMessage(plugin.getMessage("godmanager.set_self", "enabled"));
+                        return true;
                     }
-
                     if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("no") || args[0].equalsIgnoreCase("n") || args[0].equalsIgnoreCase("false")) {
-                        removeGod((Player)sender);
-                        sender.sendMessage("God mode disabled.");
-                        return false;
+                        removeGod(plugin.getServer().getPlayer(args[1]));
+                        sender.sendMessage(plugin.getMessage("godmanager.set_player", "disabled", aio.getPlayerName(plugin.getServer().getPlayer(args[1]))));
+                        plugin.getServer().getPlayer(args[1]).sendMessage(plugin.getMessage("godmanager.set_self", "disabled"));
+                        return true;
                     }
+                    sender.sendMessage(plugin.getMessage("godmanager.usage_admin_3"));
+                    return true;
+                } else {
+                    sender.sendMessage(plugin.getMessage("aio.player_not_found_2"));
+                    return true;
                 }
-
-                if (!sender.hasPermission("aio.god.others")) {
-                    sender.sendMessage("You don't have permission to change god mode for other players.");
-                    return false;
-                }
-
-                if (args.length == 1) {
-                    if (plugin.getServer().getPlayer(args[0]) != null) {
-                        changeGod(plugin.getServer().getPlayer(args[0]));
-                        sender.sendMessage("God mode enabled for " + plugin.getServer().getPlayer(args[0]).getDisplayName() + ".");
-                        return false;
-                    } else {
-                        sender.sendMessage("Player not found.");
-                        return false;
-                    }
-                }
-
-                if (args.length == 2) {
-                    if (plugin.getServer().getPlayer(args[1]) != null) {
-                        if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("yes") || args[0].equalsIgnoreCase("y") || args[0].equalsIgnoreCase("true")) {
-                            addGod(plugin.getServer().getPlayer(args[1]));
-                            sender.sendMessage("God mode enabled for " + plugin.getServer().getPlayer(args[1]).getDisplayName() + ".");
-                            return false;
-                        }
-
-                        if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("no") || args[0].equalsIgnoreCase("n") || args[0].equalsIgnoreCase("false")) {
-                            removeGod(plugin.getServer().getPlayer(args[1]));
-                            sender.sendMessage("God mode disabled for " + plugin.getServer().getPlayer(args[1]).getDisplayName() + ".");
-                            return false;
-                        }
-                    }
-
-                    if (plugin.getServer().getPlayer(args[0]) != null) {
-                        if (args[1].equalsIgnoreCase("on") || args[1].equalsIgnoreCase("yes") || args[1].equalsIgnoreCase("y") || args[1].equalsIgnoreCase("true")) {
-                            addGod(plugin.getServer().getPlayer(args[0]));
-                            sender.sendMessage("God mode enabled for " + plugin.getServer().getPlayer(args[0]).getDisplayName() + ".");
-                            return false;
-                        }
-
-                        if (args[1].equalsIgnoreCase("off") || args[1].equalsIgnoreCase("no") || args[1].equalsIgnoreCase("n") || args[1].equalsIgnoreCase("false")) {
-                            removeGod(plugin.getServer().getPlayer(args[0]));
-                            sender.sendMessage("God mode disabled for " + plugin.getServer().getPlayer(args[0]).getDisplayName() + ".");
-                            return false;
-                        }
-                    }
-                    sender.sendMessage("Invalid arguments.");
-                    return false;
-                }
-                sender.sendMessage("Too many arguments.");
-                return false;
-            } else {
-                if (args.length == 0) {
-                    sender.sendMessage("No player given.");
-                    return false;
-                }
-                if (args.length == 1) {
-                    if (plugin.getServer().getPlayer(args[0]) != null) {
-                        changeGod(plugin.getServer().getPlayer(args[0]));
-                        sender.sendMessage("God mode " + (isGod(plugin.getServer().getPlayer(args[0])) ? "enabled" : "disabled") + " for " + plugin.getServer().getPlayer(args[0]).getDisplayName() + ".");
-                        return false;
-                    }
-                }
-                if (args.length == 2) {
-                    if (plugin.getServer().getPlayer(args[1]) != null) {
-                        if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("yes") || args[0].equalsIgnoreCase("y") || args[0].equalsIgnoreCase("true")) {
-                            addGod(plugin.getServer().getPlayer(args[1]));
-                            sender.sendMessage("God mode enabled for " + plugin.getServer().getPlayer(args[1]).getDisplayName() + ".");
-                            return false;
-                        }
-
-                        if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("no") || args[0].equalsIgnoreCase("n") || args[0].equalsIgnoreCase("false")) {
-                            removeGod(plugin.getServer().getPlayer(args[1]));
-                            sender.sendMessage("God mode disabled for " + plugin.getServer().getPlayer(args[1]).getDisplayName() + ".");
-                            return false;
-                        }
-                    }
-
-                    if (plugin.getServer().getPlayer(args[0]) != null) {
-                        if (args[1].equalsIgnoreCase("on") || args[1].equalsIgnoreCase("yes") || args[1].equalsIgnoreCase("y") || args[1].equalsIgnoreCase("true")) {
-                            addGod(plugin.getServer().getPlayer(args[0]));
-                            sender.sendMessage("God mode enabled for " + plugin.getServer().getPlayer(args[0]).getDisplayName() + ".");
-                            return false;
-                        }
-
-                        if (args[1].equalsIgnoreCase("off") || args[1].equalsIgnoreCase("no") || args[1].equalsIgnoreCase("n") || args[1].equalsIgnoreCase("false")) {
-                            removeGod(plugin.getServer().getPlayer(args[0]));
-                            sender.sendMessage("God mode disabled for " + plugin.getServer().getPlayer(args[0]).getDisplayName() + ".");
-                            return false;
-                        }
-                    }
-                    sender.sendMessage("Invalid arguments.");
-                    return false;
-                }
-                sender.sendMessage("Too many arguments.");
-                return false;
             }
         }
+
         return false;
     }
 
     @EventHandler
     private void playerHarm(EntityDamageEvent event) {
-        if (!(event.getEntity() instanceof Player)) {
-            return;
-        }
-        if (!isGod((Player)event.getEntity())) {
-            return;
-        }
+        if (!(event.getEntity() instanceof Player)) { return; }
+        if (!isGod((Player)event.getEntity())) { return; }
         event.setCancelled(true);
         maxPlayer((Player)event.getEntity());
     }

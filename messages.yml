@@ -93,7 +93,7 @@ gamemodemanager:
 godmanager:
   set_self: "&aGod mode &f{status}&a."
   set_player: "&aGod mode &f{status}&a for &f{player}&a."
-  uage_player: "&cUsage: /god [on | off]"
+  usage_player: "&cUsage: /god [on | off]"
   usage_admin_1: "&cUsage: /god <playername>"
   usage_admin_2: "&cUsage: /god <playername> [on | off]"
   usage_admin_3: "&cUsage: /god [on | off] <playername>"
