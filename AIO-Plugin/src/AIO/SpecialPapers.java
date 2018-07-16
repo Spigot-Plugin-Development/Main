@@ -101,6 +101,12 @@ public class SpecialPapers implements Listener, CommandExecutor {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.RIGHT_CLICK_AIR) {
             return;
         }
+        if (event.getItem() == null) {
+            return;
+        }
+        if (event.getItem().getType() == null) {
+            return;
+        }
         if (event.getItem().getType() != Material.PAPER) {
             return;
         }
