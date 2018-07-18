@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
@@ -38,6 +39,8 @@ public class Commands implements CommandExecutor {
         plugin.getCommand("rules").setExecutor(this);
         plugin.getCommand("skull").setExecutor(this);
         plugin.getCommand("spawner").setExecutor(this);
+        plugin.getCommand("spawnmob").setExecutor(this);
+        plugin.getCommand("sudo").setExecutor(this);
         plugin.getCommand("tntcannon").setExecutor(this);
         plugin.getCommand("unsafeenchant").setExecutor(this);
         plugin.getCommand("whois").setExecutor(this);
@@ -45,6 +48,27 @@ public class Commands implements CommandExecutor {
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (cmd.getName().equalsIgnoreCase("sudo")) {
+            if (!sender.hasPermission("aio.sudo")) {
+                sender.sendMessage("You don't have permission to execute that command.");
+                return false;
+            }
+            if (args.length < 2) {
+                sender.sendMessage("Usage: /sudo <player> <command/c: message> [args]");
+                return false;
+            }
+            if (plugin.getServer().getPlayer(args[0]) == null) {
+                sender.sendMessage("Player not found.");
+                return false;
+            }
+            if (args[1].equalsIgnoreCase("c:")) {
+                plugin.getServer().getPlayer(args[0]).chat(String.join(" ", aio.allButFirst(aio.allButFirst(args))));
+                return false;
+            } else {
+                plugin.getServer().dispatchCommand(plugin.getServer().getPlayer(args[0]), String.join(" ", aio.allButFirst(args)));
+            }
+        }
+
         if (cmd.getName().equalsIgnoreCase("nightvision")) {
             if (sender instanceof Player) {
                 if (sender.hasPermission("aio.nightvision")) {

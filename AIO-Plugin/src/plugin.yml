@@ -133,3 +133,4 @@ commands:
         aliases: [pwarp]
     banknote:
     withdrawxp:
+    sudo:
