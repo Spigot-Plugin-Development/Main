@@ -63,6 +63,8 @@ public class aio extends JavaPlugin {
 	BanManager banManager;
 	Visit visit;
 	SpecialPapers specialPapers;
+	VoteSystem voteSystem;
+	Coin coin;
 
 	private File messageFile;
 	private FileConfiguration messageConfig;
@@ -128,6 +130,8 @@ public class aio extends JavaPlugin {
 		banManager = new BanManager(this);
 		visit = new Visit(this);
 		specialPapers = new SpecialPapers(this);
+		voteSystem = new VoteSystem(this);
+		coin = new Coin(this);
 	}
 	
 	@Override

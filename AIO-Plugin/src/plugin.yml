@@ -2,7 +2,7 @@ main: AIO.aio
 version: 1.0
 developers: [DaniFoldi, ApocalypseDJ]
 name: All-In-One_Plugin
-depend: [Vault, SuperVanish, WorldEdit, WorldGuard]
+depend: [Vault, SuperVanish, WorldEdit, WorldGuard, Votifier]
 commands:
     kickall:
     kick:

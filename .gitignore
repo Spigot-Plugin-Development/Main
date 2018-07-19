@@ -6,3 +6,4 @@ AIO-Plugin/bin/
 AIO-Plugin/.idea/misc.xml
 AIO-Plugin/.idea
 *.iml
+AIO-Plugin/out
