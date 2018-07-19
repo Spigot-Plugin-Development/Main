@@ -134,3 +134,4 @@ commands:
     banknote:
     withdrawxp:
     sudo:
+    coin:
