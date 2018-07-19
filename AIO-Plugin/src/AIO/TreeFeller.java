@@ -26,7 +26,8 @@ public class TreeFeller implements Listener, CommandExecutor {
     public void giveAxe(Player player) {
         ItemStack axe = new ItemStack(Material.DIAMOND_AXE);
         ItemMeta axeMeta = axe.getItemMeta();
-        axeMeta.setDisplayName(aio.colorize("&7Magic axe"));
+        axeMeta.setDisplayName(aio.colorize("&b&lMagic axe"));
+        axe.setItemMeta(axeMeta);
         net.minecraft.server.v1_12_R1.ItemStack nmsAxe = CraftItemStack.asNMSCopy(axe);
         NBTTagCompound tag = nmsAxe.hasTag() ? nmsAxe.getTag() : new NBTTagCompound();
         tag.setString("axe", "magic");
