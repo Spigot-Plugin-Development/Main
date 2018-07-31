@@ -3,6 +3,7 @@ package AIO;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -10,10 +11,44 @@ import java.util.UUID;
 public class CacheManager {
     private aio plugin;
 
-    Map<UUID, PlayerInfo> cachedPlayers = new HashMap<>();
+    private Map<UUID, PlayerInfo> cachedPlayers = new HashMap<>();
 
     CacheManager(aio plugin) {
         this.plugin = plugin;
+
+        for (Player player: plugin.getServer().getOnlinePlayers()) {
+            UUID uuid = player.getUniqueId();
+            plugin.sqlconnector.query("SELECT * FROM minecraft_player WHERE minecraft_player_UUID = '" + uuid + "';", new SQLCallback() {
+                @Override
+                public void callback(ResultSet result) {
+                    try {
+                        if (result.next()) {
+                            addPlayer(new PlayerInfo(uuid,
+                                    result.getString("minecraft_player_name"),
+                                    result.getTimestamp("minecraft_player_last_join"),
+                                    result.getTimestamp("minecraft_player_last_quit"),
+                                    result.getString("minecraft_player_last_ip"),
+                                    result.getString("minecraft_player_server"),
+                                    Convert.StringToLocation(result.getString("minecraft_player_location")),
+                                    result.getInt("minecraft_player_gamemode"),
+                                    result.getBoolean("minecraft_player_god_mode"),
+                                    result.getBoolean("minecraft_player_fly"),
+                                    result.getBoolean("minecraft_player_frozen"),
+                                    result.getBoolean("minecraft_player_vanished"),
+                                    result.getDate("minecraft_player_muted"),
+                                    result.getDate("minecraft_player_banned"),
+                                    result.getInt("minecraft_player_coins"),
+                                    result.getString("minecraft_player_nick"),
+                                    result.getInt("minecraft_player_balance"),
+                                    result.getString("minecraft_player_warnings")));
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
         new BukkitRunnable() {
             @Override
             public void run() {

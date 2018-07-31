@@ -17,23 +17,20 @@ public class Coin implements CommandExecutor {
         Bukkit.getServer().getPluginCommand("coin").setExecutor(this);
     }
 
-    public int getCoins(UUID uuid) {
-        if(plugin.cacheManager.containsPlayer(uuid)) {
-            PlayerInfo info = plugin.cacheManager.getPlayer(uuid);
-            return info.coins;
+    public int getCoins(UUID player) {
+        if(plugin.cacheManager.containsPlayer(player)) {
+            return plugin.cacheManager.getPlayer(player).coins;
         }
+        System.out.println("Player not found in getCoins.");
         return -1;
     }
 
-    public void transferCoins(UUID sender, UUID target, int amount) {
-        if(!plugin.cacheManager.containsPlayer(sender) || !plugin.cacheManager.containsPlayer(target)) {
+    public void transferCoins(UUID player, int amount) {
+        if(plugin.cacheManager.containsPlayer(player)) {
+            plugin.cacheManager.getPlayer(player).coins = getCoins(player) + amount;
             return;
         }
-        PlayerInfo senderInfo = plugin.cacheManager.getPlayer(sender);
-        PlayerInfo targetInfo = plugin.cacheManager.getPlayer(target);
-
-        senderInfo.coins = senderInfo.coins - amount;
-        targetInfo.coins = targetInfo.coins + amount;
+        System.out.println("player not found in transferCoins.");
     }
 
     public boolean onCommand(CommandSender sender, Command command, String labels, String[] args) {
@@ -47,19 +44,69 @@ public class Coin implements CommandExecutor {
                     sender.sendMessage("Balance: " + getCoins(((Player) sender).getUniqueId()));
                     return true;
                 }
-                if(args[0].equalsIgnoreCase("transfer") || args[0].equalsIgnoreCase("send")) {
+                if(args.length < 3 && !sender.hasPermission("aio.coin.admin")) {
+                    sender.sendMessage("Usage: /coin send <playername> <amount>");
+                    return true;
+                }
+                if(args.length == 2 && sender.hasPermission("aio.coin.admin")) {
+                    sender.sendMessage("Usage: /coin <give | take | send> <playername> <amount>");
+                    return true;
+                }
+                if(args[0].equalsIgnoreCase("send")) {
                     if(plugin.getServer().getPlayer(args[1]) == null) {
                         sender.sendMessage("Player not found");
                         return true;
                     }
-                    if(!args[2].matches("0-9+")) {
+                    if(!args[2].matches("\\d+")) {
                         sender.sendMessage("Invalid amount.");
                         return true;
                     }
-                    transferCoins(((Player) sender).getUniqueId(), plugin.getServer().getPlayer(args[1]).getUniqueId(), Integer.parseInt(args[2]));
+                    if(Integer.parseInt(args[2]) > getCoins(((Player) sender).getUniqueId())) {
+                        sender.sendMessage("You don't have enough coins.");
+                        return true;
+                    }
+                    transferCoins(((Player) sender).getUniqueId(), -Integer.parseInt(args[2]));
+                    transferCoins(plugin.getServer().getPlayer(args[1]).getUniqueId(), +Integer.parseInt(args[2]));
+                    sender.sendMessage("You transfered " + args[2] + " coins to " + args[1] + ".");
+                    plugin.getServer().getPlayer(args[1]).sendMessage("You recieved " + args[2] + " coins from " + aio.getPlayerName((Player)sender) + ".");
                     return true;
                 }
-                sender.sendMessage("Usage: /coin send <playername> <amount>");
+            }
+            if(args.length == 0) {
+                sender.sendMessage("Usage: /coin <playername>");
+                return true;
+            }
+            if(args.length == 1 && (!args[0].equalsIgnoreCase("give") && !args[0].equalsIgnoreCase("take") && !args[0].equalsIgnoreCase("send"))) {
+                if(plugin.getServer().getPlayer(args[0]) == null) {
+                    sender.sendMessage("Player not found.");
+                    return true;
+                }
+                sender.sendMessage("Balance of " + plugin.getServer().getPlayer(args[0]).getName() + " is " + getCoins(plugin.getServer().getPlayer(args[0]).getUniqueId()));
+                return true;
+            }
+            if(args.length < 3) {
+                sender.sendMessage("Usage: /coin " + args[0] + " <playername> <amount>");
+                return true;
+            }
+            if(args[0].equalsIgnoreCase("give") || args[0].equalsIgnoreCase("take")) {
+                if(plugin.getServer().getPlayer(args[1]) == null) {
+                    sender.sendMessage("Player not found");
+                    return true;
+                }
+                if(!args[2].matches("\\d+")) {
+                    sender.sendMessage("Invalid amount.");
+                    return true;
+                }
+                if(args[0].equalsIgnoreCase("give")) {
+                    transferCoins(plugin.getServer().getPlayer(args[1]).getUniqueId(), +Integer.parseInt(args[2]));
+                    sender.sendMessage(args[2] + " coins given to " + args[1] + ".");
+                    return true;
+                }
+                if(args[0].equalsIgnoreCase("take")) {
+                    transferCoins(plugin.getServer().getPlayer(args[1]).getUniqueId(), -Integer.parseInt(args[2]));
+                    sender.sendMessage(args[2] + " coins taken from " + args[1] + ".");
+                    return true;
+                }
             }
         }
 
